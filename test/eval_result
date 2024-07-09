@@ -1,0 +1,121 @@
+==========lv0 START========
+00_main:	Success
+01_var_defn2:	Success
+02_var_defn3:	Success
+03_arr_defn2:	Success
+04_arr_defn3:	Success
+05_arr_defn4:	Success
+06_const_var_defn2:	Success
+07_const_var_defn3:	Success
+08_const_array_defn:	Success
+09_func_defn:	Success
+10_var_defn_func:	Success
+11_add2:	Success
+12_addc:	Success
+13_sub2:	Success
+14_subc:	Success
+15_mul:	Success
+16_mulc:	Success
+17_div:	Success
+18_divc:	Success
+19_mod:	Success
+20_rem:	Success
+points of lv0 is: 21
+=============lv0 END=========
+
+==========lv1 START========
+21_if_test2:	Success
+22_if_test3:	Success
+23_if_test4:	Success
+24_if_test5:	Success
+25_while_if:	Fail
+26_while_test1:	Success
+27_while_test2:	Success
+28_while_test3:	Success
+29_break:	Success
+30_continue:	Success
+31_while_if_test1:	Success
+32_while_if_test2:	Success
+33_while_if_test3:	Fail
+34_arr_expr_len:	Success
+35_op_priority1:	Success
+36_op_priority2:	Success
+37_op_priority3:	Success
+38_op_priority4:	Success
+39_op_priority5:	Success
+points of lv1 is: 17
+=============lv1 END=========
+
+==========lv2 START========
+40_unary_op:	Success
+41_unary_op2:	Success
+42_empty_stmt:	Success
+43_logi_assign:	Success
+44_stmt_expr:	Success
+45_comment1:	Success
+46_hex_defn:	Success
+47_hex_oct_add:	Success
+48_assign_complex_expr:	Success
+49_if_complex_expr:	Success
+50_short_circuit:	Success
+51_short_circuit3:	Fail
+52_scope:	Success
+53_scope2:	Fail
+54_hidden_var:	Fail
+55_sort_test1:	Fail
+56_sort_test2:	Fail
+57_sort_test3:	Fail
+58_sort_test4:	Fail
+59_sort_test5:	Fail
+60_sort_test6:	Fail
+61_sort_test7:	Fail
+points of lv2 is: 12
+=============lv2 END=========
+
+==========lv3 START========
+62_percolation:	Fail
+63_big_int_mul:	Success
+64_calculator:	Fail
+65_color:	Fail
+66_exgcd:	Fail
+67_reverse_output:	Success
+68_brainfk:	Success
+69_expr_eval:	Fail
+70_dijkstra:	Fail
+71_full_conn:	Fail
+72_hanoi:	Success
+73_int_io:	Fail
+74_kmp:	Success
+75_max_flow:	Fail
+76_n_queens:	Success
+77_substr:	Success
+78_side_effect:	Success
+79_var_name:	Success
+80_chaos_token:	Fail
+81_skip_spaces:	Success
+82_long_func:	Fail
+points of lv3 is: 10
+=============lv3 END=========
+
+==========lv4 START========
+83_long_array:	Fail
+84_long_array2:	Success
+85_long_code:	Fail
+86_long_code2:	Success
+87_many_params:	Fail
+88_many_params2:	Success
+89_many_globals:	Success
+90_many_locals:	Success
+91_many_locals2:	Fail
+92_register_alloc:	Success
+93_nested_calls:	Fail
+94_nested_loops:	Success
+95_float:	Fail
+96_matrix_add:	Fail
+97_matrix_sub:	Fail
+98_matrix_mul:	Fail
+99_matrix_tran:	Fail
+points of lv4 is: 7
+=============lv4 END=========
+
+total points: 67

@@ -219,7 +219,10 @@ void Mem2Reg::rename(BasicBlock *bb)
     // 步骤九：清除冗余的指令
     LOG(DEBUG) << "phase_9";
     for (auto inst : deleted_instructions)
+    {
+        LOG(INFO) << inst->print();
         bb->erase_instr(inst);
+    }
 }
 
 

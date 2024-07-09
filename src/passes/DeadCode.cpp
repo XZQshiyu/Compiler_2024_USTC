@@ -62,7 +62,7 @@ bool DeadCode::sweep(Function *func) {
             } else {
                 auto tmp = &*it;
                 wait_del.insert(tmp);
-                it++;
+                ++it;
             }
         }
     }

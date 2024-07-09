@@ -8,8 +8,9 @@
 #include <cstddef>
 #include <iterator>
 #include <list>
-#include <llvm/ADT/ilist.h>
-#include <llvm/ADT/ilist_node.h>
+#include "ilist.hpp"
+// #include <llvm/ADT/ilist.h>
+// #include <llvm/ADT/ilist_node.h>
 #include <map>
 #include <memory>
 
@@ -18,12 +19,12 @@ class Argument;
 class Type;
 class FunctionType;
 
-class Function : public Value, public llvm::ilist_node<Function>
+class Function : public Value, public ilist<Function>::node
 {
 public:
   Function(const Function &) = delete;
   Function(FunctionType *ty, const std::string &name, Module *parent);
-  ~Function() = default;
+  ~Function();
   static Function *create(FunctionType *ty, const std::string &name,
                           Module *parent);
 
@@ -43,7 +44,7 @@ public:
   void remove(BasicBlock *bb);
   BasicBlock *get_entry_block() { return &*basic_blocks_.begin(); }
 
-  llvm::ilist<BasicBlock> &get_basic_blocks() { return basic_blocks_; }
+  ilist<BasicBlock> &get_basic_blocks() { return basic_blocks_; }
   std::list<Argument> &get_args() { return arguments_; }
 
   bool is_declaration() { return basic_blocks_.empty(); }
@@ -52,7 +53,7 @@ public:
   std::string print();
 
 private:
-  llvm::ilist<BasicBlock> basic_blocks_;
+  ilist<BasicBlock> basic_blocks_;
   std::list<Argument> arguments_;
   Module *parent_;
   unsigned seq_cnt_; // print use

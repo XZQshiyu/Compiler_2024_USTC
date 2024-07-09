@@ -29,6 +29,7 @@ std::string print_instr_op_name(Instruction::OpID id) {
         return "ret";
     case Instruction::br:
         return "br";
+    // binary instructions
     case Instruction::add:
         return "add";
     case Instruction::sub:
@@ -43,6 +44,15 @@ std::string print_instr_op_name(Instruction::OpID id) {
         return "or";
     case Instruction::land:
         return "and";
+    case Instruction::lxor:
+        return "xor";
+    case Instruction::shl:
+        return "shl";
+    case Instruction::ashr:
+        return "ashr";
+    case Instruction::lshr:
+        return "lshr";
+    // float binary instruction
     case Instruction::fadd:
         return "fadd";
     case Instruction::fsub:

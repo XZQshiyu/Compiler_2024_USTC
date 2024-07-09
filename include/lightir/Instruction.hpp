@@ -2,14 +2,15 @@
 
 #include "Type.hpp"
 #include "User.hpp"
+#include "ilist.hpp"
 
 #include <cstdint>
-#include <llvm/ADT/ilist_node.h>
+// #include <llvm/ADT/ilist_node.h>
 
 class BasicBlock;
 class Function;
 
-class Instruction : public User, public llvm::ilist_node<Instruction>
+class Instruction : public User, public ilist<Instruction>::node
 {
 public:
   enum OpID : uint32_t
@@ -25,7 +26,7 @@ public:
     srem, // TODO:
     land, // TODO:
     lor,  // TODO:
-         // float binary operators
+          // float binary operators
     fadd,
     fsub,
     fmul,
@@ -54,8 +55,12 @@ public:
     getelementptr,
     zext, // zero extend
     fptosi,
-    sitofp
+    sitofp,
     // float binary operators Logical operators
+    shl,
+    ashr,
+    lshr,
+    lxor,
 
   };
   /* @parent: if parent!=nullptr, auto insert to bb
@@ -88,27 +93,37 @@ public:
   bool is_load() const { return op_id_ == load; }
   bool is_br() const { return op_id_ == br; }
 
+  // Binary operators
   bool is_add() const { return op_id_ == add; }
   bool is_sub() const { return op_id_ == sub; }
   bool is_mul() const { return op_id_ == mul; }
   bool is_div() const { return op_id_ == sdiv; }
   bool is_srem() const { return op_id_ == srem; }
-  bool is_or() const { return op_id_ == lor ; }
+  bool is_or() const { return op_id_ == lor; }
   bool is_and() const { return op_id_ == land; }
+  bool is_xor() const { return op_id_ == lxor; }
+  bool is_shl() const { return op_id_ == shl; }
+  bool is_ashr() const { return op_id_ == ashr; }
+  bool is_lshr() const { return op_id_ == lshr; }
 
+  // float binary operators
   bool is_fadd() const { return op_id_ == fadd; }
   bool is_fsub() const { return op_id_ == fsub; }
   bool is_fmul() const { return op_id_ == fmul; }
   bool is_fdiv() const { return op_id_ == fdiv; }
+
+  // cast operators
   bool is_fp2si() const { return op_id_ == fptosi; }
   bool is_si2fp() const { return op_id_ == sitofp; }
+  bool is_zext() const { return op_id_ == zext; }
 
+  // compare operators
   bool is_cmp() const { return ge <= op_id_ and op_id_ <= ne; }
   bool is_fcmp() const { return fge <= op_id_ and op_id_ <= fne; }
 
+  // call operators
   bool is_call() const { return op_id_ == call; }
   bool is_gep() const { return op_id_ == getelementptr; }
-  bool is_zext() const { return op_id_ == zext; }
 
   bool isBinary() const
   {
@@ -138,6 +153,7 @@ protected:
   BaseInst(Args &&...args) : Instruction(std::forward<Args>(args)...) {}
 };
 
+// integer binary operators class
 class IBinaryInst : public BaseInst<IBinaryInst>
 {
   friend BaseInst<IBinaryInst>;
@@ -154,9 +170,15 @@ public:
   static IBinaryInst *create_srem(Value *v1, Value *v2, BasicBlock *bb);
   static IBinaryInst *create_and(Value *v1, Value *v2, BasicBlock *bb);
   static IBinaryInst *create_or(Value *v1, Value *v2, BasicBlock *bb);
+  static IBinaryInst *create_xor(Value *v1, Value *v2, BasicBlock *bb);
+  static IBinaryInst *create_shl(Value *v1, Value *v2, BasicBlock *bb);
+  static IBinaryInst *create_ashr(Value *v1, Value *v2, BasicBlock *bb);
+  static IBinaryInst *create_lshr(Value *v1, Value *v2, BasicBlock *bb);
+
   virtual std::string print() override;
 };
 
+// float binary operators class
 class FBinaryInst : public BaseInst<FBinaryInst>
 {
   friend BaseInst<FBinaryInst>;
@@ -173,6 +195,7 @@ public:
   virtual std::string print() override;
 };
 
+// integer compare operators class
 class ICmpInst : public BaseInst<ICmpInst>
 {
   friend BaseInst<ICmpInst>;
@@ -191,6 +214,7 @@ public:
   virtual std::string print() override;
 };
 
+// float compare operators class
 class FCmpInst : public BaseInst<FCmpInst>
 {
   friend BaseInst<FCmpInst>;
@@ -209,6 +233,7 @@ public:
   virtual std::string print() override;
 };
 
+// call operators class
 class CallInst : public BaseInst<CallInst>
 {
   friend BaseInst<CallInst>;
@@ -224,6 +249,7 @@ public:
   virtual std::string print() override;
 };
 
+// branch operators class
 class BranchInst : public BaseInst<BranchInst>
 {
   friend BaseInst<BranchInst>;
@@ -243,6 +269,7 @@ public:
   virtual std::string print() override;
 };
 
+// return operators class
 class ReturnInst : public BaseInst<ReturnInst>
 {
   friend BaseInst<ReturnInst>;
@@ -258,6 +285,7 @@ public:
   virtual std::string print() override;
 };
 
+// getelementptr operators class
 class GetElementPtrInst : public BaseInst<GetElementPtrInst>
 {
   friend BaseInst<GetElementPtrInst>;
@@ -274,6 +302,7 @@ public:
   virtual std::string print() override;
 };
 
+// store operators class
 class StoreInst : public BaseInst<StoreInst>
 {
   friend BaseInst<StoreInst>;
@@ -290,6 +319,7 @@ public:
   virtual std::string print() override;
 };
 
+// load operators class
 class LoadInst : public BaseInst<LoadInst>
 {
   friend BaseInst<LoadInst>;
@@ -306,6 +336,7 @@ public:
   virtual std::string print() override;
 };
 
+// alloca operators class
 class AllocaInst : public BaseInst<AllocaInst>
 {
   friend BaseInst<AllocaInst>;
@@ -324,6 +355,7 @@ public:
   virtual std::string print() override;
 };
 
+// zext operators class
 class ZextInst : public BaseInst<ZextInst>
 {
   friend BaseInst<ZextInst>;
@@ -340,6 +372,7 @@ public:
   virtual std::string print() override;
 };
 
+// cast operators class
 class FpToSiInst : public BaseInst<FpToSiInst>
 {
   friend BaseInst<FpToSiInst>;
@@ -371,6 +404,7 @@ public:
   virtual std::string print() override;
 };
 
+// phi operators class
 class PhiInst : public BaseInst<PhiInst>
 {
   friend BaseInst<PhiInst>;

@@ -5,10 +5,11 @@
 #include "Instruction.hpp"
 #include "Type.hpp"
 #include "Value.hpp"
+#include "ilist.hpp"
 
 #include <list>
-#include <llvm/ADT/ilist.h>
-#include <llvm/ADT/ilist_node.h>
+// #include <llvm/ADT/ilist.h>
+// #include <llvm/ADT/ilist_node.h>
 #include <map>
 #include <memory>
 #include <string>
@@ -33,18 +34,18 @@ class Module {
     FunctionType *get_function_type(Type *retty, std::vector<Type *> &args);
 
     void add_function(Function *f);
-    llvm::ilist<Function> &get_functions();
+    ilist<Function> &get_functions();
     void add_global_variable(GlobalVariable *g);
-    llvm::ilist<GlobalVariable> &get_global_variable();
+    ilist<GlobalVariable> &get_global_variable();
 
     void set_print_name();
     std::string print();
 
   private:
     // The global variables in the module
-    llvm::ilist<GlobalVariable> global_list_;
+    ilist<GlobalVariable> global_list_;
     // The functions in the module
-    llvm::ilist<Function> function_list_;
+    ilist<Function> function_list_;
 
     std::unique_ptr<IntegerType> int1_ty_;
     std::unique_ptr<IntegerType> int32_ty_;

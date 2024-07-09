@@ -63,6 +63,22 @@ IBinaryInst *IBinaryInst::create_or(Value *v1, Value *v2, BasicBlock *bb)
 {
     return create(lor, v1, v2, bb);
 }
+IBinaryInst *IBinaryInst::create_xor(Value *v1, Value *v2, BasicBlock *bb)
+{
+    return create(lxor, v1, v2, bb);
+}
+IBinaryInst *IBinaryInst::create_shl(Value *v1, Value *v2, BasicBlock *bb)
+{
+    return create(shl, v1, v2, bb);
+}
+IBinaryInst *IBinaryInst::create_lshr(Value *v1, Value *v2, BasicBlock *bb)
+{
+    return create(lshr, v1, v2, bb);
+}
+IBinaryInst *IBinaryInst::create_ashr(Value *v1, Value *v2, BasicBlock *bb)
+{
+    return create(ashr, v1, v2, bb);
+}
 
 FBinaryInst::FBinaryInst(OpID id, Value *v1, Value *v2, BasicBlock *bb)
     : BaseInst<FBinaryInst>(bb->get_module()->get_float_type(), id, bb)

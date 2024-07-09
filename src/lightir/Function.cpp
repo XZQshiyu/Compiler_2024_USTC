@@ -11,6 +11,11 @@ Function::Function(FunctionType *ty, const std::string &name, Module *parent)
         arguments_.emplace_back(ty->get_param_type(i), "", this, i);
     }
 }
+
+Function::~Function() {
+    arguments_.clear();
+}
+
 Function *Function::create(FunctionType *ty, const std::string &name,
                            Module *parent) {
     return new Function(ty, name, parent);

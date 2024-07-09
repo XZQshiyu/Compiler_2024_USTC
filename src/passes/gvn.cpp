@@ -343,7 +343,7 @@ std::shared_ptr<CongruenceClass> GVN::intersect(const std::shared_ptr<Congruence
     return cc;
 }
 
-void GVN::detectEquivalences(llvm::ilist<GlobalVariable> *global_list)
+void GVN::detectEquivalences(ilist<GlobalVariable> *global_list)
 {
     // create top
     auto top = std::set<shared_ptr<CongruenceClass>>();

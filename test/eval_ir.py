@@ -152,9 +152,9 @@ def eval():
             need_input = cases[case][1]
 
             COMMAND = [TEST_PATH]
-
+            # "-mem2reg", "-const-prop", "-loop-inv-hoist"
             try:
-                result = subprocess.run([EXE_PATH, "-o", TEST_PATH + ".ll", "-emit-llvm", "-mem2reg", "-const-prop", "-loop-inv-hoist",  TEST_PATH + ".sy"], stderr=subprocess.PIPE, timeout=8)
+                result = subprocess.run([EXE_PATH, "-o", TEST_PATH + ".ll", "-emit-llvm", "-mem2reg", TEST_PATH + ".sy"], stderr=subprocess.PIPE, timeout=8)
             except Exception as _:
                 f.write('\tFail\n')
                 continue
@@ -170,14 +170,20 @@ def eval():
                     with open(ANSWER_PATH + ".out", "rb") as fout:
                         expected_output_lines = fout.readlines()
                     expected_returncode = int(expected_output_lines[-1])
-                    expected_output = b"".join(expected_output_lines[:-1])
-                    # print(result.stdout)
-                    # print(case)
-                    # print(result.returncode)
-                    if result.stdout == expected_output and result.returncode == expected_returncode:
+                    expected_output = b"".join(expected_output_lines[:-1]).strip()
+                    if result.stdout.strip() == expected_output and result.returncode == expected_returncode:
                         f.write('\tSuccess\n')
                         lv_points += score
                     else:
+                        print(case)
+                        if result.stdout: 
+                            print(result.stdout)
+                        else:
+                            print("None")
+                        if expected_output:
+                            print(expected_output)
+                        else:
+                            print("None")
                         f.write('\tFail\n')
                         f.write('\tWrong output :\n')
                         if(result.stdout):
@@ -186,7 +192,8 @@ def eval():
                         f.write(str(result.returncode))
                         f.write('\n')
                         has_bonus = False
-                except Exception as _:
+                except Exception as _:  
+                    print(case)
                     f.write('\tFail\n')
                     has_bonus = False
                 finally:

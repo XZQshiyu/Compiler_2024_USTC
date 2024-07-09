@@ -9,6 +9,7 @@
 #include "Module.hpp"
 #include "PassManager.hpp"
 #include "Value.hpp"
+#include "ilist.hpp"
 
 #include <cstddef>
 #include <cstdint>
@@ -427,7 +428,7 @@ public:
 
     // fill the following functions according to Pseudocode, **you might need to add more
     // arguments**
-    void detectEquivalences(llvm::ilist<GlobalVariable> *global_list);
+    void detectEquivalences(ilist<GlobalVariable> *global_list);
     partitions join(const partitions &P1, const partitions &P2, BasicBlock *lbb, BasicBlock *rbb);
     std::shared_ptr<CongruenceClass> intersect(const std::shared_ptr<CongruenceClass> &,
                                                const std::shared_ptr<CongruenceClass> &,

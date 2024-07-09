@@ -2,10 +2,11 @@
 
 #include "Instruction.hpp"
 #include "Value.hpp"
+#include "ilist.hpp"
 
 #include <list>
-#include <llvm/ADT/ilist.h>
-#include <llvm/ADT/ilist_node.h>
+// #include <llvm/ADT/ilist.h>
+// #include <llvm/ADT/ilist_node.h>
 #include <set>
 #include <string>
 
@@ -13,7 +14,7 @@ class Function;
 class Instruction;
 class Module;
 
-class BasicBlock : public Value, public llvm::ilist_node<BasicBlock> {
+class BasicBlock : public Value, public ilist<BasicBlock>::node {
   public:
     ~BasicBlock() = default;
     static BasicBlock *create(Module *m, const std::string &name,
@@ -43,7 +44,7 @@ class BasicBlock : public Value, public llvm::ilist_node<BasicBlock> {
     void remove_instr(Instruction *instr) { instr_list_.remove(instr); }
     // void remove_instr_2(Instruction *instr) { instr_list_.}
     void remove_last_instruction();
-    llvm::ilist<Instruction> &get_instructions() { return instr_list_; }
+    ilist<Instruction> &get_instructions() { return instr_list_; }
     bool empty() const { return instr_list_.empty(); }
     int get_num_of_instr() const { return instr_list_.size(); }
 
@@ -60,6 +61,6 @@ class BasicBlock : public Value, public llvm::ilist_node<BasicBlock> {
 
     std::list<BasicBlock *> pre_bbs_;
     std::list<BasicBlock *> succ_bbs_;
-    llvm::ilist<Instruction> instr_list_;
+    ilist<Instruction> instr_list_;
     Function *parent_;
 };

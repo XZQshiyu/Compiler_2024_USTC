@@ -2,10 +2,10 @@
 
 #include "Constant.hpp"
 #include "User.hpp"
-
-#include <llvm/ADT/ilist_node.h>
+#include "ilist.hpp"
+// #include <llvm/ADT/ilist_node.h>
 class Module;
-class GlobalVariable : public User, public llvm::ilist_node<GlobalVariable> {
+class GlobalVariable : public User, public ilist<GlobalVariable>::node {
   private:
     bool is_const_;
     Constant *init_val_;

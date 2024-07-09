@@ -20,6 +20,7 @@ public:
     {
         this->BB_ = bb;
     } // 在某个基本块中插入指令
+    // 创建integer binary instruction
     IBinaryInst *create_iadd(Value *lhs, Value *rhs)
     {
         return IBinaryInst::create_add(lhs, rhs, this->BB_);
@@ -49,6 +50,23 @@ public:
     {
         return IBinaryInst::create_or(lhs, rhs, this->BB_);
     }
+    IBinaryInst *create_xor(Value *lhs, Value *rhs)
+    {
+        return IBinaryInst::create_xor(lhs, rhs, this->BB_);
+    }
+    IBinaryInst *create_shl(Value *lhs, Value *rhs)
+    {
+        return IBinaryInst::create_shl(lhs, rhs, this->BB_);
+    }
+    IBinaryInst *create_lshr(Value *lhs, Value *rhs)
+    {
+        return IBinaryInst::create_lshr(lhs, rhs, this->BB_);
+    }
+    IBinaryInst *create_ashr(Value *lhs, Value *rhs)
+    {
+        return IBinaryInst::create_ashr(lhs, rhs, this->BB_);
+    }
+
     ICmpInst *create_icmp_eq(Value *lhs, Value *rhs)
     {
         return ICmpInst::create_eq(lhs, rhs, this->BB_);

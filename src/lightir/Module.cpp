@@ -50,11 +50,11 @@ FunctionType *Module::get_function_type(Type *retty,
 }
 
 void Module::add_function(Function *f) { function_list_.push_back(f); }
-llvm::ilist<Function> &Module::get_functions() { return function_list_; }
+ilist<Function> &Module::get_functions() { return function_list_; }
 void Module::add_global_variable(GlobalVariable *g) {
     global_list_.push_back(g);
 }
-llvm::ilist<GlobalVariable> &Module::get_global_variable() {
+ilist<GlobalVariable> &Module::get_global_variable() {
     return global_list_;
 }
 
