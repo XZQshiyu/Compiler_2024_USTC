@@ -9,6 +9,7 @@
 #include <iterator>
 #include <stdexcept>
 #include <list>
+#include "logging.hpp"
 
 template <typename T> class ilist
 {
@@ -29,6 +30,7 @@ public:
 
         node(const node &) = delete;
         node &operator=(const node &) = delete;
+        size_t tag() const { return tag_; }
     };
 
     // 简易双向链表迭代器
@@ -127,6 +129,7 @@ public:
         reverse_iterator rend() { return reverse_iterator(head_); }
 
         size_t size() const { return size_; }
+        size_t tag() const { return tag_; }
 
         void push_back(T *p)
         {
@@ -193,12 +196,14 @@ public:
         iterator erase(const iterator &it)
         {
             auto p = it.ptr_;
+            LOG(INFO) << (T*)p->tag_ << " " << tag_;
             if (p == head_ || p == tail_)
             {
                 throw std::runtime_error("erase head or tail");
             }
             else if (!is_node(p))
             {
+                // return nullptr;
                 throw std::runtime_error("erase a node not in the list");
             }
             auto ret = iterator{p->next_};
@@ -220,11 +225,12 @@ public:
             else if (!is_node(p))
             {
                 throw std::runtime_error("release a node not in the list");
+                // return nullptr;
             }
             p->prev_->next_ = p->next_;
             p->next_->prev_ = p->prev_;
             size_--;
-            // unmark_node(p);
+            unmark_node(p);
             return dynamic_cast<T *>(p);
         }
 
@@ -238,6 +244,7 @@ public:
             else if (!is_node(p_it))
             {
                 throw std::runtime_error("insert a node not in the list");
+                // return nullptr;
             }
             p->prev_ = p_it->prev_;
             p->next_ = p_it;

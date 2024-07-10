@@ -154,7 +154,7 @@ def eval():
             COMMAND = [TEST_PATH]
             # "-mem2reg", "-const-prop", "-loop-inv-hoist"
             try:
-                result = subprocess.run([EXE_PATH, "-o", TEST_PATH + ".ll", "-emit-llvm", "-mem2reg", TEST_PATH + ".sy"], stderr=subprocess.PIPE, timeout=8)
+                result = subprocess.run([EXE_PATH, "-o", TEST_PATH + ".ll", "-emit-llvm", "-mem2reg", "-const-prop", "-loop-inv-hoist", TEST_PATH + ".sy"], stderr=subprocess.PIPE, timeout=8)
             except Exception as _:
                 f.write('\tFail\n')
                 continue

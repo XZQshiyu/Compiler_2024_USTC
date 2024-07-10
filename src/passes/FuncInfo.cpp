@@ -13,7 +13,8 @@ void FuncInfo::run() {
         worklist.pop_front();
         process(now);
     }
-    log();
+    // log();
+    LOG(INFO)   << "FuncInfo pass finished";
 }
 
 void FuncInfo::log() {

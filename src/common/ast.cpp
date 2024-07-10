@@ -31,7 +31,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     // 分析树结点类型为 program
     if (_STR_EQ(n->name, "program"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         auto node = new ASTProgram(); // 进入这一层就会创建一个新节点，执行这个节点
         // program -> CompUnit
         std::stack<syntax_tree_node *> s;
@@ -57,7 +57,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     }
     else if (_STR_EQ(n->name, "Decl"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         auto node = new ASTDecl();
         // Decl 对应AST结点类型，由一个域is_const区分constDecl和VarDecl
         auto child = n->children[0]; // child is constDecl 或者 varDecl
@@ -66,7 +66,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
         // ConstDefList -> ConstDef | ConstDefList ; ConstDef
         if (_STR_EQ(child->name, "ConstDecl"))
         {
-            LOG(INFO) << n->name;
+            // LOG(INFO) << n->name;
             // type
             // ConstDecl -> const BType ConstDefList ;
             if (_STR_EQ(child->children[1]->children[0]->name, "int")) // 判断b-type
@@ -96,9 +96,9 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
         // VarDeclList -> VarDeclList ; VarDef |
         else
         {
-            LOG(INFO) << n->name;
+            // LOG(INFO) << n->name;
             // type
-            // LOG(WARNING) << child->children[0]->children[0]->name << " VarDecl";
+            // // LOG(WARNING) << child->children[0]->children[0]->name << " VarDecl";
             if (_STR_EQ(child->children[0]->children[0]->name, "int"))
                 node->type = TYPE_INT;
             else
@@ -127,7 +127,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     // ConstExpList -> ConstExpList [ ConstExp ]|epsilon
     else if (_STR_EQ(n->name, "ConstDef"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         // 这个地方还不涉及处理值的问题，这一层的任务主要是把list拉平
         //
         auto node = new ASTDef();
@@ -165,7 +165,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     // ConstExpList -> ConstExpList [ ConstExp ] |
     else if (_STR_EQ(n->name, "VarDef"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         auto node = new ASTDef();
         // 标识符
         node->id = n->children[0]->name;
@@ -199,7 +199,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     // ConstInitValList -> ConstInitVal | ConstInitValList , ConstInitVal
     else if (_STR_EQ(n->name, "ConstInitVal"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         auto node = new ASTInitVal();
         node->is_const = true;
         if (n->children_num == 1) // 只有一个节点，记录value，此时子孩子为空
@@ -239,7 +239,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     // InitValList -> InitVal | InitValList , InitVal
     else if (_STR_EQ(n->name, "InitVal"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         auto node = new ASTInitVal();
         node->is_const = false; // 主要是这里不一样
         if (n->children_num == 1)
@@ -277,7 +277,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     // Exp -> AddExp
     else if (_STR_EQ(n->name, "Exp"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         auto node = new ASTExp();
         node->is_const = false;
         auto addexp_node = static_cast<ASTAddExp *>(transform_node_iter(n->children[0]));
@@ -288,7 +288,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     // ConstExp -> AddExp
     else if (_STR_EQ(n->name, "ConstExp"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         auto node = new ASTExp();
         node->is_const = true;
         auto addexp_node = static_cast<ASTAddExp *>(transform_node_iter(n->children[0]));
@@ -303,7 +303,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     // 这一层也把params直接拆开了，但是block不拆
     else if (_STR_EQ(n->name, "FuncDef"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         auto node = new ASTFuncDef();
         // 标识符
         node->id = n->children[1]->name;
@@ -358,7 +358,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     // ExpList -> ExpList [ Exp ] |
     else if (_STR_EQ(n->name, "FuncFParam"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         auto node = new ASTParam();
         // type
         if (_STR_EQ(n->children[0]->children[0]->name, "int"))
@@ -396,7 +396,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     // BlockItem -> Decl | Stmt
     else if (_STR_EQ(n->name, "Block"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         auto node = new ASTBlock();
         std::stack<syntax_tree_node *> s;
         auto list_ptr = n->children[1];
@@ -425,7 +425,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
                     child_node = nullptr;
                 else if (_STR_EQ(s.top()->children[0]->children[0]->name, "LVal"))
                 {
-                    // LOG(INFO) << n->children[0]->children[0]->name;
+                    // // LOG(INFO) << n->children[0]->children[0]->name;
                     auto node = new ASTAssignStmt();
                     auto var_node = static_cast<ASTVar *>(transform_node_iter(s.top()->children[0]->children[0]));
                     node->var = std::shared_ptr<ASTVar>(var_node);
@@ -436,19 +436,19 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
                 }
                 else if (_STR_EQ(s.top()->children[0]->children[0]->name, "Exp"))
                 {
-                    // LOG(INFO) << n->children[0]->name;
+                    // // LOG(INFO) << n->children[0]->name;
                     child_node = static_cast<ASTStmt *>(transform_node_iter(s.top()->children[0]->children[0]));
                     // return transform_node_iter(n->children[0]);
                 }
                 else if (_STR_EQ(s.top()->children[0]->children[0]->name, "Block"))
                 {
-                    // LOG(INFO) << n->children[0]->name;
+                    // // LOG(INFO) << n->children[0]->name;
                     child_node = static_cast<ASTStmt *>(transform_node_iter(s.top()->children[0]->children[0]));
                     // return transform_node_iter(n->children[0]);
                 }
                 else if (_STR_EQ(s.top()->children[0]->children[0]->name, "if"))
                 {
-                    // LOG(INFO) << n->children[0]->name;
+                    // // LOG(INFO) << n->children[0]->name;
                     auto node = new ASTSelectionStmt();
                     auto cond_node = static_cast<ASTLOrExp *>(transform_node_iter(s.top()->children[0]->children[2]->children[0]));
                     node->cond = std::shared_ptr<ASTLOrExp>(cond_node);
@@ -464,7 +464,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
                 }
                 else if (_STR_EQ(s.top()->children[0]->children[0]->name, "while"))
                 {
-                    // LOG(INFO) << n->children[0]->name;
+                    // // LOG(INFO) << n->children[0]->name;
                     auto node = new ASTIterationStmt();
                     auto cond_node = static_cast<ASTLOrExp *>(transform_node_iter(s.top()->children[0]->children[2]->children[0]));
                     node->cond = std::shared_ptr<ASTLOrExp>(cond_node);
@@ -475,7 +475,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
                 }
                 else if (_STR_EQ(s.top()->children[0]->children[0]->name, "break"))
                 {
-                    // LOG(INFO) << n->children[0]->name;
+                    // // LOG(INFO) << n->children[0]->name;
                     auto node = new ASTBreak();
                     node->is_break = true;
                     // return node;
@@ -483,7 +483,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
                 }
                 else if (_STR_EQ(s.top()->children[0]->children[0]->name, "continue"))
                 {
-                    // LOG(INFO) << n->children[0]->name;
+                    // // LOG(INFO) << n->children[0]->name;
                     auto node = new ASTContinue();
                     node->is_continue = true;
                     // return node;
@@ -491,7 +491,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
                 }
                 else if (_STR_EQ(s.top()->children[0]->children[0]->name, "return"))
                 {
-                    // LOG(INFO) << n->children[0]->name;
+                    // // LOG(INFO) << n->children[0]->name;
                     auto node = new ASTReturnStmt();
                     if (s.top()->children[0]->children_num == 3)
                     {
@@ -530,13 +530,13 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     // returnStmt
     else if (_STR_EQ(n->name, "Stmt"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         // Stmt -> LVal = Exp ;
         if (_STR_EQ(n->children[0]->name, ";"))
             return nullptr;
         if (_STR_EQ(n->children[0]->name, "LVal"))
         {
-            LOG(INFO) << n->children[0]->name;
+            // LOG(INFO) << n->children[0]->name;
             auto node = new ASTAssignStmt();
             auto var_node = static_cast<ASTVar *>(transform_node_iter(n->children[0]));
             node->var = std::shared_ptr<ASTVar>(var_node);
@@ -546,17 +546,17 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
         }
         else if (_STR_EQ(n->children[0]->name, "Exp"))
         {
-            LOG(INFO) << n->children[0]->name;
+            // LOG(INFO) << n->children[0]->name;
             return transform_node_iter(n->children[0]);
         }
         else if (_STR_EQ(n->children[0]->name, "Block"))
         {
-            LOG(INFO) << n->children[0]->name;
+            // LOG(INFO) << n->children[0]->name;
             return transform_node_iter(n->children[0]);
         }
         else if (_STR_EQ(n->children[0]->name, "if"))
         {
-            LOG(INFO) << n->children[0]->name;
+            // LOG(INFO) << n->children[0]->name;
             auto node = new ASTSelectionStmt();
             auto cond_node = static_cast<ASTLOrExp *>(transform_node_iter(n->children[2]->children[0]));
             node->cond = std::shared_ptr<ASTLOrExp>(cond_node);
@@ -571,7 +571,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
         }
         else if (_STR_EQ(n->children[0]->name, "while"))
         {
-            LOG(INFO) << n->children[0]->name;
+            // LOG(INFO) << n->children[0]->name;
             auto node = new ASTIterationStmt();
             auto cond_node = static_cast<ASTLOrExp *>(transform_node_iter(n->children[2]->children[0]));
             node->cond = std::shared_ptr<ASTLOrExp>(cond_node);
@@ -581,21 +581,21 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
         }
         else if (_STR_EQ(n->children[0]->name, "break"))
         {
-            LOG(INFO) << n->children[0]->name;
+            // LOG(INFO) << n->children[0]->name;
             auto node = new ASTBreak();
             node->is_break = true;
             return node;
         }
         else if (_STR_EQ(n->children[0]->name, "continue"))
         {
-            LOG(INFO) << n->children[0]->name;
+            // LOG(INFO) << n->children[0]->name;
             auto node = new ASTContinue();
             node->is_continue = true;
             return node;
         }
         else if (_STR_EQ(n->children[0]->name, "return"))
         {
-            LOG(INFO) << n->children[0]->name;
+            // LOG(INFO) << n->children[0]->name;
             auto node = new ASTReturnStmt();
             if (n->children_num == 3)
             {
@@ -616,7 +616,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     // ExpList -> ExpList [Exp] |
     else if (_STR_EQ(n->name, "LVal"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         auto node = new ASTVar();
         node->id = n->children[0]->name;
         std::stack<syntax_tree_node *> s;
@@ -639,7 +639,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     // LOrExp -> LAndExp | LOrExp OR LAndExp
     else if (_STR_EQ(n->name, "LOrExp"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         auto node = new ASTLOrExp();
         if (n->children_num == 3)
         {
@@ -659,7 +659,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     // LAndExp -> EqExp | LAndExp AND EqExp
     else if (_STR_EQ(n->name, "LAndExp"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         auto node = new ASTLAndExp();
         if (n->children_num == 3)
         {
@@ -678,7 +678,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     }
     else if (_STR_EQ(n->name, "EqExp"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         auto node = new ASTEqExp();
         if (n->children_num == 3)
         {
@@ -704,7 +704,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     }
     else if (_STR_EQ(n->name, "RelExp"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         auto node = new ASTRelExp();
         if (n->children_num == 3)
         {
@@ -738,7 +738,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     }
     else if (_STR_EQ(n->name, "AddExp"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         // std::stack<syntax_tree_node *> node_stack;
         // std::stack<ASTAddExp *> add_stack;
         // std::stack<ASTMulExp *> mul_stack;
@@ -789,7 +789,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     }
     else if (_STR_EQ(n->name, "MulExp"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         auto node = new ASTMulExp();
         if (n->children_num == 3)
         {
@@ -819,7 +819,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     }
     else if (_STR_EQ(n->name, "UnaryExp"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         // UnaryExp -> PrimaryExp
         // std::cout << "go UnaryExp" << std::endl;
         auto node = new ASTUnaryExp();
@@ -867,7 +867,7 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     }
     else if (_STR_EQ(n->name, "PrimaryExp"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         // std::cout << "go here" << std::endl;
         if (n->children_num == 1)
             return transform_node_iter(n->children[0]);
@@ -878,13 +878,13 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
     }
     else if (_STR_EQ(n->name, "Number"))
     {
-        LOG(INFO) << n->name;
+        // LOG(INFO) << n->name;
         auto node = new ASTNum();
         if (_STR_EQ(n->children[0]->name, "Integer"))
         {
             node->type = TYPE_INT;
             std::string value = n->children[0]->children[0]->name;
-            LOG(INFO) << value;
+            // LOG(INFO) << value;
             if (value[1] == 'x' || value[1] == 'X')
                 node->i_val = std::stoi(value, nullptr, 16);
             else if (value[0] == '0' && value.length() > 1)
@@ -895,21 +895,21 @@ ASTNode *AST::transform_node_iter(syntax_tree_node *n)
         else if (_STR_EQ(n->children[0]->name, "Floatnum"))
         {
             std::string value = n->children[0]->children[0]->name;
-            LOG(INFO) << value;
-            LOG(ERROR) << value << "--------------------";
+            // LOG(INFO) << value;
+            // LOG(ERROR) << value << "--------------------";
             node->type = TYPE_FLOAT;
             if (value[1] == 'x' || value[1] == 'X')
             {
-                LOG(ERROR) << "enter hex float ---------------";
+                // LOG(ERROR) << "enter hex float ---------------";
                 char *endPtr;
                 node->f_val = (float)std::strtod(value.c_str(), &endPtr); // 手动转换为浮点数
-                LOG(ERROR) << node->f_val << ".............";
+                // LOG(ERROR) << node->f_val << ".............";
             }
             else
             {
-                LOG(ERROR) << "enter normal float ----------------";
+                // LOG(ERROR) << "enter normal float ----------------";
                 node->f_val = std::stof(value, nullptr);
-                LOG(ERROR) << node->f_val << " .....................";
+                // LOG(ERROR) << node->f_val << " .....................";
             }
         }
         else
@@ -1096,7 +1096,7 @@ Value *ASTPrinter::visit(ASTBlock &node)
 }
 Value *ASTPrinter::visit(ASTAssignStmt &node)
 {
-    LOG(DEBUG) << "assign";
+    // LOG(DEBUG) << "assign";
     _DEBUT_PRINT_N_(depth);
     std::cout << "AssignStmt: " << std::endl;
     add_depth();
@@ -1159,7 +1159,7 @@ Value *ASTPrinter::visit(ASTContinue &node)
 }
 Value *ASTPrinter::visit(ASTExp &node)
 {
-    LOG(DEBUG) << "exp";
+    // LOG(DEBUG) << "exp";
     _DEBUT_PRINT_N_(depth);
     std::cout << "expression" << std::endl;
     add_depth();

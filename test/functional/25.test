@@ -1,0 +1,1148 @@
+[INFO] (sysy.cpp:110L  main)25_while_if.sy
+[INFO] (sysy_builder.cpp:90L  visit)get_one the functiont name is : ---------
+[INFO] (sysy_builder.cpp:186L  visit)store_2
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:1147L  visit)1
+[INFO] (sysy_builder.cpp:90L  visit)deepWhileBr the functiont name is : ---------
+[INFO] (sysy_builder.cpp:186L  visit)store_2
+[INFO] (sysy_builder.cpp:186L  visit)store_2
+[WARNING] (sysy_builder.cpp:215L  visit)0 type is ? ------------------
+[WARNING] (sysy_builder.cpp:281L  visit)i32
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:991L  visit)a -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: a
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1034L  visit)load_1---------------------
+[INFO] (sysy_builder.cpp:1134L  visit)i32 -----------------------------
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:991L  visit)b -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: b
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1034L  visit)load_1---------------------
+[INFO] (sysy_builder.cpp:1134L  visit)i32 -----------------------------
+[INFO] (sysy_builder.cpp:991L  visit)c -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: c
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1134L  visit)i32* -----------------------------
+[INFO] (sysy_builder.cpp:757L  visit)store_9
+[INFO] (sysy_builder.cpp:854L  visit)br label % br----------------
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:991L  visit)c -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: c
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1034L  visit)load_1---------------------
+[INFO] (sysy_builder.cpp:1134L  visit)i32 -----------------------------
+[INFO] (sysy_builder.cpp:1455L  visit)+++++++++++++++++++++++++++++++
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:1147L  visit)75
+[INFO] (sysy_builder.cpp:1473L  visit)3
+[INFO] (sysy_builder.cpp:1647L  visit)% = icmp slt i32 %, 75
+[INFO] (sysy_builder.cpp:1648L  visit)i1
+[WARNING] (sysy_builder.cpp:215L  visit)0 type is ? ------------------
+[WARNING] (sysy_builder.cpp:281L  visit)i32
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:1147L  visit)42
+[INFO] (sysy_builder.cpp:991L  visit)d -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: d
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1134L  visit)i32* -----------------------------
+[INFO] (sysy_builder.cpp:757L  visit)store_9
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:991L  visit)c -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: c
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1034L  visit)load_1---------------------
+[INFO] (sysy_builder.cpp:1134L  visit)i32 -----------------------------
+[INFO] (sysy_builder.cpp:1455L  visit)+++++++++++++++++++++++++++++++
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:1147L  visit)100
+[INFO] (sysy_builder.cpp:1473L  visit)3
+[INFO] (sysy_builder.cpp:1647L  visit)% = icmp slt i32 %, 100
+[INFO] (sysy_builder.cpp:1648L  visit)i1
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:991L  visit)c -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: c
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1034L  visit)load_1---------------------
+[INFO] (sysy_builder.cpp:1134L  visit)i32 -----------------------------
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:991L  visit)d -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: d
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1034L  visit)load_1---------------------
+[INFO] (sysy_builder.cpp:1134L  visit)i32 -----------------------------
+[INFO] (sysy_builder.cpp:991L  visit)c -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: c
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1134L  visit)i32* -----------------------------
+[INFO] (sysy_builder.cpp:757L  visit)store_9
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:991L  visit)c -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: c
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1034L  visit)load_1---------------------
+[INFO] (sysy_builder.cpp:1134L  visit)i32 -----------------------------
+[INFO] (sysy_builder.cpp:1455L  visit)+++++++++++++++++++++++++++++++
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:1147L  visit)99
+[INFO] (sysy_builder.cpp:1511L  visit)5
+[INFO] (sysy_builder.cpp:1647L  visit)% = icmp sgt i32 %, 99
+[INFO] (sysy_builder.cpp:1648L  visit)i1
+[WARNING] (sysy_builder.cpp:215L  visit)0 type is ? ------------------
+[WARNING] (sysy_builder.cpp:281L  visit)i32
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:991L  visit)d -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: d
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1034L  visit)load_1---------------------
+[INFO] (sysy_builder.cpp:1134L  visit)i32 -----------------------------
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:1147L  visit)2
+[INFO] (sysy_builder.cpp:1355L  visit)i32 0
+[INFO] (sysy_builder.cpp:1356L  visit)i32 2.8026e-45
+[WARNING] (sysy_builder.cpp:1359L  visit)0---------------
+[INFO] (sysy_builder.cpp:1360L  visit)i32 0
+[INFO] (sysy_builder.cpp:1361L  visit)i32 2.8026e-45
+[INFO] (sysy_builder.cpp:991L  visit)e -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: e
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1134L  visit)i32* -----------------------------
+[INFO] (sysy_builder.cpp:757L  visit)store_9
+[INFO] (sysy_builder.cpp:1748L  visit)get_one ...............................
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:1147L  visit)0
+[INFO] (sysy_builder.cpp:1775L  visit)get_one ----------------------------------
+[INFO] (sysy_builder.cpp:1776L  visit)Call type -------------------------------
+[INFO] (sysy_builder.cpp:1779L  visit)i32
+[INFO] (sysy_builder.cpp:1780L  visit)0
+[INFO] (sysy_builder.cpp:1782L  visit)Function type ------------------------------
+[INFO] (sysy_builder.cpp:1785L  visit)i32
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:1147L  visit)1
+[INFO] (sysy_builder.cpp:1647L  visit)% = icmp eq i32 %, 1
+[INFO] (sysy_builder.cpp:1648L  visit)i1
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:991L  visit)e -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: e
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1034L  visit)load_1---------------------
+[INFO] (sysy_builder.cpp:1134L  visit)i32 -----------------------------
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:1147L  visit)2
+[INFO] (sysy_builder.cpp:1355L  visit)i32 0
+[INFO] (sysy_builder.cpp:1356L  visit)i32 2.8026e-45
+[WARNING] (sysy_builder.cpp:1359L  visit)0---------------
+[INFO] (sysy_builder.cpp:1360L  visit)i32 0
+[INFO] (sysy_builder.cpp:1361L  visit)i32 2.8026e-45
+[INFO] (sysy_builder.cpp:991L  visit)c -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: c
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1134L  visit)i32* -----------------------------
+[INFO] (sysy_builder.cpp:757L  visit)store_9
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:991L  visit)c -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: c
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1034L  visit)load_1---------------------
+[INFO] (sysy_builder.cpp:1134L  visit)i32 -----------------------------
+[INFO] (sysy_builder.cpp:90L  visit)main the functiont name is : ---------
+[WARNING] (sysy_builder.cpp:215L  visit)0 type is ? ------------------
+[WARNING] (sysy_builder.cpp:281L  visit)i32
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:1147L  visit)2
+[INFO] (sysy_builder.cpp:991L  visit)p -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: p
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1134L  visit)i32* -----------------------------
+[INFO] (sysy_builder.cpp:757L  visit)store_9
+[INFO] (sysy_builder.cpp:1748L  visit)deepWhileBr ...............................
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:991L  visit)p -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: p
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1034L  visit)load_1---------------------
+[INFO] (sysy_builder.cpp:1134L  visit)i32 -----------------------------
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:991L  visit)p -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: p
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1034L  visit)load_1---------------------
+[INFO] (sysy_builder.cpp:1134L  visit)i32 -----------------------------
+[INFO] (sysy_builder.cpp:1775L  visit)deepWhileBr ----------------------------------
+[INFO] (sysy_builder.cpp:1776L  visit)Call type -------------------------------
+[INFO] (sysy_builder.cpp:1779L  visit)i32
+[INFO] (sysy_builder.cpp:1780L  visit)% = load i32, i32* %
+[INFO] (sysy_builder.cpp:1779L  visit)i32
+[INFO] (sysy_builder.cpp:1780L  visit)% = load i32, i32* %
+[INFO] (sysy_builder.cpp:1782L  visit)Function type ------------------------------
+[INFO] (sysy_builder.cpp:1785L  visit)i32
+[INFO] (sysy_builder.cpp:1785L  visit)i32
+[INFO] (sysy_builder.cpp:991L  visit)p -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: p
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1134L  visit)i32* -----------------------------
+[INFO] (sysy_builder.cpp:757L  visit)store_9
+[INFO] (sysy_builder.cpp:1748L  visit)putint ...............................
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:991L  visit)p -----------------
+[INFO] (sysy_builder.cpp:994L  visit)id: p
+[INFO] (sysy_builder.cpp:1002L  visit)i32*
+[INFO] (sysy_builder.cpp:1034L  visit)load_1---------------------
+[INFO] (sysy_builder.cpp:1134L  visit)i32 -----------------------------
+[INFO] (sysy_builder.cpp:1775L  visit)putint ----------------------------------
+[INFO] (sysy_builder.cpp:1776L  visit)Call type -------------------------------
+[INFO] (sysy_builder.cpp:1779L  visit)i32
+[INFO] (sysy_builder.cpp:1780L  visit)% = load i32, i32* %
+[INFO] (sysy_builder.cpp:1782L  visit)Function type ------------------------------
+[INFO] (sysy_builder.cpp:1785L  visit)i32
+[INFO] (sysy_builder.cpp:1192L  visit)ASTUnaryExp enter primary_exp
+[INFO] (sysy_builder.cpp:1147L  visit)0
+[INFO] (sysy.cpp:127L  main)before mem2reg
+[INFO] (sysy.cpp:130L  main)getint
+[INFO] (sysy.cpp:130L  main)getch
+[INFO] (sysy.cpp:130L  main)getfloat
+[INFO] (sysy.cpp:130L  main)getarray
+[INFO] (sysy.cpp:130L  main)getfarray
+[INFO] (sysy.cpp:130L  main)putint
+[INFO] (sysy.cpp:130L  main)putch
+[INFO] (sysy.cpp:130L  main)putarray
+[INFO] (sysy.cpp:130L  main)putfloat
+[INFO] (sysy.cpp:130L  main)putfarray
+[INFO] (sysy.cpp:130L  main)before_main
+[INFO] (sysy.cpp:130L  main)after_main
+[INFO] (sysy.cpp:130L  main)_sysy_starttime
+[INFO] (sysy.cpp:130L  main)_sysy_stoptime
+[INFO] (sysy.cpp:130L  main)memset_int
+[INFO] (sysy.cpp:130L  main)memset_float
+[INFO] (sysy.cpp:130L  main)get_one
+[INFO] (sysy.cpp:133L  main)label_entry
+[INFO] (sysy.cpp:136L  main)% = alloca i32 1
+[INFO] (sysy.cpp:136L  main)store i32 %, i32* % 1
+[INFO] (sysy.cpp:136L  main)ret i32 1 1
+[INFO] (sysy.cpp:130L  main)deepWhileBr
+[INFO] (sysy.cpp:133L  main)label_entry
+[INFO] (sysy.cpp:136L  main)% = alloca i32 2
+[INFO] (sysy.cpp:136L  main)store i32 %, i32* % 2
+[INFO] (sysy.cpp:136L  main)% = alloca i32 2
+[INFO] (sysy.cpp:136L  main)store i32 %, i32* % 2
+[INFO] (sysy.cpp:136L  main)% = alloca i32 2
+[INFO] (sysy.cpp:136L  main)% = load i32, i32* % 2
+[INFO] (sysy.cpp:136L  main)% = load i32, i32* % 2
+[INFO] (sysy.cpp:136L  main)% = add i32 %, % 2
+[INFO] (sysy.cpp:136L  main)store i32 %, i32* % 2
+[INFO] (sysy.cpp:136L  main)br label % 2
+[INFO] (sysy.cpp:133L  main)
+[INFO] (sysy.cpp:136L  main)% = load i32, i32* % 3
+[INFO] (sysy.cpp:136L  main)% = icmp slt i32 %, 75 3
+[INFO] (sysy.cpp:136L  main)br i1 %, label %, label % 3
+[INFO] (sysy.cpp:133L  main)
+[INFO] (sysy.cpp:136L  main)% = alloca i32 4
+[INFO] (sysy.cpp:136L  main)store i32 42, i32* % 4
+[INFO] (sysy.cpp:136L  main)% = load i32, i32* % 4
+[INFO] (sysy.cpp:136L  main)% = icmp slt i32 %, 100 4
+[INFO] (sysy.cpp:136L  main)br i1 %, label %, label % 4
+[INFO] (sysy.cpp:133L  main)
+[INFO] (sysy.cpp:136L  main)% = load i32, i32* % 5
+[INFO] (sysy.cpp:136L  main)ret i32 % 5
+[INFO] (sysy.cpp:133L  main)
+[INFO] (sysy.cpp:136L  main)% = load i32, i32* % 6
+[INFO] (sysy.cpp:136L  main)% = load i32, i32* % 6
+[INFO] (sysy.cpp:136L  main)% = add i32 %, % 6
+[INFO] (sysy.cpp:136L  main)store i32 %, i32* % 6
+[INFO] (sysy.cpp:136L  main)% = load i32, i32* % 6
+[INFO] (sysy.cpp:136L  main)% = icmp sgt i32 %, 99 6
+[INFO] (sysy.cpp:136L  main)br i1 %, label %, label % 6
+[INFO] (sysy.cpp:133L  main)
+[INFO] (sysy.cpp:136L  main)br label % 7
+[INFO] (sysy.cpp:133L  main)
+[INFO] (sysy.cpp:136L  main)% = alloca i32 8
+[INFO] (sysy.cpp:136L  main)% = load i32, i32* % 8
+[INFO] (sysy.cpp:136L  main)% = mul i32 %, 2 8
+[INFO] (sysy.cpp:136L  main)store i32 %, i32* % 8
+[INFO] (sysy.cpp:136L  main)% = call i32 @get_one(i32 0) 8
+[INFO] (sysy.cpp:136L  main)% = icmp eq i32 %, 1 8
+[INFO] (sysy.cpp:136L  main)br i1 %, label %, label % 8
+[INFO] (sysy.cpp:133L  main)
+[INFO] (sysy.cpp:136L  main)br label % 9
+[INFO] (sysy.cpp:133L  main)
+[INFO] (sysy.cpp:136L  main)% = load i32, i32* % 10
+[INFO] (sysy.cpp:136L  main)% = mul i32 %, 2 10
+[INFO] (sysy.cpp:136L  main)store i32 %, i32* % 10
+[INFO] (sysy.cpp:136L  main)br label % 10
+[INFO] (sysy.cpp:133L  main)
+[INFO] (sysy.cpp:136L  main)br label % 11
+[INFO] (sysy.cpp:130L  main)main
+[INFO] (sysy.cpp:133L  main)label_entry
+[INFO] (sysy.cpp:136L  main)% = alloca i32 12
+[INFO] (sysy.cpp:136L  main)store i32 2, i32* % 12
+[INFO] (sysy.cpp:136L  main)% = load i32, i32* % 12
+[INFO] (sysy.cpp:136L  main)% = load i32, i32* % 12
+[INFO] (sysy.cpp:136L  main)% = call i32 @deepWhileBr(i32 %, i32 %) 12
+[INFO] (sysy.cpp:136L  main)store i32 %, i32* % 12
+[INFO] (sysy.cpp:136L  main)% = load i32, i32* % 12
+[INFO] (sysy.cpp:136L  main)call void @putint(i32 %) 12
+[INFO] (sysy.cpp:136L  main)ret i32 0 12
+[INFO] (sysy.cpp:144L  main)finish mem2reg and start deadcode
+[INFO] (Mem2Reg.cpp:10L  run)start dominators
+[INFO] (Dominators.cpp:5L  run)enter here
+[INFO] (Dominators.cpp:8L  run)getint
+[INFO] (Dominators.cpp:8L  run)getch
+[INFO] (Dominators.cpp:8L  run)getfloat
+[INFO] (Dominators.cpp:8L  run)getarray
+[INFO] (Dominators.cpp:8L  run)getfarray
+[INFO] (Dominators.cpp:8L  run)putint
+[INFO] (Dominators.cpp:8L  run)putch
+[INFO] (Dominators.cpp:8L  run)putarray
+[INFO] (Dominators.cpp:8L  run)putfloat
+[INFO] (Dominators.cpp:8L  run)putfarray
+[INFO] (Dominators.cpp:8L  run)before_main
+[INFO] (Dominators.cpp:8L  run)after_main
+[INFO] (Dominators.cpp:8L  run)_sysy_starttime
+[INFO] (Dominators.cpp:8L  run)_sysy_stoptime
+[INFO] (Dominators.cpp:8L  run)memset_int
+[INFO] (Dominators.cpp:8L  run)memset_float
+[INFO] (Dominators.cpp:8L  run)get_one
+[INFO] (Dominators.cpp:19L  run)start create idom
+[INFO] (Dominators.cpp:55L  create_idom)label_entry
+[INFO] (Dominators.cpp:21L  run)finish create idom
+[INFO] (Dominators.cpp:144L  create_dominance_frontier)get_one
+[INFO] (Dominators.cpp:147L  create_dominance_frontier)label_entry
+[INFO] (Dominators.cpp:23L  run)finfish dominance frontier
+[INFO] (Dominators.cpp:25L  run)finish dom_tree_succ
+[INFO] (Dominators.cpp:8L  run)deepWhileBr
+[INFO] (Dominators.cpp:19L  run)start create idom
+[INFO] (Dominators.cpp:55L  create_idom)label_entry
+[INFO] (Dominators.cpp:55L  create_idom)label8
+[INFO] (Dominators.cpp:55L  create_idom)label15
+[INFO] (Dominators.cpp:55L  create_idom)label11
+[INFO] (Dominators.cpp:55L  create_idom)label17
+[INFO] (Dominators.cpp:55L  create_idom)label24
+[INFO] (Dominators.cpp:55L  create_idom)label31
+[INFO] (Dominators.cpp:55L  create_idom)label34
+[INFO] (Dominators.cpp:55L  create_idom)label30
+[INFO] (Dominators.cpp:55L  create_idom)label23
+[INFO] (Dominators.cpp:21L  run)finish create idom
+[INFO] (Dominators.cpp:144L  create_dominance_frontier)deepWhileBr
+[INFO] (Dominators.cpp:147L  create_dominance_frontier)label_entry
+[INFO] (Dominators.cpp:147L  create_dominance_frontier)label8
+[INFO] (Dominators.cpp:152L  create_dominance_frontier)label_entry
+[INFO] (Dominators.cpp:154L  create_dominance_frontier)label_entry
+[INFO] (Dominators.cpp:152L  create_dominance_frontier)label23
+[INFO] (Dominators.cpp:154L  create_dominance_frontier)label_entry
+[INFO] (Dominators.cpp:147L  create_dominance_frontier)label11
+[INFO] (Dominators.cpp:147L  create_dominance_frontier)label15
+[INFO] (Dominators.cpp:147L  create_dominance_frontier)label17
+[INFO] (Dominators.cpp:147L  create_dominance_frontier)label23
+[INFO] (Dominators.cpp:152L  create_dominance_frontier)label11
+[INFO] (Dominators.cpp:154L  create_dominance_frontier)label11
+[INFO] (Dominators.cpp:152L  create_dominance_frontier)label30
+[INFO] (Dominators.cpp:154L  create_dominance_frontier)label11
+[INFO] (Dominators.cpp:147L  create_dominance_frontier)label24
+[INFO] (Dominators.cpp:147L  create_dominance_frontier)label30
+[INFO] (Dominators.cpp:152L  create_dominance_frontier)label17
+[INFO] (Dominators.cpp:154L  create_dominance_frontier)label17
+[INFO] (Dominators.cpp:152L  create_dominance_frontier)label34
+[INFO] (Dominators.cpp:154L  create_dominance_frontier)label17
+[INFO] (Dominators.cpp:147L  create_dominance_frontier)label31
+[INFO] (Dominators.cpp:147L  create_dominance_frontier)label34
+[INFO] (Dominators.cpp:152L  create_dominance_frontier)label24
+[INFO] (Dominators.cpp:154L  create_dominance_frontier)label24
+[INFO] (Dominators.cpp:152L  create_dominance_frontier)label31
+[INFO] (Dominators.cpp:154L  create_dominance_frontier)label24
+[INFO] (Dominators.cpp:23L  run)finfish dominance frontier
+[INFO] (Dominators.cpp:25L  run)finish dom_tree_succ
+[INFO] (Dominators.cpp:8L  run)main
+[INFO] (Dominators.cpp:19L  run)start create idom
+[INFO] (Dominators.cpp:55L  create_idom)label_entry
+[INFO] (Dominators.cpp:21L  run)finish create idom
+[INFO] (Dominators.cpp:144L  create_dominance_frontier)main
+[INFO] (Dominators.cpp:147L  create_dominance_frontier)label_entry
+[INFO] (Dominators.cpp:23L  run)finfish dominance frontier
+[INFO] (Dominators.cpp:25L  run)finish dom_tree_succ
+[INFO] (Mem2Reg.cpp:14L  run)create a dominator tree
+[INFO] (Mem2Reg.cpp:15L  run)start mem2reg
+[WARNING] (Mem2Reg.cpp:64L  loop_alloc_inv_hoist)%op1 = alloca i32 1
+[WARNING] (Mem2Reg.cpp:67L  loop_alloc_inv_hoist)%op1 = alloca i32 0
+[WARNING] (Mem2Reg.cpp:76L  loop_alloc_inv_hoist)%op1 = alloca i32 0
+[WARNING] (Mem2Reg.cpp:78L  loop_alloc_inv_hoist)%op1 = alloca i32 1
+[INFO] (Mem2Reg.cpp:230L  rename)store i32 %arg0, i32* %op1
+[INFO] (ilist.hpp:199L  erase)0x1 1
+[WARNING] (Mem2Reg.cpp:64L  loop_alloc_inv_hoist)%op2 = alloca i32 2
+[WARNING] (Mem2Reg.cpp:67L  loop_alloc_inv_hoist)%op2 = alloca i32 0
+[WARNING] (Mem2Reg.cpp:64L  loop_alloc_inv_hoist)%op3 = alloca i32 2
+[WARNING] (Mem2Reg.cpp:67L  loop_alloc_inv_hoist)%op3 = alloca i32 0
+[WARNING] (Mem2Reg.cpp:64L  loop_alloc_inv_hoist)%op4 = alloca i32 2
+[WARNING] (Mem2Reg.cpp:67L  loop_alloc_inv_hoist)%op4 = alloca i32 0
+[WARNING] (Mem2Reg.cpp:64L  loop_alloc_inv_hoist)%op12 = alloca i32 4
+[WARNING] (Mem2Reg.cpp:67L  loop_alloc_inv_hoist)%op12 = alloca i32 0
+[WARNING] (Mem2Reg.cpp:64L  loop_alloc_inv_hoist)%op25 = alloca i32 8
+[WARNING] (Mem2Reg.cpp:67L  loop_alloc_inv_hoist)%op25 = alloca i32 0
+[WARNING] (Mem2Reg.cpp:76L  loop_alloc_inv_hoist)%op2 = alloca i32 0
+[WARNING] (Mem2Reg.cpp:78L  loop_alloc_inv_hoist)%op2 = alloca i32 2
+[WARNING] (Mem2Reg.cpp:76L  loop_alloc_inv_hoist)%op3 = alloca i32 0
+[WARNING] (Mem2Reg.cpp:78L  loop_alloc_inv_hoist)%op3 = alloca i32 2
+[WARNING] (Mem2Reg.cpp:76L  loop_alloc_inv_hoist)%op4 = alloca i32 0
+[WARNING] (Mem2Reg.cpp:78L  loop_alloc_inv_hoist)%op4 = alloca i32 2
+[WARNING] (Mem2Reg.cpp:76L  loop_alloc_inv_hoist)%op12 = alloca i32 0
+[WARNING] (Mem2Reg.cpp:78L  loop_alloc_inv_hoist)%op12 = alloca i32 2
+[WARNING] (Mem2Reg.cpp:76L  loop_alloc_inv_hoist)%op25 = alloca i32 0
+[WARNING] (Mem2Reg.cpp:78L  loop_alloc_inv_hoist)%op25 = alloca i32 2
+[INFO] (Mem2Reg.cpp:230L  rename)store i32 %op33, i32* %op4
+[INFO] (ilist.hpp:199L  erase)0xa 10
+[INFO] (Mem2Reg.cpp:230L  rename)store i32 %op27, i32* %op25
+[INFO] (ilist.hpp:199L  erase)0x8 8
+[INFO] (Mem2Reg.cpp:230L  rename)store i32 %op20, i32* %op4
+[INFO] (ilist.hpp:199L  erase)0x6 6
+[INFO] (Mem2Reg.cpp:230L  rename)store i32 42, i32* %op12
+[INFO] (ilist.hpp:199L  erase)0x4 4
+[INFO] (Mem2Reg.cpp:230L  rename)store i32 %arg0, i32* %op2
+[INFO] (ilist.hpp:199L  erase)0x2 2
+[INFO] (Mem2Reg.cpp:230L  rename)store i32 %arg1, i32* %op3
+[INFO] (ilist.hpp:199L  erase)0x2 2
+[INFO] (Mem2Reg.cpp:230L  rename)store i32 %op7, i32* %op4
+[INFO] (ilist.hpp:199L  erase)0x2 2
+[WARNING] (Mem2Reg.cpp:64L  loop_alloc_inv_hoist)%op0 = alloca i32 12
+[WARNING] (Mem2Reg.cpp:67L  loop_alloc_inv_hoist)%op0 = alloca i32 0
+[WARNING] (Mem2Reg.cpp:76L  loop_alloc_inv_hoist)%op0 = alloca i32 0
+[WARNING] (Mem2Reg.cpp:78L  loop_alloc_inv_hoist)%op0 = alloca i32 12
+[INFO] (Mem2Reg.cpp:230L  rename)store i32 2, i32* %op0
+[INFO] (ilist.hpp:199L  erase)0xc 12
+[INFO] (Mem2Reg.cpp:230L  rename)store i32 %op3, i32* %op0
+[INFO] (ilist.hpp:199L  erase)0xc 12
+[INFO] (Mem2Reg.cpp:35L  run)declare i32 @getint()
+
+[INFO] (Mem2Reg.cpp:35L  run)declare i32 @getch()
+
+[INFO] (Mem2Reg.cpp:35L  run)declare float @getfloat()
+
+[INFO] (Mem2Reg.cpp:35L  run)declare i32 @getarray(i32*)
+
+[INFO] (Mem2Reg.cpp:35L  run)declare i32 @getfarray(float*)
+
+[INFO] (Mem2Reg.cpp:35L  run)declare void @putint(i32)
+
+[INFO] (Mem2Reg.cpp:35L  run)declare void @putch(i32)
+
+[INFO] (Mem2Reg.cpp:35L  run)declare void @putarray(i32, i32*)
+
+[INFO] (Mem2Reg.cpp:35L  run)declare void @putfloat(float)
+
+[INFO] (Mem2Reg.cpp:35L  run)declare void @putfarray(i32, float*)
+
+[INFO] (Mem2Reg.cpp:35L  run)declare void @before_main()
+
+[INFO] (Mem2Reg.cpp:35L  run)declare void @after_main()
+
+[INFO] (Mem2Reg.cpp:35L  run)declare void @_sysy_starttime(i32)
+
+[INFO] (Mem2Reg.cpp:35L  run)declare void @_sysy_stoptime(i32)
+
+[INFO] (Mem2Reg.cpp:35L  run)declare void @memset_int(i32*, i32)
+
+[INFO] (Mem2Reg.cpp:35L  run)declare void @memset_float(float*, i32)
+
+[INFO] (Mem2Reg.cpp:35L  run)define i32 @get_one(i32 %arg0) {
+label_entry:
+  %op1 = alloca i32
+  ret i32 1
+}
+[INFO] (Mem2Reg.cpp:38L  run)label_entry:
+  %op1 = alloca i32
+  ret i32 1
+
+[INFO] (Mem2Reg.cpp:41L  run)%op1 = alloca i32 1
+[INFO] (Mem2Reg.cpp:41L  run)ret i32 1 1
+[INFO] (Mem2Reg.cpp:35L  run)define i32 @deepWhileBr(i32 %arg0, i32 %arg1) {
+label_entry:
+  %op25 = alloca i32
+  %op12 = alloca i32
+  %op4 = alloca i32
+  %op3 = alloca i32
+  %op2 = alloca i32
+  %op5 = load i32, i32* %op2
+  %op6 = load i32, i32* %op3
+  %op7 = add i32 %arg0, %arg1
+  br label %label8
+label8:                                                ; preds = %label_entry, %label23
+  %op35 = phi i32 [ %op38, %label23 ], [ undef, %label_entry ]
+  %op36 = phi i32 [ 42, %label23 ], [ undef, %label_entry ]
+  %op37 = phi i32 [ %op7, %label_entry ], [ %op39, %label23 ]
+  %op9 = load i32, i32* %op4
+  %op10 = icmp slt i32 %op37, 75
+  br i1 %op10, label %label11, label %label15
+label11:                                                ; preds = %label8
+  %op13 = load i32, i32* %op4
+  %op14 = icmp slt i32 %op37, 100
+  br i1 %op14, label %label17, label %label23
+label15:                                                ; preds = %label8
+  %op16 = load i32, i32* %op4
+  ret i32 %op37
+label17:                                                ; preds = %label11
+  %op18 = load i32, i32* %op4
+  %op19 = load i32, i32* %op12
+  %op20 = add i32 %op37, 42
+  %op21 = load i32, i32* %op4
+  %op22 = icmp sgt i32 %op20, 99
+  br i1 %op22, label %label24, label %label30
+label23:                                                ; preds = %label11, %label30
+  %op38 = phi i32 [ %op35, %label11 ], [ %op40, %label30 ]
+  %op39 = phi i32 [ %op37, %label11 ], [ %op41, %label30 ]
+  br label %label8
+label24:                                                ; preds = %label17
+  %op26 = load i32, i32* %op12
+  %op27 = mul i32 42, 2
+  %op28 = call i32 @get_one(i32 0)
+  %op29 = icmp eq i32 %op28, 1
+  br i1 %op29, label %label31, label %label34
+label30:                                                ; preds = %label17, %label34
+  %op40 = phi i32 [ %op35, %label17 ], [ %op27, %label34 ]
+  %op41 = phi i32 [ %op20, %label17 ], [ %op42, %label34 ]
+  br label %label23
+label31:                                                ; preds = %label24
+  %op32 = load i32, i32* %op25
+  %op33 = mul i32 %op27, 2
+  br label %label34
+label34:                                                ; preds = %label24, %label31
+  %op42 = phi i32 [ %op20, %label24 ], [ %op33, %label31 ]
+  br label %label30
+}
+[INFO] (Mem2Reg.cpp:38L  run)label_entry:
+  %op25 = alloca i32
+  %op12 = alloca i32
+  %op4 = alloca i32
+  %op3 = alloca i32
+  %op2 = alloca i32
+  %op5 = load i32, i32* %op2
+  %op6 = load i32, i32* %op3
+  %op7 = add i32 %arg0, %arg1
+  br label %label8
+
+[INFO] (Mem2Reg.cpp:41L  run)%op25 = alloca i32 2
+[INFO] (Mem2Reg.cpp:41L  run)%op12 = alloca i32 2
+[INFO] (Mem2Reg.cpp:41L  run)%op4 = alloca i32 2
+[INFO] (Mem2Reg.cpp:41L  run)%op3 = alloca i32 2
+[INFO] (Mem2Reg.cpp:41L  run)%op2 = alloca i32 2
+[INFO] (Mem2Reg.cpp:41L  run)%op5 = load i32, i32* %op2 2
+[INFO] (Mem2Reg.cpp:41L  run)%op6 = load i32, i32* %op3 2
+[INFO] (Mem2Reg.cpp:41L  run)%op7 = add i32 %arg0, %arg1 2
+[INFO] (Mem2Reg.cpp:41L  run)br label %label8 2
+[INFO] (Mem2Reg.cpp:38L  run)label8:                                                ; preds = %label_entry, %label23
+  %op35 = phi i32 [ %op38, %label23 ], [ undef, %label_entry ]
+  %op36 = phi i32 [ 42, %label23 ], [ undef, %label_entry ]
+  %op37 = phi i32 [ %op7, %label_entry ], [ %op39, %label23 ]
+  %op9 = load i32, i32* %op4
+  %op10 = icmp slt i32 %op37, 75
+  br i1 %op10, label %label11, label %label15
+
+[INFO] (Mem2Reg.cpp:41L  run)%op35 = phi i32 [ %op38, %label23 ], [ undef, %label_entry ] 3
+[INFO] (Mem2Reg.cpp:41L  run)%op36 = phi i32 [ 42, %label23 ], [ undef, %label_entry ] 3
+[INFO] (Mem2Reg.cpp:41L  run)%op37 = phi i32 [ %op7, %label_entry ], [ %op39, %label23 ] 3
+[INFO] (Mem2Reg.cpp:41L  run)%op9 = load i32, i32* %op4 3
+[INFO] (Mem2Reg.cpp:41L  run)%op10 = icmp slt i32 %op37, 75 3
+[INFO] (Mem2Reg.cpp:41L  run)br i1 %op10, label %label11, label %label15 3
+[INFO] (Mem2Reg.cpp:38L  run)label11:                                                ; preds = %label8
+  %op13 = load i32, i32* %op4
+  %op14 = icmp slt i32 %op37, 100
+  br i1 %op14, label %label17, label %label23
+
+[INFO] (Mem2Reg.cpp:41L  run)%op13 = load i32, i32* %op4 4
+[INFO] (Mem2Reg.cpp:41L  run)%op14 = icmp slt i32 %op37, 100 4
+[INFO] (Mem2Reg.cpp:41L  run)br i1 %op14, label %label17, label %label23 4
+[INFO] (Mem2Reg.cpp:38L  run)label15:                                                ; preds = %label8
+  %op16 = load i32, i32* %op4
+  ret i32 %op37
+
+[INFO] (Mem2Reg.cpp:41L  run)%op16 = load i32, i32* %op4 5
+[INFO] (Mem2Reg.cpp:41L  run)ret i32 %op37 5
+[INFO] (Mem2Reg.cpp:38L  run)label17:                                                ; preds = %label11
+  %op18 = load i32, i32* %op4
+  %op19 = load i32, i32* %op12
+  %op20 = add i32 %op37, 42
+  %op21 = load i32, i32* %op4
+  %op22 = icmp sgt i32 %op20, 99
+  br i1 %op22, label %label24, label %label30
+
+[INFO] (Mem2Reg.cpp:41L  run)%op18 = load i32, i32* %op4 6
+[INFO] (Mem2Reg.cpp:41L  run)%op19 = load i32, i32* %op12 6
+[INFO] (Mem2Reg.cpp:41L  run)%op20 = add i32 %op37, 42 6
+[INFO] (Mem2Reg.cpp:41L  run)%op21 = load i32, i32* %op4 6
+[INFO] (Mem2Reg.cpp:41L  run)%op22 = icmp sgt i32 %op20, 99 6
+[INFO] (Mem2Reg.cpp:41L  run)br i1 %op22, label %label24, label %label30 6
+[INFO] (Mem2Reg.cpp:38L  run)label23:                                                ; preds = %label11, %label30
+  %op38 = phi i32 [ %op35, %label11 ], [ %op40, %label30 ]
+  %op39 = phi i32 [ %op37, %label11 ], [ %op41, %label30 ]
+  br label %label8
+
+[INFO] (Mem2Reg.cpp:41L  run)%op38 = phi i32 [ %op35, %label11 ], [ %op40, %label30 ] 7
+[INFO] (Mem2Reg.cpp:41L  run)%op39 = phi i32 [ %op37, %label11 ], [ %op41, %label30 ] 7
+[INFO] (Mem2Reg.cpp:41L  run)br label %label8 7
+[INFO] (Mem2Reg.cpp:38L  run)label24:                                                ; preds = %label17
+  %op26 = load i32, i32* %op12
+  %op27 = mul i32 42, 2
+  %op28 = call i32 @get_one(i32 0)
+  %op29 = icmp eq i32 %op28, 1
+  br i1 %op29, label %label31, label %label34
+
+[INFO] (Mem2Reg.cpp:41L  run)%op26 = load i32, i32* %op12 8
+[INFO] (Mem2Reg.cpp:41L  run)%op27 = mul i32 42, 2 8
+[INFO] (Mem2Reg.cpp:41L  run)%op28 = call i32 @get_one(i32 0) 8
+[INFO] (Mem2Reg.cpp:41L  run)%op29 = icmp eq i32 %op28, 1 8
+[INFO] (Mem2Reg.cpp:41L  run)br i1 %op29, label %label31, label %label34 8
+[INFO] (Mem2Reg.cpp:38L  run)label30:                                                ; preds = %label17, %label34
+  %op40 = phi i32 [ %op35, %label17 ], [ %op27, %label34 ]
+  %op41 = phi i32 [ %op20, %label17 ], [ %op42, %label34 ]
+  br label %label23
+
+[INFO] (Mem2Reg.cpp:41L  run)%op40 = phi i32 [ %op35, %label17 ], [ %op27, %label34 ] 9
+[INFO] (Mem2Reg.cpp:41L  run)%op41 = phi i32 [ %op20, %label17 ], [ %op42, %label34 ] 9
+[INFO] (Mem2Reg.cpp:41L  run)br label %label23 9
+[INFO] (Mem2Reg.cpp:38L  run)label31:                                                ; preds = %label24
+  %op32 = load i32, i32* %op25
+  %op33 = mul i32 %op27, 2
+  br label %label34
+
+[INFO] (Mem2Reg.cpp:41L  run)%op32 = load i32, i32* %op25 10
+[INFO] (Mem2Reg.cpp:41L  run)%op33 = mul i32 %op27, 2 10
+[INFO] (Mem2Reg.cpp:41L  run)br label %label34 10
+[INFO] (Mem2Reg.cpp:38L  run)label34:                                                ; preds = %label24, %label31
+  %op42 = phi i32 [ %op20, %label24 ], [ %op33, %label31 ]
+  br label %label30
+
+[INFO] (Mem2Reg.cpp:41L  run)%op42 = phi i32 [ %op20, %label24 ], [ %op33, %label31 ] 11
+[INFO] (Mem2Reg.cpp:41L  run)br label %label30 11
+[INFO] (Mem2Reg.cpp:35L  run)define i32 @main() {
+label_entry:
+  %op0 = alloca i32
+  %op1 = load i32, i32* %op0
+  %op2 = load i32, i32* %op0
+  %op3 = call i32 @deepWhileBr(i32 2, i32 2)
+  %op4 = load i32, i32* %op0
+  call void @putint(i32 %op3)
+  ret i32 0
+}
+[INFO] (Mem2Reg.cpp:38L  run)label_entry:
+  %op0 = alloca i32
+  %op1 = load i32, i32* %op0
+  %op2 = load i32, i32* %op0
+  %op3 = call i32 @deepWhileBr(i32 2, i32 2)
+  %op4 = load i32, i32* %op0
+  call void @putint(i32 %op3)
+  ret i32 0
+
+[INFO] (Mem2Reg.cpp:41L  run)%op0 = alloca i32 12
+[INFO] (Mem2Reg.cpp:41L  run)%op1 = load i32, i32* %op0 12
+[INFO] (Mem2Reg.cpp:41L  run)%op2 = load i32, i32* %op0 12
+[INFO] (Mem2Reg.cpp:41L  run)%op3 = call i32 @deepWhileBr(i32 2, i32 2) 12
+[INFO] (Mem2Reg.cpp:41L  run)%op4 = load i32, i32* %op0 12
+[INFO] (Mem2Reg.cpp:41L  run)call void @putint(i32 %op3) 12
+[INFO] (Mem2Reg.cpp:41L  run)ret i32 0 12
+[INFO] (FuncInfo.cpp:54L  process)call void @putint(i32 %op3) uses func: putint
+[INFO] (FuncInfo.cpp:17L  run)FuncInfo pass finished
+[INFO] (DeadCode.cpp:69L  sweep)declare i32 @getint()
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare i32 @getch()
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare float @getfloat()
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare i32 @getarray(i32*)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare i32 @getfarray(float*)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @putint(i32)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @putch(i32)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @putarray(i32, i32*)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @putfloat(float)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @putfarray(i32, float*)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @before_main()
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @after_main()
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @_sysy_starttime(i32)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @_sysy_stoptime(i32)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @memset_int(i32*, i32)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @memset_float(float*, i32)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)define i32 @get_one(i32 %arg0) {
+label_entry:
+  %op1 = alloca i32
+  ret i32 1
+}
+[INFO] (DeadCode.cpp:72L  sweep)bb: label_entry 17
+[INFO] (DeadCode.cpp:76L  sweep)%op1 = alloca i32
+[INFO] (DeadCode.cpp:77L  sweep)1
+[INFO] (DeadCode.cpp:76L  sweep)ret i32 1
+[INFO] (DeadCode.cpp:77L  sweep)1
+[INFO] (DeadCode.cpp:81L  sweep)1
+[INFO] (DeadCode.cpp:85L  sweep)%op1 = alloca i32
+[INFO] (DeadCode.cpp:86L  sweep)1
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (ilist.hpp:199L  erase)0x1 1
+[INFO] (DeadCode.cpp:69L  sweep)define i32 @deepWhileBr(i32 %arg0, i32 %arg1) {
+label_entry:
+  %op25 = alloca i32
+  %op12 = alloca i32
+  %op4 = alloca i32
+  %op3 = alloca i32
+  %op2 = alloca i32
+  %op5 = load i32, i32* %op2
+  %op6 = load i32, i32* %op3
+  %op7 = add i32 %arg0, %arg1
+  br label %label8
+label8:                                                ; preds = %label_entry, %label23
+  %op35 = phi i32 [ %op38, %label23 ], [ undef, %label_entry ]
+  %op36 = phi i32 [ 42, %label23 ], [ undef, %label_entry ]
+  %op37 = phi i32 [ %op7, %label_entry ], [ %op39, %label23 ]
+  %op9 = load i32, i32* %op4
+  %op10 = icmp slt i32 %op37, 75
+  br i1 %op10, label %label11, label %label15
+label11:                                                ; preds = %label8
+  %op13 = load i32, i32* %op4
+  %op14 = icmp slt i32 %op37, 100
+  br i1 %op14, label %label17, label %label23
+label15:                                                ; preds = %label8
+  %op16 = load i32, i32* %op4
+  ret i32 %op37
+label17:                                                ; preds = %label11
+  %op18 = load i32, i32* %op4
+  %op19 = load i32, i32* %op12
+  %op20 = add i32 %op37, 42
+  %op21 = load i32, i32* %op4
+  %op22 = icmp sgt i32 %op20, 99
+  br i1 %op22, label %label24, label %label30
+label23:                                                ; preds = %label11, %label30
+  %op38 = phi i32 [ %op35, %label11 ], [ %op40, %label30 ]
+  %op39 = phi i32 [ %op37, %label11 ], [ %op41, %label30 ]
+  br label %label8
+label24:                                                ; preds = %label17
+  %op26 = load i32, i32* %op12
+  %op27 = mul i32 42, 2
+  %op28 = call i32 @get_one(i32 0)
+  %op29 = icmp eq i32 %op28, 1
+  br i1 %op29, label %label31, label %label34
+label30:                                                ; preds = %label17, %label34
+  %op40 = phi i32 [ %op35, %label17 ], [ %op27, %label34 ]
+  %op41 = phi i32 [ %op20, %label17 ], [ %op42, %label34 ]
+  br label %label23
+label31:                                                ; preds = %label24
+  %op32 = load i32, i32* %op25
+  %op33 = mul i32 %op27, 2
+  br label %label34
+label34:                                                ; preds = %label24, %label31
+  %op42 = phi i32 [ %op20, %label24 ], [ %op33, %label31 ]
+  br label %label30
+}
+[INFO] (DeadCode.cpp:72L  sweep)bb: label_entry 18
+[INFO] (DeadCode.cpp:76L  sweep)%op25 = alloca i32
+[INFO] (DeadCode.cpp:77L  sweep)2
+[INFO] (DeadCode.cpp:76L  sweep)%op12 = alloca i32
+[INFO] (DeadCode.cpp:77L  sweep)2
+[INFO] (DeadCode.cpp:76L  sweep)%op4 = alloca i32
+[INFO] (DeadCode.cpp:77L  sweep)2
+[INFO] (DeadCode.cpp:76L  sweep)%op3 = alloca i32
+[INFO] (DeadCode.cpp:77L  sweep)2
+[INFO] (DeadCode.cpp:76L  sweep)%op2 = alloca i32
+[INFO] (DeadCode.cpp:77L  sweep)2
+[INFO] (DeadCode.cpp:76L  sweep)%op5 = load i32, i32* %op2
+[INFO] (DeadCode.cpp:77L  sweep)2
+[INFO] (DeadCode.cpp:76L  sweep)%op6 = load i32, i32* %op3
+[INFO] (DeadCode.cpp:77L  sweep)2
+[INFO] (DeadCode.cpp:76L  sweep)%op7 = add i32 %arg0, %arg1
+[INFO] (DeadCode.cpp:77L  sweep)2
+[INFO] (DeadCode.cpp:76L  sweep)br label %label8
+[INFO] (DeadCode.cpp:77L  sweep)2
+[INFO] (DeadCode.cpp:72L  sweep)bb: label8 18
+[INFO] (DeadCode.cpp:76L  sweep)%op35 = phi i32 [ %op38, %label23 ], [ undef, %label_entry ]
+[INFO] (DeadCode.cpp:77L  sweep)3
+[INFO] (DeadCode.cpp:76L  sweep)%op36 = phi i32 [ 42, %label23 ], [ undef, %label_entry ]
+[INFO] (DeadCode.cpp:77L  sweep)3
+[INFO] (DeadCode.cpp:76L  sweep)%op37 = phi i32 [ %op7, %label_entry ], [ %op39, %label23 ]
+[INFO] (DeadCode.cpp:77L  sweep)3
+[INFO] (DeadCode.cpp:76L  sweep)%op9 = load i32, i32* %op4
+[INFO] (DeadCode.cpp:77L  sweep)3
+[INFO] (DeadCode.cpp:76L  sweep)%op10 = icmp slt i32 %op37, 75
+[INFO] (DeadCode.cpp:77L  sweep)3
+[INFO] (DeadCode.cpp:76L  sweep)br i1 %op10, label %label11, label %label15
+[INFO] (DeadCode.cpp:77L  sweep)3
+[INFO] (DeadCode.cpp:72L  sweep)bb: label11 18
+[INFO] (DeadCode.cpp:76L  sweep)%op13 = load i32, i32* %op4
+[INFO] (DeadCode.cpp:77L  sweep)4
+[INFO] (DeadCode.cpp:76L  sweep)%op14 = icmp slt i32 %op37, 100
+[INFO] (DeadCode.cpp:77L  sweep)4
+[INFO] (DeadCode.cpp:76L  sweep)br i1 %op14, label %label17, label %label23
+[INFO] (DeadCode.cpp:77L  sweep)4
+[INFO] (DeadCode.cpp:72L  sweep)bb: label15 18
+[INFO] (DeadCode.cpp:76L  sweep)%op16 = load i32, i32* %op4
+[INFO] (DeadCode.cpp:77L  sweep)5
+[INFO] (DeadCode.cpp:76L  sweep)ret i32 %op37
+[INFO] (DeadCode.cpp:77L  sweep)5
+[INFO] (DeadCode.cpp:72L  sweep)bb: label17 18
+[INFO] (DeadCode.cpp:76L  sweep)%op18 = load i32, i32* %op4
+[INFO] (DeadCode.cpp:77L  sweep)6
+[INFO] (DeadCode.cpp:76L  sweep)%op19 = load i32, i32* %op12
+[INFO] (DeadCode.cpp:77L  sweep)6
+[INFO] (DeadCode.cpp:76L  sweep)%op20 = add i32 %op37, 42
+[INFO] (DeadCode.cpp:77L  sweep)6
+[INFO] (DeadCode.cpp:76L  sweep)%op21 = load i32, i32* %op4
+[INFO] (DeadCode.cpp:77L  sweep)6
+[INFO] (DeadCode.cpp:76L  sweep)%op22 = icmp sgt i32 %op20, 99
+[INFO] (DeadCode.cpp:77L  sweep)6
+[INFO] (DeadCode.cpp:76L  sweep)br i1 %op22, label %label24, label %label30
+[INFO] (DeadCode.cpp:77L  sweep)6
+[INFO] (DeadCode.cpp:72L  sweep)bb: label23 18
+[INFO] (DeadCode.cpp:76L  sweep)%op38 = phi i32 [ %op35, %label11 ], [ %op40, %label30 ]
+[INFO] (DeadCode.cpp:77L  sweep)7
+[INFO] (DeadCode.cpp:76L  sweep)%op39 = phi i32 [ %op37, %label11 ], [ %op41, %label30 ]
+[INFO] (DeadCode.cpp:77L  sweep)7
+[INFO] (DeadCode.cpp:76L  sweep)br label %label8
+[INFO] (DeadCode.cpp:77L  sweep)7
+[INFO] (DeadCode.cpp:72L  sweep)bb: label24 18
+[INFO] (DeadCode.cpp:76L  sweep)%op26 = load i32, i32* %op12
+[INFO] (DeadCode.cpp:77L  sweep)8
+[INFO] (DeadCode.cpp:76L  sweep)%op27 = mul i32 42, 2
+[INFO] (DeadCode.cpp:77L  sweep)8
+[INFO] (DeadCode.cpp:76L  sweep)%op28 = call i32 @get_one(i32 0)
+[INFO] (DeadCode.cpp:77L  sweep)8
+[INFO] (DeadCode.cpp:76L  sweep)%op29 = icmp eq i32 %op28, 1
+[INFO] (DeadCode.cpp:77L  sweep)8
+[INFO] (DeadCode.cpp:76L  sweep)br i1 %op29, label %label31, label %label34
+[INFO] (DeadCode.cpp:77L  sweep)8
+[INFO] (DeadCode.cpp:72L  sweep)bb: label30 18
+[INFO] (DeadCode.cpp:76L  sweep)%op40 = phi i32 [ %op35, %label17 ], [ %op27, %label34 ]
+[INFO] (DeadCode.cpp:77L  sweep)9
+[INFO] (DeadCode.cpp:76L  sweep)%op41 = phi i32 [ %op20, %label17 ], [ %op42, %label34 ]
+[INFO] (DeadCode.cpp:77L  sweep)9
+[INFO] (DeadCode.cpp:76L  sweep)br label %label23
+[INFO] (DeadCode.cpp:77L  sweep)9
+[INFO] (DeadCode.cpp:72L  sweep)bb: label31 18
+[INFO] (DeadCode.cpp:76L  sweep)%op32 = load i32, i32* %op25
+[INFO] (DeadCode.cpp:77L  sweep)10
+[INFO] (DeadCode.cpp:76L  sweep)%op33 = mul i32 %op27, 2
+[INFO] (DeadCode.cpp:77L  sweep)10
+[INFO] (DeadCode.cpp:76L  sweep)br label %label34
+[INFO] (DeadCode.cpp:77L  sweep)10
+[INFO] (DeadCode.cpp:72L  sweep)bb: label34 18
+[INFO] (DeadCode.cpp:76L  sweep)%op42 = phi i32 [ %op20, %label24 ], [ %op33, %label31 ]
+[INFO] (DeadCode.cpp:77L  sweep)11
+[INFO] (DeadCode.cpp:76L  sweep)br label %label30
+[INFO] (DeadCode.cpp:77L  sweep)11
+[INFO] (DeadCode.cpp:81L  sweep)19
+[INFO] (DeadCode.cpp:85L  sweep)%op32 = load i32, i32* %op25
+[INFO] (DeadCode.cpp:86L  sweep)10
+[INFO] (DeadCode.cpp:85L  sweep)%op40 = phi i32 [ %op35, %label17 ], [ %op27, %label34 ]
+[INFO] (DeadCode.cpp:86L  sweep)9
+[INFO] (DeadCode.cpp:85L  sweep)%op26 = load i32, i32* %op12
+[INFO] (DeadCode.cpp:86L  sweep)8
+[INFO] (DeadCode.cpp:85L  sweep)%op38 = phi i32 [ %op35, %label11 ], [ %op40, %label30 ]
+[INFO] (DeadCode.cpp:86L  sweep)7
+[INFO] (DeadCode.cpp:85L  sweep)%op21 = load i32, i32* %op4
+[INFO] (DeadCode.cpp:86L  sweep)6
+[INFO] (DeadCode.cpp:85L  sweep)%op25 = alloca i32
+[INFO] (DeadCode.cpp:86L  sweep)2
+[INFO] (DeadCode.cpp:85L  sweep)%op4 = alloca i32
+[INFO] (DeadCode.cpp:86L  sweep)2
+[INFO] (DeadCode.cpp:85L  sweep)%op3 = alloca i32
+[INFO] (DeadCode.cpp:86L  sweep)2
+[INFO] (DeadCode.cpp:85L  sweep)%op19 = load i32, i32* %op12
+[INFO] (DeadCode.cpp:86L  sweep)6
+[INFO] (DeadCode.cpp:85L  sweep)%op2 = alloca i32
+[INFO] (DeadCode.cpp:86L  sweep)2
+[INFO] (DeadCode.cpp:85L  sweep)%op5 = load i32, i32* %op2
+[INFO] (DeadCode.cpp:86L  sweep)2
+[INFO] (DeadCode.cpp:85L  sweep)%op6 = load i32, i32* %op3
+[INFO] (DeadCode.cpp:86L  sweep)2
+[INFO] (DeadCode.cpp:85L  sweep)%op12 = alloca i32
+[INFO] (DeadCode.cpp:86L  sweep)2
+[INFO] (DeadCode.cpp:85L  sweep)%op35 = phi i32 [ %op38, %label23 ], [ undef, %label_entry ]
+[INFO] (DeadCode.cpp:86L  sweep)3
+[INFO] (DeadCode.cpp:85L  sweep)%op36 = phi i32 [ 42, %label23 ], [ undef, %label_entry ]
+[INFO] (DeadCode.cpp:86L  sweep)3
+[INFO] (DeadCode.cpp:85L  sweep)%op9 = load i32, i32* %op4
+[INFO] (DeadCode.cpp:86L  sweep)3
+[INFO] (DeadCode.cpp:85L  sweep)%op13 = load i32, i32* %op4
+[INFO] (DeadCode.cpp:86L  sweep)4
+[INFO] (DeadCode.cpp:85L  sweep)%op16 = load i32, i32* %op4
+[INFO] (DeadCode.cpp:86L  sweep)5
+[INFO] (DeadCode.cpp:85L  sweep)%op18 = load i32, i32* %op4
+[INFO] (DeadCode.cpp:86L  sweep)6
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (ilist.hpp:199L  erase)0xa 10
+[INFO] (ilist.hpp:199L  erase)0x9 9
+[INFO] (ilist.hpp:199L  erase)0x8 8
+[INFO] (ilist.hpp:199L  erase)0x7 7
+[INFO] (ilist.hpp:199L  erase)0x6 6
+[INFO] (ilist.hpp:199L  erase)0x2 2
+[INFO] (ilist.hpp:199L  erase)0x2 2
+[INFO] (ilist.hpp:199L  erase)0x2 2
+[INFO] (ilist.hpp:199L  erase)0x6 6
+[INFO] (ilist.hpp:199L  erase)0x2 2
+[INFO] (ilist.hpp:199L  erase)0x2 2
+[INFO] (ilist.hpp:199L  erase)0x2 2
+[INFO] (ilist.hpp:199L  erase)0x2 2
+[INFO] (ilist.hpp:199L  erase)0x3 3
+[INFO] (ilist.hpp:199L  erase)0x3 3
+[INFO] (ilist.hpp:199L  erase)0x3 3
+[INFO] (ilist.hpp:199L  erase)0x4 4
+[INFO] (ilist.hpp:199L  erase)0x5 5
+[INFO] (ilist.hpp:199L  erase)0x6 6
+[INFO] (DeadCode.cpp:69L  sweep)define i32 @main() {
+label_entry:
+  %op0 = alloca i32
+  %op1 = load i32, i32* %op0
+  %op2 = load i32, i32* %op0
+  %op3 = call i32 @deepWhileBr(i32 2, i32 2)
+  %op4 = load i32, i32* %op0
+  call void @putint(i32 %op3)
+  ret i32 0
+}
+[INFO] (DeadCode.cpp:72L  sweep)bb: label_entry 19
+[INFO] (DeadCode.cpp:76L  sweep)%op0 = alloca i32
+[INFO] (DeadCode.cpp:77L  sweep)12
+[INFO] (DeadCode.cpp:76L  sweep)%op1 = load i32, i32* %op0
+[INFO] (DeadCode.cpp:77L  sweep)12
+[INFO] (DeadCode.cpp:76L  sweep)%op2 = load i32, i32* %op0
+[INFO] (DeadCode.cpp:77L  sweep)12
+[INFO] (DeadCode.cpp:76L  sweep)%op3 = call i32 @deepWhileBr(i32 2, i32 2)
+[INFO] (DeadCode.cpp:77L  sweep)12
+[INFO] (DeadCode.cpp:76L  sweep)%op4 = load i32, i32* %op0
+[INFO] (DeadCode.cpp:77L  sweep)12
+[INFO] (DeadCode.cpp:76L  sweep)call void @putint(i32 %op3)
+[INFO] (DeadCode.cpp:77L  sweep)12
+[INFO] (DeadCode.cpp:76L  sweep)ret i32 0
+[INFO] (DeadCode.cpp:77L  sweep)12
+[INFO] (DeadCode.cpp:81L  sweep)4
+[INFO] (DeadCode.cpp:85L  sweep)%op4 = load i32, i32* %op0
+[INFO] (DeadCode.cpp:86L  sweep)12
+[INFO] (DeadCode.cpp:85L  sweep)%op2 = load i32, i32* %op0
+[INFO] (DeadCode.cpp:86L  sweep)12
+[INFO] (DeadCode.cpp:85L  sweep)%op1 = load i32, i32* %op0
+[INFO] (DeadCode.cpp:86L  sweep)12
+[INFO] (DeadCode.cpp:85L  sweep)%op0 = alloca i32
+[INFO] (DeadCode.cpp:86L  sweep)12
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (ilist.hpp:199L  erase)0xc 12
+[INFO] (ilist.hpp:199L  erase)0xc 12
+[INFO] (ilist.hpp:199L  erase)0xc 12
+[INFO] (ilist.hpp:199L  erase)0xc 12
+[INFO] (DeadCode.cpp:69L  sweep)declare i32 @getint()
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare i32 @getch()
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare float @getfloat()
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare i32 @getarray(i32*)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare i32 @getfarray(float*)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @putint(i32)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @putch(i32)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @putarray(i32, i32*)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @putfloat(float)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @putfarray(i32, float*)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @before_main()
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @after_main()
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @_sysy_starttime(i32)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @_sysy_stoptime(i32)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @memset_int(i32*, i32)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)declare void @memset_float(float*, i32)
+
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)define i32 @get_one(i32 %arg0) {
+label_entry:
+  ret i32 1
+}
+[INFO] (DeadCode.cpp:72L  sweep)bb: label_entry 17
+[INFO] (DeadCode.cpp:76L  sweep)ret i32 1
+[INFO] (DeadCode.cpp:77L  sweep)1
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)define i32 @deepWhileBr(i32 %arg0, i32 %arg1) {
+label_entry:
+  %op7 = add i32 %arg0, %arg1
+  br label %label8
+label8:                                                ; preds = %label_entry, %label23
+  %op37 = phi i32 [ %op7, %label_entry ], [ %op39, %label23 ]
+  %op10 = icmp slt i32 %op37, 75
+  br i1 %op10, label %label11, label %label15
+label11:                                                ; preds = %label8
+  %op14 = icmp slt i32 %op37, 100
+  br i1 %op14, label %label17, label %label23
+label15:                                                ; preds = %label8
+  ret i32 %op37
+label17:                                                ; preds = %label11
+  %op20 = add i32 %op37, 42
+  %op22 = icmp sgt i32 %op20, 99
+  br i1 %op22, label %label24, label %label30
+label23:                                                ; preds = %label11, %label30
+  %op39 = phi i32 [ %op37, %label11 ], [ %op41, %label30 ]
+  br label %label8
+label24:                                                ; preds = %label17
+  %op27 = mul i32 42, 2
+  %op28 = call i32 @get_one(i32 0)
+  %op29 = icmp eq i32 %op28, 1
+  br i1 %op29, label %label31, label %label34
+label30:                                                ; preds = %label17, %label34
+  %op41 = phi i32 [ %op20, %label17 ], [ %op42, %label34 ]
+  br label %label23
+label31:                                                ; preds = %label24
+  %op33 = mul i32 %op27, 2
+  br label %label34
+label34:                                                ; preds = %label24, %label31
+  %op42 = phi i32 [ %op20, %label24 ], [ %op33, %label31 ]
+  br label %label30
+}
+[INFO] (DeadCode.cpp:72L  sweep)bb: label_entry 18
+[INFO] (DeadCode.cpp:76L  sweep)%op7 = add i32 %arg0, %arg1
+[INFO] (DeadCode.cpp:77L  sweep)2
+[INFO] (DeadCode.cpp:76L  sweep)br label %label8
+[INFO] (DeadCode.cpp:77L  sweep)2
+[INFO] (DeadCode.cpp:72L  sweep)bb: label8 18
+[INFO] (DeadCode.cpp:76L  sweep)%op37 = phi i32 [ %op7, %label_entry ], [ %op39, %label23 ]
+[INFO] (DeadCode.cpp:77L  sweep)3
+[INFO] (DeadCode.cpp:76L  sweep)%op10 = icmp slt i32 %op37, 75
+[INFO] (DeadCode.cpp:77L  sweep)3
+[INFO] (DeadCode.cpp:76L  sweep)br i1 %op10, label %label11, label %label15
+[INFO] (DeadCode.cpp:77L  sweep)3
+[INFO] (DeadCode.cpp:72L  sweep)bb: label11 18
+[INFO] (DeadCode.cpp:76L  sweep)%op14 = icmp slt i32 %op37, 100
+[INFO] (DeadCode.cpp:77L  sweep)4
+[INFO] (DeadCode.cpp:76L  sweep)br i1 %op14, label %label17, label %label23
+[INFO] (DeadCode.cpp:77L  sweep)4
+[INFO] (DeadCode.cpp:72L  sweep)bb: label15 18
+[INFO] (DeadCode.cpp:76L  sweep)ret i32 %op37
+[INFO] (DeadCode.cpp:77L  sweep)5
+[INFO] (DeadCode.cpp:72L  sweep)bb: label17 18
+[INFO] (DeadCode.cpp:76L  sweep)%op20 = add i32 %op37, 42
+[INFO] (DeadCode.cpp:77L  sweep)6
+[INFO] (DeadCode.cpp:76L  sweep)%op22 = icmp sgt i32 %op20, 99
+[INFO] (DeadCode.cpp:77L  sweep)6
+[INFO] (DeadCode.cpp:76L  sweep)br i1 %op22, label %label24, label %label30
+[INFO] (DeadCode.cpp:77L  sweep)6
+[INFO] (DeadCode.cpp:72L  sweep)bb: label23 18
+[INFO] (DeadCode.cpp:76L  sweep)%op39 = phi i32 [ %op37, %label11 ], [ %op41, %label30 ]
+[INFO] (DeadCode.cpp:77L  sweep)7
+[INFO] (DeadCode.cpp:76L  sweep)br label %label8
+[INFO] (DeadCode.cpp:77L  sweep)7
+[INFO] (DeadCode.cpp:72L  sweep)bb: label24 18
+[INFO] (DeadCode.cpp:76L  sweep)%op27 = mul i32 42, 2
+[INFO] (DeadCode.cpp:77L  sweep)8
+[INFO] (DeadCode.cpp:76L  sweep)%op28 = call i32 @get_one(i32 0)
+[INFO] (DeadCode.cpp:77L  sweep)8
+[INFO] (DeadCode.cpp:76L  sweep)%op29 = icmp eq i32 %op28, 1
+[INFO] (DeadCode.cpp:77L  sweep)8
+[INFO] (DeadCode.cpp:76L  sweep)br i1 %op29, label %label31, label %label34
+[INFO] (DeadCode.cpp:77L  sweep)8
+[INFO] (DeadCode.cpp:72L  sweep)bb: label30 18
+[INFO] (DeadCode.cpp:76L  sweep)%op41 = phi i32 [ %op20, %label17 ], [ %op42, %label34 ]
+[INFO] (DeadCode.cpp:77L  sweep)9
+[INFO] (DeadCode.cpp:76L  sweep)br label %label23
+[INFO] (DeadCode.cpp:77L  sweep)9
+[INFO] (DeadCode.cpp:72L  sweep)bb: label31 18
+[INFO] (DeadCode.cpp:76L  sweep)%op33 = mul i32 %op27, 2
+[INFO] (DeadCode.cpp:77L  sweep)10
+[INFO] (DeadCode.cpp:76L  sweep)br label %label34
+[INFO] (DeadCode.cpp:77L  sweep)10
+[INFO] (DeadCode.cpp:72L  sweep)bb: label34 18
+[INFO] (DeadCode.cpp:76L  sweep)%op42 = phi i32 [ %op20, %label24 ], [ %op33, %label31 ]
+[INFO] (DeadCode.cpp:77L  sweep)11
+[INFO] (DeadCode.cpp:76L  sweep)br label %label30
+[INFO] (DeadCode.cpp:77L  sweep)11
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:69L  sweep)define i32 @main() {
+label_entry:
+  %op3 = call i32 @deepWhileBr(i32 2, i32 2)
+  call void @putint(i32 %op3)
+  ret i32 0
+}
+[INFO] (DeadCode.cpp:72L  sweep)bb: label_entry 19
+[INFO] (DeadCode.cpp:76L  sweep)%op3 = call i32 @deepWhileBr(i32 2, i32 2)
+[INFO] (DeadCode.cpp:77L  sweep)12
+[INFO] (DeadCode.cpp:76L  sweep)call void @putint(i32 %op3)
+[INFO] (DeadCode.cpp:77L  sweep)12
+[INFO] (DeadCode.cpp:76L  sweep)ret i32 0
+[INFO] (DeadCode.cpp:77L  sweep)12
+[INFO] (DeadCode.cpp:81L  sweep)0
+[INFO] (DeadCode.cpp:88L  sweep)wait_del
+[INFO] (DeadCode.cpp:16L  run)dead code pass erased 24 instructions

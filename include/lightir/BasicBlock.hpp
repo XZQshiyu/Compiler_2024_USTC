@@ -39,9 +39,17 @@ class BasicBlock : public Value, public ilist<BasicBlock>::node {
 
     /****************api about Instruction****************/
     void add_instruction(Instruction *instr);
-    void add_instr_begin(Instruction *instr) { instr_list_.push_front(instr); }
+    void add_instr_begin(Instruction *instr) 
+    { 
+      instr_list_.push_front(instr);
+      instr->set_parent(this); 
+    }
     void erase_instr(Instruction *instr) { instr_list_.erase(instr); }
-    void remove_instr(Instruction *instr) { instr_list_.remove(instr); }
+    void remove_instr(Instruction *instr) 
+    { 
+      instr_list_.remove(instr); 
+      instr->set_parent_null();
+    }
     // void remove_instr_2(Instruction *instr) { instr_list_.}
     void remove_last_instruction();
     ilist<Instruction> &get_instructions() { return instr_list_; }

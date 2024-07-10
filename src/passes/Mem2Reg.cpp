@@ -30,6 +30,18 @@ void Mem2Reg::run()
         }
         // 后续 DeadCode 将移除冗余的局部变量的分配空间
     }
+    for(auto &func : m_->get_functions())
+    {
+        LOG(INFO) << func.print();
+        for(auto &bb : func.get_basic_blocks())
+        {
+            LOG(INFO) << bb.print();
+            for(auto &ins : bb.get_instructions())
+            {
+                LOG(INFO) << ins.print() << " " << ins.tag();
+            }
+        }
+    }
 }
 
 void Mem2Reg::loop_alloc_inv_hoist(){
@@ -37,19 +49,6 @@ void Mem2Reg::loop_alloc_inv_hoist(){
     std::vector<Instruction*> alloc_vec;
     for(auto &bb : func_->get_basic_blocks()){
         auto b = &bb;
-        // for(auto &inst : b->get_instructions()){
-        //     auto instr = &inst;
-        //     if(instr->is_br()){
-        //         auto cond_br = static_cast<BranchInst*>(instr);
-        //         if(cond_br->is_iter()){
-        //             std::stack<BasicBlock*> loop_stack;
-        //             std::set<BasicBlock*> loop_set;
-        //             std::vector<Value*> alloc_vec;
-        //             loop_stack.push()
-        //         }
-        //     }
-
-        // }
         std::vector<Instruction*> replace_inst;
         for(auto &inst : b->get_instructions()){
             auto instr = &inst;
@@ -62,14 +61,22 @@ void Mem2Reg::loop_alloc_inv_hoist(){
             }
         }
         for(auto instr : replace_inst){
+            LOG(WARNING) << instr->print() << " " << instr->tag();
+            // LOG(WARNING) << instr->get_parent()->print();
             instr->get_parent()->remove_instr(instr);
+            LOG(WARNING) << instr->print() << " " << instr->tag();
+            // LOG(WARNING) << instr->get_parent()->print();
         }
     }
     auto entry_bb = func_->get_entry_block();
     LOG(DEBUG) << "here";
     for(auto &instr : alloc_vec){
         auto ori_bb = instr->get_parent();
+        // LOG(WARNING) << instr->get_parent()->print();
+        LOG(WARNING) << instr->print() << " " << instr->tag();
         entry_bb->add_instr_begin(instr);
+        LOG(WARNING) << instr->print() << " " << instr->tag();
+        // LOG(WARNING) << instr->get_parent()->print();
         // ori_bb->erase_instr(instr);
     }
 }

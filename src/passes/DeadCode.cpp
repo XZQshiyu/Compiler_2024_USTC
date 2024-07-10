@@ -66,10 +66,32 @@ bool DeadCode::sweep(Function *func) {
             }
         }
     }
+    LOG(INFO) << func->print();
+    for(auto &bb : func->get_basic_blocks())
+    {
+        LOG(INFO) << "bb: " << bb.get_name() << " " << bb.tag();
+        for(auto &ins : bb.get_instructions())
+        {
+            // 打印每个指令的tag_
+            LOG(INFO) << ins.print();
+            LOG(INFO) << ins.tag();
+        }
+    }
+
+    LOG(INFO) << wait_del.size();
+    // LOG(INFO) << "wait_del";
+    for(auto inst : wait_del)
+    {
+        LOG(INFO) << inst->print();
+        LOG(INFO) << inst->tag();
+    }
+    LOG(INFO) << "wait_del";
     for (auto inst : wait_del)
         inst->remove_all_operands();
     for (auto inst : wait_del)
+    {
         inst->get_parent()->get_instructions().erase(inst);
+    }
     ins_count += wait_del.size();
     return not wait_del.empty(); // changed
 }

@@ -28,7 +28,7 @@ points of lv0 is: 21
 22_if_test3:	Success
 23_if_test4:	Success
 24_if_test5:	Success
-25_while_if:	Fail
+25_while_if:	Success
 26_while_test1:	Success
 27_while_test2:	Success
 28_while_test3:	Success
@@ -36,14 +36,14 @@ points of lv0 is: 21
 30_continue:	Success
 31_while_if_test1:	Success
 32_while_if_test2:	Success
-33_while_if_test3:	Fail
+33_while_if_test3:	Success
 34_arr_expr_len:	Success
 35_op_priority1:	Success
 36_op_priority2:	Success
 37_op_priority3:	Success
 38_op_priority4:	Success
 39_op_priority5:	Success
-points of lv1 is: 17
+points of lv1 is: 19
 =============lv1 END=========
 
 ==========lv2 START========
@@ -58,64 +58,64 @@ points of lv1 is: 17
 48_assign_complex_expr:	Success
 49_if_complex_expr:	Success
 50_short_circuit:	Success
-51_short_circuit3:	Fail
+51_short_circuit3:	Success
 52_scope:	Success
-53_scope2:	Fail
-54_hidden_var:	Fail
-55_sort_test1:	Fail
-56_sort_test2:	Fail
-57_sort_test3:	Fail
-58_sort_test4:	Fail
-59_sort_test5:	Fail
-60_sort_test6:	Fail
-61_sort_test7:	Fail
-points of lv2 is: 12
+53_scope2:	Success
+54_hidden_var:	Success
+55_sort_test1:	Success
+56_sort_test2:	Success
+57_sort_test3:	Success
+58_sort_test4:	Success
+59_sort_test5:	Success
+60_sort_test6:	Success
+61_sort_test7:	Success
+points of lv2 is: 22
 =============lv2 END=========
 
 ==========lv3 START========
-62_percolation:	Fail
+62_percolation:	Success
 63_big_int_mul:	Success
-64_calculator:	Fail
-65_color:	Fail
-66_exgcd:	Fail
+64_calculator:	Success
+65_color:	Success
+66_exgcd:	Success
 67_reverse_output:	Success
 68_brainfk:	Success
-69_expr_eval:	Fail
-70_dijkstra:	Fail
-71_full_conn:	Fail
+69_expr_eval:	Success
+70_dijkstra:	Success
+71_full_conn:	Success
 72_hanoi:	Success
-73_int_io:	Fail
+73_int_io:	Success
 74_kmp:	Success
-75_max_flow:	Fail
+75_max_flow:	Success
 76_n_queens:	Success
 77_substr:	Success
 78_side_effect:	Success
 79_var_name:	Success
-80_chaos_token:	Fail
+80_chaos_token:	Success
 81_skip_spaces:	Success
-82_long_func:	Fail
-points of lv3 is: 10
+82_long_func:	Success
+points of lv3 is: 21
 =============lv3 END=========
 
 ==========lv4 START========
-83_long_array:	Fail
+83_long_array:	Success
 84_long_array2:	Success
-85_long_code:	Fail
+85_long_code:	Success
 86_long_code2:	Success
-87_many_params:	Fail
+87_many_params:	Success
 88_many_params2:	Success
 89_many_globals:	Success
 90_many_locals:	Success
-91_many_locals2:	Fail
+91_many_locals2:	Success
 92_register_alloc:	Success
-93_nested_calls:	Fail
+93_nested_calls:	Success
 94_nested_loops:	Success
-95_float:	Fail
-96_matrix_add:	Fail
-97_matrix_sub:	Fail
-98_matrix_mul:	Fail
-99_matrix_tran:	Fail
-points of lv4 is: 7
+95_float:	Success
+96_matrix_add:	Success
+97_matrix_sub:	Success
+98_matrix_mul:	Success
+99_matrix_tran:	Success
+points of lv4 is: 17
 =============lv4 END=========
 
-total points: 67
+total points: 100
