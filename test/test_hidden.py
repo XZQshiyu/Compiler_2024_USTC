@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import subprocess
-
+from tqdm import tqdm
+import time
 #21
 lv0 = {
     "00_comment2":(1, False),
@@ -69,7 +70,7 @@ def eval():
         bonus = level[2]
         cases = level[1]
         f.write('==========%s START========\n' % level_name)
-        for case in cases:
+        for case in tqdm(cases, desc=f"Processing {level_name}"):
             f.write('%s:' % case)
             TEST_PATH =TEST_BASE_PATH + "/" + case
             ANSWER_PATH = ANSWER_BASE_PATH + "/" + case

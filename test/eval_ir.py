@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import subprocess
-
+from tqdm import tqdm
+import time
 #21
 lv0 = {
     "00_main":(1, False),
@@ -143,8 +144,7 @@ def eval():
         bonus = level[2]
         cases = level[1]
         f.write('==========%s START========\n' % level_name)
-        for case in cases:
-            # print(case)
+        for case in tqdm(cases, desc=f"Processing {level_name}"):
             f.write('%s:' % case)
             TEST_PATH =TEST_BASE_PATH + "/" + case
             ANSWER_PATH = ANSWER_BASE_PATH + "/" + case
@@ -152,7 +152,6 @@ def eval():
             need_input = cases[case][1]
 
             COMMAND = [TEST_PATH]
-            # "-mem2reg", "-const-prop", "-loop-inv-hoist"
             try:
                 result = subprocess.run([EXE_PATH, "-o", TEST_PATH + ".ll", "-emit-llvm", "-mem2reg", "-const-prop", "-loop-inv-hoist", TEST_PATH + ".sy"], stderr=subprocess.PIPE, timeout=8)
             except Exception as _:
@@ -210,6 +209,7 @@ def eval():
         f.write('points of %s is: %d\n' % (level_name, lv_points))
         f.write('=============%s END=========\n\n' % level_name)
     f.write('total points: %d\n' % total_points)
+    f.close()
 
 if __name__ == "__main__":
     eval()
