@@ -58,9 +58,9 @@ suite = [
 
 def eval():
     f = open("eval_result2", 'w')
-    EXE_PATH = "../../build/cminusfc"
-    TEST_BASE_PATH = "./input2"
-    ANSWER_BASE_PATH = "./input2"
+    EXE_PATH = "../build/sysy"
+    TEST_BASE_PATH = "./hidden_functional"
+    ANSWER_BASE_PATH = "./hidden_functional"
     total_points = 0
     for level in suite:
         lv_points = 0
@@ -85,7 +85,7 @@ def eval():
                 continue
             
             if result.returncode == 0:
-                subprocess.run(["clang", "-O0", "-w", "-no-pie", TEST_PATH + ".ll", "-o", TEST_PATH, "-L", "../../../build", "-lcminus_io"])
+                subprocess.run(["clang", "-O0", "-w", "-no-pie", TEST_PATH + ".ll", "-o", TEST_PATH, "-L", "../../../build", "-lsysy_io"])
                 input_option = None
                 if need_input:
                     with open(ANSWER_PATH + ".in", "rb") as fin:
@@ -96,9 +96,9 @@ def eval():
                     with open(ANSWER_PATH + ".out", "rb") as fout:
                         expected_output_lines = fout.readlines()
                     expected_returncode = int(expected_output_lines[-1])
-                    expected_output = b"".join(expected_output_lines[:-1])
+                    expected_output = b"".join(expected_output_lines[:-1]).strip()
 
-                    if result.stdout == expected_output and result.returncode == expected_returncode:
+                    if result.stdout.strip() == expected_output and result.returncode == expected_returncode:
                         f.write('\tSuccess\n')
                         lv_points += score
                     else:

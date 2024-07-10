@@ -1,0 +1,49 @@
+==========lv0 START========
+00_comment2:	Success
+01_multiple_returns:	Success
+02_ret_in_block:	Success
+03_branch:	Success
+04_break_continue:	Success
+05_param_name:	Success
+06_func_name:	Success
+07_arr_init_nd:	Success
+08_global_arr_init:	Success
+09_BFS:	Success
+10_DFS:	Success
+11_BST:	Success
+12_DSU:	Success
+13_LCA:	Success
+14_dp:	Success
+15_graph_coloring:	Success
+16_k_smallest:	Success
+17_maximal_clique:	Success
+18_prim:	Success
+19_search:	Success
+20_sort:	Success
+points of lv0 is: 21
+=============lv0 END=========
+
+==========lv1 START========
+21_union_find:	Success
+22_matrix_multiply:	Success
+23_json:	Success
+24_array_only:	Success
+25_scope3:	Success
+26_scope4:	Success
+27_scope5:	Success
+28_side_effect2:	Success
+29_long_line:	Success
+30_many_dimensions:	Success
+31_many_indirections:	Success
+32_many_params3:	Success
+33_multi_branch:	Success
+34_multi_loop:	Success
+35_math:	Success
+36_rotate:	Success
+37_dct:	Success
+38_light2d:	Success
+39_fp_params:	Success
+points of lv1 is: 19
+=============lv1 END=========
+
+total points: 40
