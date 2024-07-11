@@ -54,30 +54,21 @@ void Mem2Reg::loop_alloc_inv_hoist(){
             auto instr = &inst;
             if(instr->is_alloca()){
                 alloc_vec.push_back(instr);
-                // LOG(DEBUG) << "1";
-                // instr->get_parent()->remove_instr(instr);
-                // LOG(DEBUG) << "2";
                 replace_inst.push_back(instr);
             }
         }
         for(auto instr : replace_inst){
             LOG(WARNING) << instr->print() << " " << instr->tag();
-            // LOG(WARNING) << instr->get_parent()->print();
             instr->get_parent()->remove_instr(instr);
             LOG(WARNING) << instr->print() << " " << instr->tag();
-            // LOG(WARNING) << instr->get_parent()->print();
         }
     }
     auto entry_bb = func_->get_entry_block();
     LOG(DEBUG) << "here";
     for(auto &instr : alloc_vec){
-        auto ori_bb = instr->get_parent();
-        // LOG(WARNING) << instr->get_parent()->print();
         LOG(WARNING) << instr->print() << " " << instr->tag();
         entry_bb->add_instr_begin(instr);
         LOG(WARNING) << instr->print() << " " << instr->tag();
-        // LOG(WARNING) << instr->get_parent()->print();
-        // ori_bb->erase_instr(instr);
     }
 }
 
@@ -118,7 +109,7 @@ void Mem2Reg::generate_phi()
         w.assign(alloca_var_map[var].begin(), alloca_var_map[var].end());
         std::set<BasicBlock *> F;
         //
-        for (int i = 0; i < w.size(); i++)
+        for (size_t i = 0; i < w.size(); i++)
         {
             auto bb = w[i];
             for (auto y : dominators_->get_dominance_frontier(bb))

@@ -54,6 +54,11 @@ public:
     call,
     getelementptr,
     zext, // zero extend
+    sext, // sign extend
+    // int2ptr and ptr2int
+    inttoptr,
+    ptrtoint,
+    // cast operators
     fptosi,
     sitofp,
     // float binary operators Logical operators
@@ -372,6 +377,24 @@ public:
   virtual std::string print() override;
 };
 
+class SextInst : public BaseInst<SextInst>
+{
+  friend BaseInst<SextInst>;
+
+  private:
+  SextInst(Value *val, Type *ty, BasicBlock *bb);
+
+public:
+  static SextInst *create_sext(Value *val, Type *ty, BasicBlock *bb);
+  static SextInst *create_sext_to_i32(Value *val, BasicBlock *bb);
+  static SextInst *create_sext_to_i64(Value *val, BasicBlock *bb);
+
+  Type *get_dest_type() const { return get_type(); };
+
+  virtual std::string print() override;
+};
+
+
 // cast operators class
 class FpToSiInst : public BaseInst<FpToSiInst>
 {
@@ -402,6 +425,41 @@ public:
   Type *get_dest_type() const { return get_type(); };
 
   virtual std::string print() override;
+};
+
+class Ptr2IntInst : public BaseInst<Ptr2IntInst>
+{
+  friend BaseInst<Ptr2IntInst>;
+
+private:
+  Ptr2IntInst(Value *val, Type *ty, BasicBlock *bb);
+
+public:
+  static Ptr2IntInst *create_ptrtoint(Value *val, Type *ty, BasicBlock *bb);
+
+  Type *get_dest_type() const { return get_type(); };
+
+  virtual std::string print() override;
+  Value *get_ptr() { return this->get_operand(0); }
+
+};
+
+class Int2PtrInst : public BaseInst<Int2PtrInst>
+{
+  friend BaseInst<Int2PtrInst>;
+
+private:
+  Int2PtrInst(Value *val, Type *ty, BasicBlock *bb);
+
+public:
+
+  static Int2PtrInst *create_inttoptr(Value *val, Type *ty, BasicBlock *bb);
+
+  Type *get_dest_type() const { return get_type(); };
+
+  virtual std::string print() override;
+  Value *get_int() { return this->get_operand(0); }
+
 };
 
 // phi operators class

@@ -15,6 +15,7 @@ class Type {
     enum TypeID {
         VoidTyID,     // Void
         LabelTyID,    // Labels, e.g., BasicBlock
+        // add i8, i16, i64
         IntegerTyID,  // Integers, include 32 bits and 1 bit
         FunctionTyID, // Functions
         ArrayTyID,    // Arrays
@@ -37,6 +38,9 @@ class Type {
     bool is_float_type() const { return get_type_id() == FloatTyID; }
     bool is_int32_type() const;
     bool is_int1_type() const;
+    bool is_int8_type() const;
+    bool is_int16_type() const;
+    bool is_int64_type() const;
 
     // Return related data member if is the required type, else throw error
     Type *get_pointer_element_type() const;

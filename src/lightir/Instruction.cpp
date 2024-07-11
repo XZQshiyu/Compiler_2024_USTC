@@ -389,6 +389,34 @@ AllocaInst *AllocaInst::create_alloca(Type *ty, BasicBlock *bb)
     return create(ty, bb);
 }
 
+SextInst::SextInst(Value *val, Type *ty, BasicBlock *bb)
+    : BaseInst<SextInst>(ty, sext, bb)
+{
+    assert(val->get_type()->is_integer_type() &&
+           "SextInst operand is not integer");
+    assert(ty->is_integer_type() && "SextInst destination type is not integer");
+    assert((static_cast<IntegerType *>(val->get_type())->get_num_bits() >
+            static_cast<IntegerType *>(ty)->get_num_bits()) &&
+           "SextInst operand bit size is not larger than destination type bit "
+           "size");
+    add_operand(val);
+}
+
+SextInst *SextInst::create_sext(Value *val, Type *ty, BasicBlock *bb)
+{
+    return create(val, ty, bb);
+}
+
+SextInst *SextInst::create_sext_to_i32(Value *val, BasicBlock *bb)
+{
+    return create(val, bb->get_module()->get_int32_type(), bb);
+}
+
+SextInst *SextInst::create_sext_to_i64(Value *val, BasicBlock *bb)
+{
+    return create(val, bb->get_module()->get_int64_type(), bb);
+}
+
 ZextInst::ZextInst(Value *val, Type *ty, BasicBlock *bb)
     : BaseInst<ZextInst>(ty, zext, bb)
 {
@@ -409,6 +437,36 @@ ZextInst *ZextInst::create_zext(Value *val, Type *ty, BasicBlock *bb)
 ZextInst *ZextInst::create_zext_to_i32(Value *val, BasicBlock *bb)
 {
     return create(val, bb->get_module()->get_int32_type(), bb);
+}
+
+Int2PtrInst::Int2PtrInst(Value *val, Type *ty, BasicBlock *bb)
+    : BaseInst<Int2PtrInst>(ty, inttoptr, bb)
+{
+    assert(val->get_type()->is_integer_type() &&
+           "Int2PtrInst operand is not integer");
+    assert(ty->is_pointer_type() && "Int2PtrInst destination type is not "
+                                    "pointer");
+    add_operand(val);
+}
+
+Int2PtrInst *Int2PtrInst::create_inttoptr(Value *val, Type *ty, BasicBlock *bb)
+{
+    return create(val, ty, bb);
+}
+
+Ptr2IntInst::Ptr2IntInst(Value *val, Type *ty, BasicBlock *bb)
+    : BaseInst<Ptr2IntInst>(ty, ptrtoint, bb)
+{
+    assert(val->get_type()->is_pointer_type() &&
+           "Ptr2IntInst operand is not pointer");
+    assert(ty->is_integer_type() && "Ptr2IntInst destination type is not "
+                                    "integer");
+    add_operand(val);
+}
+
+Ptr2IntInst *Ptr2IntInst::create_ptrtoint(Value *val, Type *ty, BasicBlock *bb)
+{
+    return create(val, ty, bb);
 }
 
 FpToSiInst::FpToSiInst(Value *val, Type *ty, BasicBlock *bb)

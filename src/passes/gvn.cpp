@@ -674,7 +674,7 @@ std::shared_ptr<GVNExpression::Expression> GVN::bin_ValueExpr(Instruction *instr
 std::shared_ptr<GVNExpression::Expression> GVN::func_ValueExpr(Instruction *instr, partitions &pout) const
 {
     std::vector<std::shared_ptr<Expression>> operands{};
-    for (int i = 1; i < instr->get_num_operand(); i++)
+    for (unsigned int i = 1; i < instr->get_num_operand(); i++)
     {
         if (dynamic_cast<Constant *>(instr->get_operand(i)) != nullptr)
         {
@@ -839,7 +839,7 @@ std::shared_ptr<GVNExpression::Expression> GVN::trans_ValueExpr(Instruction *ins
 std::shared_ptr<GVNExpression::Expression> GVN::gep_ValueExpr(Instruction *instr, partitions &pout) const
 {
     std::vector<std::shared_ptr<Expression>> operands{};
-    for (int i = 0; i < instr->get_num_operand(); i++)
+    for (size_t i = 0; i < instr->get_num_operand(); i++)
     {
         if (dynamic_cast<Constant *>(instr->get_operand(i)) != nullptr)
         {

@@ -103,6 +103,12 @@ std::string print_instr_op_name(Instruction::OpID id) {
         return "fptosi";
     case Instruction::sitofp:
         return "sitofp";
+    case Instruction::inttoptr:
+        return "inttoptr";
+    case Instruction::ptrtoint:
+        return "ptrtoint";
+    case Instruction::sext:
+        return "sext";
     }
     assert(false && "Must be bug");
 }
@@ -272,6 +278,22 @@ std::string AllocaInst::print() {
     return instr_ir;
 }
 
+std::string SextInst::print()
+{
+    std::string instr_ir;
+    instr_ir += "%";
+    instr_ir += this->get_name();
+    instr_ir += " = ";
+    instr_ir += get_instr_op_name();
+    instr_ir += " ";
+    instr_ir += this->get_operand(0)->get_type()->print();
+    instr_ir += " ";
+    instr_ir += print_as_op(this->get_operand(0), false);
+    instr_ir += " to "; 
+    instr_ir += this->get_dest_type()->print();
+    return instr_ir;
+}
+
 std::string ZextInst::print() {
     std::string instr_ir;
     instr_ir += "%";
@@ -285,6 +307,39 @@ std::string ZextInst::print() {
     instr_ir += " to ";
     instr_ir += this->get_dest_type()->print();
     return instr_ir;
+}
+
+std::string Int2PtrInst::print()
+{
+    std::string instr_ir;
+    instr_ir += "%";
+    instr_ir += this->get_name();
+    instr_ir += " = ";
+    instr_ir += get_instr_op_name();
+    instr_ir += " ";
+    instr_ir += this->get_operand(0)->get_type()->print();
+    instr_ir += " ";
+    instr_ir += print_as_op(this->get_operand(0), false);
+    instr_ir += " to "; 
+    instr_ir += this->get_dest_type()->print();
+    return instr_ir;
+}
+
+std::string Ptr2IntInst::print()
+{
+    std::string instr_ir;
+    instr_ir += "%";
+    instr_ir += this->get_name();
+    instr_ir += " = ";
+    instr_ir += get_instr_op_name();
+    instr_ir += " ";
+    instr_ir += this->get_operand(0)->get_type()->print();
+    instr_ir += " ";
+    instr_ir += print_as_op(this->get_operand(0), false);
+    instr_ir += " to "; 
+    instr_ir += this->get_dest_type()->print();
+    return instr_ir;
+
 }
 
 std::string FpToSiInst::print() {

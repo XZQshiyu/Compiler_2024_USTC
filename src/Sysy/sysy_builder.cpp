@@ -5,15 +5,15 @@
 
 #define CONST_FP(num) ConstantFP::get((float)num, module.get())
 #define CONST_INT(num) ConstantInt::get(num, module.get())
-// union temp_val
-// {
-//     int val_i;
-//     float val_f;
-// };
 // types
 Type *VOID_T;
+
 Type *INT1_T;
 Type *INT32_T;
+Type *INT8_T;
+Type *INT16_T;
+Type *INT64_T;
+
 Type *INT32PTR_T;
 Type *FLOAT_T;
 Type *FLOATPTR_T;
@@ -69,8 +69,13 @@ Value *CminusfBuilder::visit(ASTProgram &node)
     // LOG(INFO) << context.is_const;
     LOG(DEBUG) << "ASTProgram";
     VOID_T = module->get_void_type();
+
     INT1_T = module->get_int1_type();
+    INT8_T = module->get_int8_type();
+    INT16_T = module->get_int16_type();
     INT32_T = module->get_int32_type();
+    INT64_T = module->get_int64_type();
+    
     INT32PTR_T = module->get_int32_ptr_type();
     FLOAT_T = module->get_float_type();
     FLOATPTR_T = module->get_float_ptr_type();

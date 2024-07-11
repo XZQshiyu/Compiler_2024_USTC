@@ -90,7 +90,10 @@ public:
         module = std::make_unique<Module>();
         builder = std::make_unique<IRBuilder>(nullptr, module.get());
         auto *TyVoid = module->get_void_type();
+
         auto *TyInt32 = module->get_int32_type();
+        auto *TyInt1 = module->get_int1_type();
+
         auto *TyFloat = module->get_float_type();
         auto *TyFloat_ptr = module->get_float_ptr_type();
         auto *TyInt32_ptr = module->get_int32_ptr_type();
@@ -198,7 +201,6 @@ public:
         scope.push("putarray", putarray_fun);
         scope.push("putfloat", putfloat_fun);
         scope.push("putfarray", putfarray_fun);
-        // scope.push("putf", putf_fun);
         scope.push("before_main", before_main_fun);
         scope.push("after_main", after_main_fun);
         scope.push("_sysy_starttime", _sysy_starttime_fun);
