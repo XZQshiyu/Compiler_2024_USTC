@@ -1837,37 +1837,3 @@ void CodeGenRegister::run() {
     }
     //TODO: 处理read only data
 }
-
-std::string CodeGenRegister::print() const {
-    std::string result;
-    for (const auto &inst : output) {
-        result += inst.format();
-    }
-    return result;
-}
-//TODO: 对框架不满可尽情修改
-
-template <class... Args> void CodeGenRegister::append_inst(Args... arg) {
-        LOG(DEBUG) << "?";
-        output.emplace_back(arg...);
-    }
-
-void
-    CodeGenRegister::append_inst(const char *inst, std::initializer_list<std::string> args,
-                ASMInstruction::InstType ty ) {
-        LOG(DEBUG) << "11";
-        auto content = std::string(inst) + " ";
-        string instr(inst);
-        if(instr == "lb" || instr == "lh" || instr == "lw" || instr == "ld" || instr == "sb" || instr == "sh" || instr == "sw" || instr == "sd"){
-            assert(args.size() == 3);
-            content += *(args.begin()) + ", " + *(args.begin() + 2) + "(" + *(args.begin() + 1) + ")";
-        }
-        else {
-            for (const auto &arg : args) {
-                content += arg + ", ";
-            }
-            content.pop_back();
-            content.pop_back();
-        }
-        output.emplace_back(content, ty);
-    }
