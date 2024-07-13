@@ -55,7 +55,7 @@ public:
     getelementptr,
     zext, // zero extend
     sext, // sign extend
-    // int2ptr and ptr2int
+          // int2ptr and ptr2int
     inttoptr,
     ptrtoint,
     // cast operators
@@ -381,7 +381,7 @@ class SextInst : public BaseInst<SextInst>
 {
   friend BaseInst<SextInst>;
 
-  private:
+private:
   SextInst(Value *val, Type *ty, BasicBlock *bb);
 
 public:
@@ -393,7 +393,6 @@ public:
 
   virtual std::string print() override;
 };
-
 
 // cast operators class
 class FpToSiInst : public BaseInst<FpToSiInst>
@@ -441,7 +440,6 @@ public:
 
   virtual std::string print() override;
   Value *get_ptr() { return this->get_operand(0); }
-
 };
 
 class Int2PtrInst : public BaseInst<Int2PtrInst>
@@ -452,14 +450,12 @@ private:
   Int2PtrInst(Value *val, Type *ty, BasicBlock *bb);
 
 public:
-
   static Int2PtrInst *create_inttoptr(Value *val, Type *ty, BasicBlock *bb);
 
   Type *get_dest_type() const { return get_type(); };
 
   virtual std::string print() override;
   Value *get_int() { return this->get_operand(0); }
-
 };
 
 // phi operators class

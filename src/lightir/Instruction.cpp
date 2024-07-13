@@ -14,6 +14,7 @@
 Instruction::Instruction(Type *ty, OpID id, BasicBlock *parent)
     : User(ty, ""), op_id_(id), parent_(parent)
 {
+    // 即builder->create的时候，在这里这条指令被添加到其parent bb的instructions中
     if (parent)
         parent->add_instruction(this);
 }

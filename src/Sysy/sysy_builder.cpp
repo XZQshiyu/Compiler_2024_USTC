@@ -75,7 +75,7 @@ Value *CminusfBuilder::visit(ASTProgram &node)
     INT16_T = module->get_int16_type();
     INT32_T = module->get_int32_type();
     INT64_T = module->get_int64_type();
-    
+
     INT32PTR_T = module->get_int32_ptr_type();
     FLOAT_T = module->get_float_type();
     FLOATPTR_T = module->get_float_ptr_type();
@@ -90,22 +90,25 @@ Value *CminusfBuilder::visit(ASTProgram &node)
 // 函数定义
 Value *CminusfBuilder::visit(ASTFuncDef &node)
 {
-    // LOG(INFO) << context.is_const;
     LOG(DEBUG) << "ASTFuncDef";
     LOG(INFO) << node.id << " the functiont name is : ---------";
     FunctionType *func_type = nullptr;
     Type *ret_type = nullptr;
     std::vector<Type *> param_types;
+    // 返回类型确定
     if (node.type == TYPE_INT)
         ret_type = INT32_T;
     else if (node.type == TYPE_FLOAT)
         ret_type = FLOAT_T;
     else
         ret_type = VOID_T;
+    // 参数类型确定
     for (auto &param : node.params)
     {
         if (param->type == TYPE_INT)
         {
+            // int a[]([num]) 这样的类型
+            // 创建一个指向对应数组类型的指针而不保留数组类型参数
             if (param->isarray)
             {
                 // param_types.push_back(INT32PTR_T);//TODO: 这里存在一个变量复合数组类型错误的问题
@@ -127,6 +130,8 @@ Value *CminusfBuilder::visit(ASTFuncDef &node)
                 param_types.push_back(INT32_T);
             }
         }
+        // float a[]([num]) 这样的类型
+        // 处理成一个 指向 float[num]的指针
         else
         {
             if (param->isarray)
@@ -153,6 +158,7 @@ Value *CminusfBuilder::visit(ASTFuncDef &node)
     func_type = FunctionType::get(ret_type, param_types);
     auto func = Function::create(func_type, node.id, module.get());
     scope.push(node.id, func);
+    // 将context变更为当前function
     context.func = func;
     // 函数声明结束 开始函数定义
 
@@ -164,20 +170,16 @@ Value *CminusfBuilder::visit(ASTFuncDef &node)
     {
         args.push_back(&arg);
     }
-    for (int i = 0; i < node.params.size(); ++i)
+    for (size_t i = 0; i < node.params.size(); ++i)
     {
         // 处理参数
         if (node.params[i]->isarray)
         {
             Value *array_alloc;
-            // if (node.params[i]->type == TYPE_INT)
-            LOG(DEBUG) << param_types[i]->print();
+            // LOG(DEBUG) << param_types[i]->print();
             array_alloc = builder->create_alloca(param_types[i]);
-            // else
-            //     array_alloc = builder->create_alloca(FLOATPTR_T);
-            LOG(INFO) << "store_1";
-            LOG(INFO) << args[i]->get_type()->print();
-            LOG(INFO) << array_alloc->print();
+            // LOG(INFO) << args[i]->get_type()->print();
+            // LOG(INFO) << array_alloc->print();
             builder->create_store(args[i], array_alloc);
             scope.push(node.params[i]->id, array_alloc);
         }
@@ -194,6 +196,7 @@ Value *CminusfBuilder::visit(ASTFuncDef &node)
         }
     }
     node.block->accept(*this);
+    // block中还没添加return/branch的话自动添加一个return，这种情况下只会使用默认返回值
     if (not builder->get_insert_block()->is_terminated())
     {
         if (context.func->get_return_type()->is_void_type())
@@ -217,12 +220,12 @@ Value *CminusfBuilder::visit(ASTDecl &node)
     else
         context.is_const = false;
     context.type = node.type;
-    LOG(WARNING) << context.type << " type is ? ------------------";
+    // LOG(WARNING) << context.type << " type is ? ------------------";
     for (auto &def : node.def_lists)
     {
         def->accept(*this);
     }
-    LOG(DEBUG) << "ASTDecl_end";
+    // LOG(DEBUG) << "ASTDecl_end";
     return nullptr;
 }
 //
@@ -261,16 +264,11 @@ Constant *CminusfBuilder::get_const_array(Type *array_type_t, std::vector<const_
 // 变量声明
 Value *CminusfBuilder::visit(ASTDef &node)
 {
-    // LOG(INFO) << context.is_const;
-    // LOG(WARNING) << (context.is_const_exp ? 1 : 0) << " ============================";
     LOG(DEBUG) << "ASTDef_start";
-    LOG(DEBUG) << node.id;
-    LOG(DEBUG) << context.type;
     Type *var_type;
     auto current_type = context.type;
     if (current_type == TYPE_INT)
     {
-        LOG(DEBUG) << "aaaa"<<" "<<node.length<<" "<<scope.in_global()<<"    ";
         var_type = module->get_int32_type();
     }
     else if (current_type == TYPE_FLOAT)
@@ -290,6 +288,7 @@ Value *CminusfBuilder::visit(ASTDef &node)
         // 全局变量
         if (scope.in_global())
         {
+            // 无初始化值, 默认为0
             if (node.initval_list == nullptr)
             {
                 Constant *initial_value;
@@ -299,38 +298,37 @@ Value *CminusfBuilder::visit(ASTDef &node)
                     initial_value = CONST_FP(0.);
                 auto *var = GlobalVariable::create(node.id, module.get(), var_type, context.is_const, initial_value);
                 scope.push(node.id, var);
+                // 对于const变量，需要在全局作用域的const_map中记录其值
                 if (node.is_const)
                     scope.push({node.id, std::vector<unsigned int>(0)}, {0});
             }
             else//初始化不是0
             {
                 // 需要通过访问ASTInitval更新 context中的val.i_val或者val.f_val
-                LOG(DEBUG)<<"bbbbb";
                 node.initval_list->accept(*this);
-                LOG(INFO) << "lrb1";
                 Constant *initial_value;
                 if (current_type == TYPE_INT)
                     initial_value = ConstantInt::get(int(context.val.i_val), module.get());
                 else if (current_type == TYPE_FLOAT)
                     initial_value = ConstantFP::get(context.val.f_val, module.get());
-                LOG(WARNING) << initial_value->get_name() << " ssssssssssssssss";
-                LOG(WARNING) << current_type << "   " << node.id;
-                if (current_type == TYPE_INT)
-                    LOG(WARNING) << context.val.i_val << " int ";
-                else
-                    LOG(WARNING) << context.val.f_val << " float ";
+                // if (current_type == TYPE_INT)
+                //     LOG(WARNING) << context.val.i_val << " int ";
+                // else
+                //     LOG(WARNING) << context.val.f_val << " float ";
                 auto *var = GlobalVariable::create(node.id, module.get(), var_type, context.is_const, initial_value);
                 scope.push(node.id, var);
                 if (node.is_const)
                 {
-                    LOG(INFO) << node.id << " now enter the global scope";
-                    LOG(WARNING) << context.val.f_val << " " << context.val.i_val << " ......";
+                    // LOG(INFO) << node.id << " now enter the global scope";
+                    // LOG(WARNING) << context.val.f_val << " " << context.val.i_val << " ......";
                     scope.push({node.id, std::vector<unsigned int>(0)}, context.val);
                 }
             }
         }
+        // 非全局变量
         else
         {
+            // 没有初始化值
             if (node.initval_list == nullptr)
             {
                 auto *var = builder->create_alloca(var_type);
@@ -338,34 +336,28 @@ Value *CminusfBuilder::visit(ASTDef &node)
             }
             else
             {
+                // 这时候如果initial_list是nullptr报错
                 assert(node.initval_list->initval_list.size() == 0);
                 auto *var = builder->create_alloca(var_type);
 
                 scope.push(node.id, var);
                 node.initval_list->accept(*this);
-                LOG(DEBUG) << "000000000000000000000000";
-                LOG(DEBUG) << context.exp_vals.size();
+                // LOG(DEBUG) << context.exp_vals.size();
                 if (!node.is_const)
                 {
                     auto *initial_value = context.exp_vals[0];
-                    LOG(WARNING) << var->get_type()->print();
-                    LOG(WARNING) << initial_value->get_type()->print();
-                    LOG(INFO) << "store_3";
+                    // LOG(WARNING) << var->get_type()->print();
+                    // LOG(WARNING) << initial_value->get_type()->print();
+                    // LOG(INFO) << "store_3";
                     builder->create_store(initial_value, var);
                 }
                 else
                 {
                     auto initial_value = context.exp_uints[0];
                     if (current_type == TYPE_INT)
-                    {
-                        LOG(INFO) << "store_4";
                         builder->create_store(ConstantInt::get(int(initial_value.i_val), module.get()), var);
-                    }
                     else
-                    {
-                        LOG(INFO) << "store_5";
                         builder->create_store(ConstantFP::get(initial_value.f_val, module.get()), var);
-                    }
                     scope.push({node.id, std::vector<unsigned int>(0)}, initial_value);
                 }
             }
@@ -404,7 +396,6 @@ Value *CminusfBuilder::visit(ASTDef &node)
                 auto var = GlobalVariable::create(node.id, module.get(), array_type, node.is_const, zero);
                 //全都是零的数组，这个需要codegen的时候自己想办法初始化
                 scope.push(node.id, var);
-                LOG(DEBUG) << "lrb1";
             }
             else
             {
@@ -412,19 +403,21 @@ Value *CminusfBuilder::visit(ASTDef &node)
                 scope.push(node.id, var);
             }
         }
+        // 数组变量 + 有初始化
         else
         {
+            // 全局变量数组
             if (scope.in_global())
             {
                 auto ori_const = node.initval_list->is_const;
                 node.initval_list->is_const = true;
                 node.initval_list->accept(*this);
-                LOG(DEBUG) << "lrb2";
                 node.initval_list->is_const = ori_const;
                 auto initval = get_const_array(array_type, context.exp_uints);
                 auto var = GlobalVariable::create(node.id, module.get(), array_type, node.is_const, initval);
                 scope.push(node.id, var);
-                for (auto i = 0; i < size; i++)
+                // 将const数组的值存入全局const_map
+                for (unsigned int i = 0; i < size; i++)
                 {
                     auto temp = i;
                     std::vector<unsigned int> now_dim;
@@ -437,10 +430,10 @@ Value *CminusfBuilder::visit(ASTDef &node)
                         scope.push({node.id, now_dim}, context.exp_uints[i]);
                 }
             }
+            // 非全局数组变量，且有初始化 + 非const
             else if (!node.is_const)
             {
                 node.initval_list->accept(*this);
-                LOG(DEBUG) << "lrb3";
                 auto initval = context.exp_vals;
                 auto var = builder->create_alloca(array_type);
                 scope.push(node.id, var);
@@ -448,13 +441,10 @@ Value *CminusfBuilder::visit(ASTDef &node)
                 int len = 1;
                 for (auto i : context.exp_lists)
                 {
-                    LOG(DEBUG) << i.val.i_val;
                     len *= i.val.i_val;
-                    // temp = builder->create_gep(temp, {CONST_INT(0), CONST_INT(0)});
                 }
                 auto temp_dim = std::vector<Value *>(context.exp_lists.size() + 1, CONST_INT(0));
                 temp = builder->create_gep(temp, temp_dim);
-                LOG(DEBUG) << temp->get_type()->print();
                 if (current_type == TYPE_INT)
                 {
                     auto mem_set = scope.find("memset_int");
@@ -465,12 +455,11 @@ Value *CminusfBuilder::visit(ASTDef &node)
                 else
                 {
                     auto mem_set = scope.find("memset_float");
-                    LOG(DEBUG) << mem_set->get_type()->print() << "+++";
+                    // LOG(DEBUG) << mem_set->get_type()->print() << "+++";
                     auto call = builder->create_call(mem_set, {temp, CONST_INT(len)});
                     call->set_name("memset_float_call");
                 }
-                // auto four = ConstantInt::get(4, module.get());
-                LOG(DEBUG) << initval.size();
+                // LOG(DEBUG) << initval.size();
                 for (auto val = 0u; val < initval.size(); val++)
                 {
                     if (initval[val] == nullptr)
@@ -497,21 +486,19 @@ Value *CminusfBuilder::visit(ASTDef &node)
                     }
                     else if (current_type == TYPE_FLOAT)
                     {
-                        // LOG(INFO) << "hhhhhhhhh";
                         if (initval[val]->get_type()->is_integer_type())
                             initval[val] = builder->create_sitofp(initval[val], FLOAT_T);
                     }
                     builder->create_store(initval[val], iter);
                 }
             }
+            // const数组变量有初始化
             else
             {
                 node.initval_list->accept(*this);
-                LOG(DEBUG) << "lrb4";
                 auto initval = context.exp_uints;
                 auto var = builder->create_alloca(array_type);
                 scope.push(node.id, var);
-                // auto four = ConstantInt::get(4, module.get());
                 for (auto val = 0u; val < initval.size(); val++)
                 {
                     Value *iter = var;
@@ -549,12 +536,10 @@ Value *CminusfBuilder::visit(ASTDef &node)
 }
 Value *CminusfBuilder::visit(ASTInitVal &node)
 {
-    // LOG(INFO) << context.is_const;
     LOG(DEBUG) << "ASTInitVal";
     if (node.initval_list.size() == 0 && node.value != nullptr)
     {
         // Exp
-        // LOG(DEBUG) << "enter first ";
         auto value = node.value->accept(*this);
         if (context.type == TYPE_INT)
         {
@@ -578,7 +563,6 @@ Value *CminusfBuilder::visit(ASTInitVal &node)
                 }
             }
         }
-        LOG(INFO) << value->print() << "  -----";
         context.exp_vals = std::vector<Value *>(1, value);
         if (node.is_const)
             context.exp_uints = std::vector<const_val>(1, node.value->val);
@@ -586,35 +570,28 @@ Value *CminusfBuilder::visit(ASTInitVal &node)
     else if (!node.is_const)
     {
         // 不是常量定义
-        // LOG(DEBUG) << "enter second ";
         auto exp_list = context.exp_lists;
-        // // LOG(INFO) << exp_list.size();
         assert(context.exp_lists[0].is_const);
         unsigned int all_dim = 1;
         for (auto &exp : context.exp_lists)
         {
             all_dim *= exp.val.i_val;
-            // LOG(DEBUG) << exp.val.i_val;
         }
         std::vector<Value *> exp_vals = std::vector<Value *>(0);
         auto now_dim = std::vector<unsigned int>(exp_list.size(), 0);
-        // LOG(DEBUG) << "enter here in second place";
         for (auto init : node.initval_list)
         {
             if (init->initval_list.size() == 0 && init->value != nullptr)
             {
                 // Exp
-                // LOG(DEBUG) << "can arrive here";
                 if (init->value != nullptr)
                 {
                     auto value = init->value->accept(*this);
-                    // LOG(DEBUG) << value->print();
                     exp_vals.push_back(value);
-                    LOG(DEBUG) << "succ to reach here";
-                    LOG(DEBUG) << now_dim.size();
+                    // LOG(DEBUG) << "succ to reach here";
+                    // LOG(DEBUG) << now_dim.size();
                     now_dim.back()++;
                 }
-                // LOG(DEBUG) << "can leave here?";
             }
             else
             {
@@ -623,7 +600,6 @@ Value *CminusfBuilder::visit(ASTInitVal &node)
                 {
                     now_dim[i - 1] += now_dim[i] / exp_list[i].val.i_val;
                     now_dim[i] %= exp_list[i].val.i_val;
-                    // assert(now_dim[i] == 0);
                 }
 
                 context.exp_lists.erase(context.exp_lists.begin());
@@ -637,16 +613,12 @@ Value *CminusfBuilder::visit(ASTInitVal &node)
                 now_dim[0]++;
             }
         }
-        LOG(DEBUG) << exp_vals.size();
-        LOG(DEBUG) << all_dim;
         // if(exp_vals.size() <= all_dim)
         exp_vals.resize(all_dim, nullptr);
         context.exp_vals = exp_vals;
-        LOG(DEBUG) << "arrive here";
     }
     else
     {
-        LOG(DEBUG) << "enter third ";
         auto exp_list = context.exp_lists;
         assert(context.exp_lists[0].is_const);
         unsigned int all_dim = 1;
@@ -658,7 +630,6 @@ Value *CminusfBuilder::visit(ASTInitVal &node)
         auto now_dim = std::vector<unsigned int>(exp_list.size(), 0);
         for (auto init : node.initval_list)
         {
-            // LOG(INFO) << init->initval_list.size();
             if (init->initval_list.size() == 0 && init->value != nullptr)
             {
                 // Exp
@@ -744,14 +715,10 @@ Value *CminusfBuilder::visit(ASTBlock &node)
 
 Value *CminusfBuilder::visit(ASTAssignStmt &node)
 {
-    // LOG(WARNING) << (context.is_const_exp ? 1 : 0);
     LOG(DEBUG) << "ASTAssignStmt";
     auto *expr_result = node.expression->accept(*this);
     context.require_lvalue = true;
     auto *var_addr = node.var->accept(*this);
-    LOG(DEBUG) << node.var->id;
-    LOG(DEBUG) << var_addr->get_type()->get_pointer_element_type()->print() << " ==============================";
-    LOG(DEBUG) << expr_result->get_type()->print() << " ========================";
     if (var_addr->get_type()->get_pointer_element_type() != expr_result->get_type())
     {
         if (expr_result->get_type() == INT32_T)
@@ -759,9 +726,6 @@ Value *CminusfBuilder::visit(ASTAssignStmt &node)
         else
             expr_result = builder->create_fptosi(expr_result, INT32_T);
     }
-    LOG(INFO) << "store_9";
-    LOG(DEBUG) << expr_result->get_type()->print();
-    LOG(DEBUG) << var_addr->get_type()->print();
     builder->create_store(expr_result, var_addr);
     LOG(DEBUG) << "ASTAssignStmt_end";
     return expr_result;
@@ -769,7 +733,6 @@ Value *CminusfBuilder::visit(ASTAssignStmt &node)
 
 Value *CminusfBuilder::visit(ASTSelectionStmt &node)
 {
-    // LOG(INFO) << context.is_const;
     LOG(DEBUG) << "ASTSelectionStmt";
     auto *trueBB = BasicBlock::create(module.get(), "", context.func);
     BasicBlock *falseBB{};
@@ -777,7 +740,7 @@ Value *CminusfBuilder::visit(ASTSelectionStmt &node)
         falseBB = BasicBlock::create(module.get(), "", context.func);
     auto *nextBB = BasicBlock::create(module.get(), "", context.func);
 
-    // // 入栈
+    // 入栈
     context.true_bb_stk.push(trueBB);
     if (node.else_stmt != nullptr)
         context.false_bb_stk.push(falseBB);
@@ -806,21 +769,10 @@ Value *CminusfBuilder::visit(ASTSelectionStmt &node)
         if (not builder->get_insert_block()->is_terminated())
             builder->create_br(nextBB);
     }
-    // if (not builder->get_insert_block()->is_terminated())
-    // {
-    //     auto br_inst = builder->create_br(nextBB);
-    //     LOG(INFO) << br_inst->print() << " br-------------------";
-    // }
-    // else 存在时 falseBB 相关语句，并建立 falseBB -> nextBB
     if (node.else_stmt != nullptr)
     {
         builder->set_insert_point(falseBB);
         node.else_stmt->accept(*this);
-        // if (not builder->get_insert_block()->is_terminated())
-        // {
-        //     auto br_inst = builder->create_br(nextBB);
-        //     LOG(INFO) << br_inst->print() << " br-------------------";
-        // }
         if (builder->get_insert_block()->empty())
         {
             if (builder->get_insert_block()->get_pre_basic_blocks().empty())
@@ -882,10 +834,8 @@ Value *CminusfBuilder::visit(ASTIterationStmt &node)
         if (builder->get_insert_block()->get_pre_basic_blocks().empty())
             builder->get_insert_block()->erase_from_parent();
         else
-        {
             if (not builder->get_insert_block()->is_terminated())
                 builder->create_br(condBB);
-        }
     }
     else
     {
@@ -912,7 +862,7 @@ Value *CminusfBuilder::visit(ASTBreak &node)
     LOG(DEBUG) << "ASTBreak";
     auto *bb = context.next_bb_stk.top();
     auto *ret_val = builder->create_br(bb);
-    LOG(INFO) << ret_val->print() << " br---------------";
+    // LOG(INFO) << ret_val->print() << " br---------------";
     return ret_val;
 }
 
@@ -922,7 +872,7 @@ Value *CminusfBuilder::visit(ASTContinue &node)
     LOG(DEBUG) << "ASTContinue";
     auto *bb = context.cond_bb_stk.top();
     auto *ret_val = builder->create_br(bb);
-    LOG(INFO) << ret_val->print() << " br---------------";
+    // LOG(INFO) << ret_val->print() << " br---------------";
     return ret_val;
 }
 
