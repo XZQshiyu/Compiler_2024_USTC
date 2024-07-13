@@ -9,22 +9,31 @@ std::string Reg::print() const {
         return "ra";
     }
     if (id == 2) {
-        return "tp";
-    }
-    if (id == 3) {
         return "sp";
     }
-    if (4 <= id and id <= 11) {
-        return "a" + std::to_string(id - 4);
+    if (id == 3) {
+        return "gp";
     }
-    if (12 <= id and id <= 18) {
-        return "t" + std::to_string(id - 12);
+    if (id == 4) {
+        return "tp";
     }
-    if (19 <= id and id <= 20) {
-        return "s" + std::to_string(id - 9);
+    if (5 <= id and id <= 7) {
+        return "t" + std::to_string(id - 5);
     }
-    if (id == 22) {
+    if (id == 8) {
         return "fp";
+    }
+    if (id == 9) {
+        return "s1";
+    }
+    if (10 <= id and id <= 17) {
+        return "a" + std::to_string(id - 10);
+    }
+    if (18 <= id and id <= 27) {
+        return "s" + std::to_string(id - 16);
+    }
+    if (28 <= id and id <= 31) {
+        return "t" + std::to_string(id - 25);
     }
     assert(false);
 }
