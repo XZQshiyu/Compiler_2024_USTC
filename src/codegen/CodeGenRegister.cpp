@@ -1837,3 +1837,11 @@ void CodeGenRegister::run() {
     }
     //TODO: 处理read only data
 }
+
+std::string CodeGenRegister::print() const {
+    std::string result;
+    for (const auto &inst : output) {
+        result += inst.format();
+    }
+    return result;
+}
