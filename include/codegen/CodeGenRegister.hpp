@@ -45,6 +45,7 @@ class CodeGenRegister {
     void
     append_inst(const char *inst, std::initializer_list<std::string> args,
                 ASMInstruction::InstType ty = ASMInstruction::Instruction) {
+        LOG(DEBUG) << "11";
         auto content = std::string(inst) + " ";
         string instr(inst);
         if(instr == "lb" || instr == "lh" || instr == "lw" || instr == "ld" || instr == "sb" || instr == "sh" || instr == "sw" || instr == "sd"){

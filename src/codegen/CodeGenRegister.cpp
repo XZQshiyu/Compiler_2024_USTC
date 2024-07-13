@@ -868,32 +868,32 @@ void CodeGenRegister::gen_icmp() {
     // 根据指令类型生成汇编
     switch (context.inst->get_instr_type()) {
     case Instruction::eq:
-        append_inst("slt t8,"+sreg1+","+sreg0);
+        append_inst("slt s11,"+sreg1+","+sreg0);
         append_inst("slt t0,"+sreg0+","+sreg1);
-        append_inst("or t0,t0,t8");
-        append_inst("addi t8,zero,1");
-        append_inst("sub  "+dest_reg+",t8,t0");
+        append_inst("or t0,t0,s11");
+        append_inst("addi s11,zero,1");
+        append_inst("sub  "+dest_reg+",s11,t0");
         break;
     case Instruction::ne:
-        append_inst("slt t8,"+sreg1+","+sreg0);
+        append_inst("slt s11,"+sreg1+","+sreg0);
         append_inst("slt t0,"+sreg0+","+sreg1);
-        append_inst("or "+dest_reg+",t0,t8");
+        append_inst("or "+dest_reg+",t0,s11");
         break;
     case Instruction::gt:
         append_inst("slt "+dest_reg+","+sreg1+","+sreg0);
         break;
     case Instruction::ge:
         append_inst("slt "+dest_reg+","+sreg0+","+sreg1);
-        append_inst("addi t8,zero,1");
-        append_inst("sub "+dest_reg+",t8,"+dest_reg);
+        append_inst("addi s11,zero,1");
+        append_inst("sub "+dest_reg+",s11,"+dest_reg);
         break;
     case Instruction::lt:
           append_inst("slt "+dest_reg+","+sreg0+","+sreg1);
         break;
     case Instruction::le:
         append_inst("slt "+dest_reg+","+sreg1+","+sreg0);
-        append_inst("addi t8,zero,1");
-        append_inst("sub "+dest_reg+",t8,"+dest_reg);
+        append_inst("addi s11,zero,1");
+        append_inst("sub "+dest_reg+",s11,"+dest_reg);
         break;
     default:
         assert(false);
@@ -1391,14 +1391,14 @@ void CodeGenRegister::gen_gep() {
             auto idx=value2reg(context.inst->get_operand(j),1);//这是一个指针，初始指针
             //t1放着这个维度的下标
             int val=weight->get_size();
-            if (IS_IMM_12(val)) {//t8 放着这个维度的后缀乘积
-                append_inst(ADDI WORD, {"t8", "zero", std::to_string(val)});
+            if (IS_IMM_12(val)) {//s11 放着这个维度的后缀乘积
+                append_inst(ADDI WORD, {"s11", "zero", std::to_string(val)});
                 /* addi f1, zero, 4 */
             } else {
                 load_large_int32(val, Reg::t(8));//太大了
             }
-            append_inst("mul t8,"+idx+",t8");//*扩大倍数
-            append_inst("add t0,t0,t8");//添加到t0身上
+            append_inst("mul s11,"+idx+",s11");//*扩大倍数
+            append_inst("add t0,t0,s11");//添加到t0身上
             
             //LOG(DEBUG)<<"++++++++++++++++++++++++"<<weight->get_size()<<" "<<static_cast<ConstantInt *>(context.inst->get_operand(j))->get_value();
             if(j==len-1)continue;
@@ -1422,10 +1422,10 @@ void CodeGenRegister::gen_gep() {
         auto ptr_reg=value2reg(ptr,1);
         auto idx=value2reg(context.inst->get_operand(1),0);//这个是常数，也就是数组下标
         //append_inst("addi t2,zero,"+std::to_string(context.inst->get_type()->get_pointer_element_type()->get_size()));
-        append_inst("add t8,"+idx+" , "+idx);
-        append_inst("add t8,t8,t8");//*4
-        append_inst("add "+dest_reg+",t8,"+ptr_reg);//基础值。
-      //  append_inst("add "+dest_reg+",zero,t8");
+        append_inst("add s11,"+idx+" , "+idx);
+        append_inst("add s11,s11,s11");//*4
+        append_inst("add "+dest_reg+",s11,"+ptr_reg);//基础值。
+      //  append_inst("add "+dest_reg+",zero,s11");
         if(!find){
             store_from_greg_string(context.inst, dest_reg);
         }

@@ -34,22 +34,25 @@ struct Reg {
 
     static Reg zero() { return Reg(0); }
     static Reg ra() { return Reg(1); }
-    static Reg sp() { return Reg(3); }
-    static Reg fp() { return Reg(22); }
+    static Reg sp() { return Reg(2); }
+    static Reg fp() { return Reg(8); }
     static Reg a(unsigned i) {
         assert(0 <= i and i <= 7);
-        return Reg(i + 4);
+        return Reg(i + 10);
     }
     static Reg t(unsigned i) {
-        assert(0 <= i and i <= 8);
-        return Reg(i + 12);
+        assert(0 <= i and i <= 6);
+        if(i < 3) 
+            return Reg(i + 5);
+        else
+            return Reg(i + 25);
     }
     static Reg s(unsigned i) {
-        assert(0 <= i and i <= 9);
-        if (i == 9)
-            return Reg(22);
+        assert(0 <= i and i <= 11);
+        if (i < 2)
+            return Reg(i + 8);
         else
-            return Reg(i + 23);
+            return Reg(i + 16);
     }
 };
 
