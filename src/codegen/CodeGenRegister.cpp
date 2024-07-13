@@ -182,6 +182,7 @@ pair<string, bool> CodeGenRegister::getRegName(Value *v, int i)  {//不仅需要
             name=regname(regmap[v],false);
         }
     }
+    LOG(DEBUG) << "getRegNameEnd";
     return {name, find};
 }
 
@@ -790,7 +791,7 @@ void CodeGenRegister::gen_alloca() {
     //std:: cout<<shuzu_offset<<std::endl;
     auto [dest, find] = getRegName(context.inst,0);
     load_large_int32(shuzu_offset,Reg::t(0));
-    append_inst(SUB + dest+",fp,t0");// fp-base-size
+    append_inst(SUB + string(" ")+ dest+",fp,t0");// fp-base-size
     if(!find){
         store_from_greg_string(context.inst, dest);//load这个操作产生了一个新的左值，我们需要把这个现在在ft中的左值放到栈里边
     }
@@ -806,7 +807,6 @@ void CodeGenRegister::gen_load() {
    // load_to_greg(ptr, Reg::t(0));//这里t0放的是一个指针而不是一个数，这是因为这个指令调用的时候，就只能传个指针进来。
     //相当于alloca，最后传进来的最后存储的头指针，但是我们要把数据放到alloca出来的数组里
     //
-
     if (type->is_float_type()) {
         append_inst("fld.s "+dest+", "+sreg+", 0");//ft0=M[t0+0]
         if(!find){
@@ -815,11 +815,12 @@ void CodeGenRegister::gen_load() {
         
     } else {
         if(type->is_int1_type()){
-            append_inst(LOAD_BYTE, {dest, sreg, 0});
+            append_inst(LOAD_BYTE, {dest, sreg, "0"});
         }else if(type->is_int32_type()){
-            append_inst(LOAD_WORD, {dest, sreg, 0});
+            LOG(DEBUG) << dest << " " << sreg;
+            append_inst(LOAD_WORD, {dest, sreg, "0"});
         }else{
-            append_inst(LOAD_DOUBLE, {dest, sreg, 0});
+            append_inst(LOAD_DOUBLE, {dest, sreg, "0"});
         }
         if(!find){
             store_from_greg_string(context.inst, dest);//load这个操作产生了一个新的左值，我们需要把这个现在在ft中的左值放到栈里边
@@ -1789,6 +1790,7 @@ void CodeGenRegister::run() {
                             break;
                         case Instruction::load:
                             gen_load();
+                            LOG(DEBUG)<<"load";
                             break;
                         case Instruction::store:
                             gen_store();
@@ -1844,3 +1846,28 @@ std::string CodeGenRegister::print() const {
     return result;
 }
 //TODO: 对框架不满可尽情修改
+
+template <class... Args> void CodeGenRegister::append_inst(Args... arg) {
+        LOG(DEBUG) << "?";
+        output.emplace_back(arg...);
+    }
+
+void
+    CodeGenRegister::append_inst(const char *inst, std::initializer_list<std::string> args,
+                ASMInstruction::InstType ty ) {
+        LOG(DEBUG) << "11";
+        auto content = std::string(inst) + " ";
+        string instr(inst);
+        if(instr == "lb" || instr == "lh" || instr == "lw" || instr == "ld" || instr == "sb" || instr == "sh" || instr == "sw" || instr == "sd"){
+            assert(args.size() == 3);
+            content += *(args.begin()) + ", " + *(args.begin() + 2) + "(" + *(args.begin() + 1) + ")";
+        }
+        else {
+            for (const auto &arg : args) {
+                content += arg + ", ";
+            }
+            content.pop_back();
+            content.pop_back();
+        }
+        output.emplace_back(content, ty);
+    }
