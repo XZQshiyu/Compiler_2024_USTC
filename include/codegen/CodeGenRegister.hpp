@@ -12,17 +12,20 @@
 #include "Value.hpp"
 #include "liverange.hpp"
 #include "regalloc.hpp"
+#include <cassert>
+#include <cstring>
 #include <functional>
+#include <string>
 
 // #define STACK_ALIGN(x) (((x / 16) + (x % 16 ? 1 : 0)) * 16)
 #define STACK_ALIGN(x) ALIGN(x, 16)
 #define CONST_0 ConstantInt::get(0, m)
-#define FP "$fp"
-#define SP "$sp"
-#define RA_reg "$ra"
-// #a = 8, #t = 9, reserve $t0, $t1 $t8 for temporary
+#define FP "s0"
+#define SP "sp"
+#define RA_reg "ra"
+// #a = 8, #t = 9, reserve t0, t1 t8 for temporary
 #define R_USABLE (17 - 3)
-// #fa = 8, #ft=16, reserve $ft0, $ft1 for temporary
+// #fa = 8, #ft=16, reserve ft0, ft1 for temporary
 #define FR_USABLE (24 - 2)
 #define ARG_R 8
 
@@ -43,11 +46,18 @@ class CodeGenRegister {
     append_inst(const char *inst, std::initializer_list<std::string> args,
                 ASMInstruction::InstType ty = ASMInstruction::Instruction) {
         auto content = std::string(inst) + " ";
-        for (const auto &arg : args) {
-            content += arg + ", ";
+        string instr(inst);
+        if(instr == "lb" || instr == "lh" || instr == "lw" || instr == "ld" || instr == "sb" || instr == "sh" || instr == "sw" || instr == "sd"){
+            assert(args.size() == 3);
+            content += *(args.begin()) + ", " + *(args.begin() + 2) + "(" + *(args.begin() + 1) + ")";
         }
-        content.pop_back();
-        content.pop_back();
+        else {
+            for (const auto &arg : args) {
+                content += arg + ", ";
+            }
+            content.pop_back();
+            content.pop_back();
+        }
         output.emplace_back(content, ty);
     }
 
@@ -68,7 +78,7 @@ class CodeGenRegister {
                          int bits = 12,
                          bool u = false){
         /* this function will tranfser
-            * `addi.d $a0, $fp, imm` to `add.d $a0, $fp, tmp_ireg` if imm
+            * `addi.d a0, fp, imm` to `add.d a0, fp, tmp_ireg` if imm
             * overfloats for `addi.d`. During the time we move `imm` to `tmp_ireg`,
             * another tmp ireg will be used, they can be same, but we must specify
             * it.
@@ -161,19 +171,19 @@ class CodeGenRegister {
         string name;
         if (is_float) {
             // assert(false && "not implemented!");
-            if(i==-100) name="$ft0";
+            if(i==-100) name="ft0";
             else if (1 <= i and i <= 8)
-                name = "$fa" + to_string(i - 1);
+                name = "fa" + to_string(i - 1);
             else if (9 <= i and i <= FR_USABLE)
-                name = "$ft" + to_string(i - 9 + 2);
+                name = "ft" + to_string(i - 9 + 2);
             else
                 name = "WRONG_REG_" + to_string(i);
         } else {
-            if(i==-100) name="$t0";
+            if(i==-100) name="t0";
             else if (1 <= i and i <= 8)
-                name = "$a" + to_string(i - 1);
+                name = "a" + to_string(i - 1);
             else if (9 <= i and i <= R_USABLE)
-                name = "$t" + to_string(i - 9 + 2);
+                name = "t" + to_string(i - 9 + 2);
             else
                 name = "WRONG_REG_" + to_string(i);
         }
@@ -183,7 +193,7 @@ class CodeGenRegister {
 
     string tmpregname(int i, bool is_float) const {//只会用到t0 or t1
         assert(i == 0 or i == 1);
-        return (is_float ? "$ft" : "$t") + to_string(i);
+        return (is_float ? "ft" : "t") + to_string(i);
     }
 
     static pair<int, int> immRange(int bit, bool u) {
@@ -220,14 +230,15 @@ class CodeGenRegister {
     }
 
     static string suffix(Type *type) {
-        int len = typeLen(type);
-        switch (len) {
-        case 1: return ".b";
-        case 2: return ".h";
-        case 4: return type->is_float_type() ? ".s" : ".w";
-        case 8: return ".d";
-        }
-        assert(false && "no such suffix");
+        return "";
+        // int len = typeLen(type);
+        // switch (len) {
+        // case 1: return ".b";
+        // case 2: return ".h";
+        // case 4: return type->is_float_type() ? ".s" : ".w";
+        // case 8: return ".d";
+        // }
+        // assert(false && "no such suffix");
     }
 
     bool no_stack_alloca(Instruction *instr) const {//不需要栈分配的情况

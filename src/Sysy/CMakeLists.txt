@@ -13,9 +13,7 @@ target_link_libraries(
     common
     syntax
     codegen
-    stdc++fs
     opt_lib
-    Sysy
 )
 
 # 添加为全局路径,可以在任意路径下执行sysy,默认将sysy添加到 /usr/local/bin路径下

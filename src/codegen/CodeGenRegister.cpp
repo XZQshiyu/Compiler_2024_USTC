@@ -1,5 +1,6 @@
 #include "CodeGenRegister.hpp"
 
+#include "ASMInstruction.hpp"
 #include "BasicBlock.hpp"
 #include "Constant.hpp"
 #include "Function.hpp"
@@ -80,11 +81,11 @@ string CodeGenRegister::value2reg(Value *v, int i, string recommend) {//把value
         if(v->get_type()->is_float_type()){
             load_to_freg(v, FReg::ft(unsigned(i)));
             find=false;
-            name="$ft"+to_string(i);
+            name="ft"+to_string(i);
         }else{
             load_to_greg(v, Reg::t(unsigned(i)));
             find=false;
-            name="$t"+to_string(i);
+            name="t"+to_string(i);
         }
     }else{
         if(v->get_type()->is_float_type()){
@@ -119,24 +120,24 @@ void CodeGenRegister::value4call(Value *v, int cnt) {//把value放到reg里边�
                 auto offset=(-1)*float_reg_offset(regmap[v]);
                 if (IS_IMM_12(offset)) {
                     auto offset_str = std::to_string(offset);
-                    append_inst(FLOAD SINGLE,{regname(cnt,true), "$fp", to_string(offset)});
+                    append_inst(FLOAD_SINGLE,{regname(cnt,true), "fp", to_string(offset)});
                 } else {
                     auto addr = Reg::t(8);
                     load_large_int64(offset, addr);
-                    append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-                    append_inst(FLOAD SINGLE, {regname(cnt,true), addr.print(), "0"});
+                    append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+                    append_inst(FLOAD_SINGLE, {regname(cnt,true), addr.print(), "0"});
                 }
-            //append_inst("fld.s $fa"+to_string(cnt)+" ,$fp, "+to_string(()));
+            //append_inst("fld.s fa"+to_string(cnt)+" ,fp, "+to_string(()));
         }else{
                 auto offset=(-1)*int_reg_offset(regmap[v]);
                 if (IS_IMM_12(offset)) {
                     auto offset_str = std::to_string(offset);
-                    append_inst(LOAD DOUBLE,{regname(cnt,false), "$fp", to_string(offset)});
+                    append_inst(LOAD_DOUBLE,{regname(cnt,false), "fp", to_string(offset)});
                 } else {
                     auto addr = Reg::t(8);
                     load_large_int64(offset, addr);
-                    append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-                    append_inst(LOAD DOUBLE, {regname(cnt,false), addr.print(), "0"});
+                    append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+                    append_inst(LOAD_DOUBLE, {regname(cnt,false), addr.print(), "0"});
                 }
         }
     }
@@ -149,7 +150,7 @@ void CodeGenRegister::gencopy(string lhs_reg, string rhs_reg, bool is_float) {
         if (is_float)
             append_inst("fmov.s " + lhs_reg + ", " + rhs_reg);
         else
-            append_inst("or " + lhs_reg + ", $zero, " + rhs_reg);
+            append_inst("or " + lhs_reg + ", zero, " + rhs_reg);
     }
 }
 
@@ -165,11 +166,11 @@ pair<string, bool> CodeGenRegister::getRegName(Value *v, int i)  {//不仅需要
         if(v->get_type()->is_float_type()){
        //     load_to_freg(v, FReg::ft(unsigned(i)));
             find=false;
-            name="$ft"+to_string(i);
+            name="ft"+to_string(i);
         }else{
        //     load_to_greg(v, Reg::t(unsigned(i)));
             find=false;
-            name="$t"+to_string(i);
+            name="t"+to_string(i);
         }
     }else{
         if(v->get_type()->is_float_type()){
@@ -192,7 +193,7 @@ int CodeGenRegister::float_reg_offset(int id){
     return context.origin_frame_size+8*R_USABLE+id*8;
 }
 void CodeGenRegister::allocate() {
-     // 先给出了一个长度是16的空间 备份 $ra $
+     // 先给出了一个长度是16的空间 备份 ra 
     unsigned offset = PROLOGUE_OFFSET_BASE;
     context.origin_frame_size=offset;
     offset+=(R_USABLE+FR_USABLE)*8;
@@ -267,10 +268,10 @@ void CodeGenRegister::allocate() {
 }
 
 void CodeGenRegister::gen_prologue() {
-    makeSureInRange("addi.d", SP, SP, -context.frame_size, "add.d");
-    makeSureInRange("st.d", RA_reg, SP, context.frame_size - 8, "stx.d");
-    makeSureInRange("st.d", FP, SP, context.frame_size - 16, "stx.d");
-    makeSureInRange("addi.d", FP, SP, context.frame_size, "add.d");
+    makeSureInRange("addi", SP, SP, -context.frame_size, "add");
+    makeSureInRange("sd", RA_reg, SP, context.frame_size - 8, "stx");
+    makeSureInRange("sd", FP, SP, context.frame_size - 16, "stx");
+    makeSureInRange("addi", FP, SP, context.frame_size, "add");
         // 将函数参数转移到栈帧上
     if(context.func->get_name()=="main"){
         int garg_cnt = 0;
@@ -299,10 +300,10 @@ void CodeGenRegister::gen_epilogue() {
     append_inst(func_exit_label_name(context.func), ASMInstruction::Label);
     output.emplace_back("# epilog");
 
-    makeSureInRange("ld.d", RA_reg, SP, context.frame_size - 8, "ldx.d");
-    makeSureInRange("ld.d", FP, SP, context.frame_size - 16, "ldx.d");
-    makeSureInRange("addi.d", SP, SP, context.frame_size, "add.d");
-    append_inst("jr $ra");
+    makeSureInRange("ld", RA_reg, SP, context.frame_size - 8, "ldx");
+    makeSureInRange("ld", FP, SP, context.frame_size - 16, "ldx");
+    makeSureInRange("addi", SP, SP, context.frame_size, "add");
+    append_inst("jr ra");
 }
 
 void CodeGenRegister::load_to_greg(Value *val, const Reg &reg) {
@@ -313,7 +314,7 @@ void CodeGenRegister::load_to_greg(Value *val, const Reg &reg) {
     if (auto *constant = dynamic_cast<ConstantInt *>(val)) {
         int32_t val = constant->get_value();
         if (IS_IMM_12(val)) {
-            append_inst(ADDI WORD, {reg.print(), "$zero", std::to_string(val)});
+            append_inst(ADDI WORD, {reg.print(), "zero", std::to_string(val)});
         } else {
             load_large_int32(val, reg);
         }
@@ -331,7 +332,7 @@ void CodeGenRegister::load_to_greg_string(Value *val, string reg) {
     if (auto *constant = dynamic_cast<ConstantInt *>(val)) {
         int32_t val = constant->get_value();
         if (IS_IMM_12(val)) {
-            append_inst(ADDI WORD, {reg, "$zero", std::to_string(val)});
+            append_inst(ADDI WORD, {reg, "zero", std::to_string(val)});
         } else {
             load_large_int32_string(val, reg);
         }
@@ -355,28 +356,54 @@ void CodeGenRegister::load_large_int32_string(int32_t val, string reg) {
     append_inst(LU12I_W, {reg, std::to_string(high_20)});
     append_inst(ORI, {reg, reg, std::to_string(low_12)});
 }
+
+
+// void CodeGenRegister::load_large_int64(int64_t val, const Reg &reg) {
+//     auto low_32 = static_cast<int32_t>(val & LOW_32_MASK);
+//     load_large_int32(low_32, reg);
+
+//     auto high_32 = static_cast<int32_t>(val >> 32);
+
+
+//     int32_t high_32_low_20 = (high_32 << 12) >> 12; // si20
+//     int32_t high_32_high_12 = high_32 >> 20;        // si12
+//     append_inst(LU32I_D, {reg.print(), std::to_string(high_32_low_20)});
+//     append_inst(LU52I_D,
+//                 {reg.print(), reg.print(), std::to_string(high_32_high_12)});
+
+// void CodeGenRegister::load_large_int64_string(int64_t val, string reg) {
+//     auto low_32 = static_cast<int32_t>(val & LOW_32_MASK);
+//     load_large_int32_string (low_32, reg);
+
+//     auto high_32 = static_cast<int32_t>(val >> 32);
+
+//     int32_t high_32_low_20 = (high_32 << 12) >> 12; // si20
+//     int32_t high_32_high_12 = high_32 >> 20;        // si12
+//     append_inst(LU32I_D, {reg, std::to_string(high_32_low_20)});
+//     append_inst(LU52I_D,
+//                 {reg, reg, std::to_string(high_32_high_12)});
+// }
+
+// }
+
+
 void CodeGenRegister::load_large_int64(int64_t val, const Reg &reg) {
     auto low_32 = static_cast<int32_t>(val & LOW_32_MASK);
-    load_large_int32(low_32, reg);
-
     auto high_32 = static_cast<int32_t>(val >> 32);
-    int32_t high_32_low_20 = (high_32 << 12) >> 12; // si20
-    int32_t high_32_high_12 = high_32 >> 20;        // si12
-    append_inst(LU32I_D, {reg.print(), std::to_string(high_32_low_20)});
-    append_inst(LU52I_D,
-                {reg.print(), reg.print(), std::to_string(high_32_high_12)});
+    load_large_int32(high_32, reg);
+    append_inst(SLLI, {reg.print(), reg.print(), "32"});
+    load_large_int32(low_32, reg);
 }
+
 void CodeGenRegister::load_large_int64_string(int64_t val, string reg) {
     auto low_32 = static_cast<int32_t>(val & LOW_32_MASK);
-    load_large_int32_string (low_32, reg);
 
     auto high_32 = static_cast<int32_t>(val >> 32);
-    int32_t high_32_low_20 = (high_32 << 12) >> 12; // si20
-    int32_t high_32_high_12 = high_32 >> 20;        // si12
-    append_inst(LU32I_D, {reg, std::to_string(high_32_low_20)});
-    append_inst(LU52I_D,
-                {reg, reg, std::to_string(high_32_high_12)});
+    load_large_int32_string (high_32, reg);
+    append_inst(SLLI, {reg, reg, "32"});
+    load_large_int32_string (low_32, reg);
 }
+
 
 void CodeGenRegister::load_from_stack_to_greg(Value *val, const Reg &reg) {
     auto offset = context.offset_map.at(val);
@@ -384,21 +411,21 @@ void CodeGenRegister::load_from_stack_to_greg(Value *val, const Reg &reg) {
     auto *type = val->get_type();
     if (IS_IMM_12(offset)) {
         if (type->is_int1_type()) {
-            append_inst(LOAD BYTE, {reg.print(), "$fp", offset_str});
+            append_inst(LOAD_BYTE, {reg.print(), "fp", offset_str});
         } else if (type->is_int32_type()) {
-            append_inst(LOAD WORD, {reg.print(), "$fp", offset_str});
+            append_inst(LOAD_WORD, {reg.print(), "fp", offset_str});
         } else { // Pointer
-            append_inst(LOAD DOUBLE, {reg.print(), "$fp", offset_str});
+            append_inst(LOAD_DOUBLE, {reg.print(), "fp", offset_str});
         }
     } else {
         load_large_int64(offset, reg);
-        append_inst(ADD DOUBLE, {reg.print(), "$fp", reg.print()});
+        append_inst(ADD DOUBLE, {reg.print(), "fp", reg.print()});
         if (type->is_int1_type()) {
-            append_inst(LOAD BYTE, {reg.print(), reg.print(), "0"});
+            append_inst(LOAD_BYTE, {reg.print(), reg.print(), "0"});
         } else if (type->is_int32_type()) {
-            append_inst(LOAD WORD, {reg.print(), reg.print(), "0"});
+            append_inst(LOAD_WORD, {reg.print(), reg.print(), "0"});
         } else { // Pointer
-            append_inst(LOAD DOUBLE, {reg.print(), reg.print(), "0"});
+            append_inst(LOAD_DOUBLE, {reg.print(), reg.print(), "0"});
         }
     }
 }
@@ -408,32 +435,32 @@ void CodeGenRegister::load_from_stack_to_greg_string(Value *val, string reg) {
     auto *type = val->get_type();
     if (IS_IMM_12(offset)) {
         if (type->is_int1_type()) {
-            append_inst(LOAD BYTE, {reg, "$fp", offset_str});
+            append_inst(LOAD_BYTE, {reg, "fp", offset_str});
         } else if (type->is_int32_type()) {
-            append_inst(LOAD WORD, {reg, "$fp", offset_str});
+            append_inst(LOAD_WORD, {reg, "fp", offset_str});
         } else { // Pointer
-            append_inst(LOAD DOUBLE, {reg, "$fp", offset_str});
+            append_inst(LOAD_DOUBLE, {reg, "fp", offset_str});
         }
     } else {
         load_large_int64_string(offset, reg);
-        append_inst(ADD DOUBLE, {reg, "$fp", reg});
+        append_inst(ADD DOUBLE, {reg, "fp", reg});
         if (type->is_int1_type()) {
-            append_inst(LOAD BYTE, {reg, reg, "0"});
+            append_inst(LOAD_BYTE, {reg, reg, "0"});
         } else if (type->is_int32_type()) {
-            append_inst(LOAD WORD, {reg, reg, "0"});
+            append_inst(LOAD_WORD, {reg, reg, "0"});
         } else { // Pointer
-            append_inst(LOAD DOUBLE, {reg, reg, "0"});
+            append_inst(LOAD_DOUBLE, {reg, reg, "0"});
         }
     }
 }
 void CodeGenRegister::load_from_stack_to_greg_offset(int offset, string reg) {
     auto offset_str = std::to_string(offset);
     if (IS_IMM_12(offset)) {
-        append_inst(LOAD DOUBLE, {reg, "$fp", offset_str});
+        append_inst(LOAD_DOUBLE, {reg, "fp", offset_str});
     } else {
         load_large_int64_string(offset, reg);
-        append_inst(ADD DOUBLE, {reg, "$fp", reg});
-        append_inst(LOAD DOUBLE, {reg, reg, "0"});
+        append_inst(ADD DOUBLE, {reg, "fp", reg});
+        append_inst(LOAD_DOUBLE, {reg, reg, "0"});
     }
 }
 
@@ -444,22 +471,22 @@ void CodeGenRegister::store_from_greg(Value *val, const Reg &reg) {
     auto *type = val->get_type();
     if (IS_IMM_12(offset)) {
         if (type->is_int1_type()) {
-            append_inst(STORE BYTE, {reg.print(), "$fp", offset_str});
+            append_inst(STORE_BYTE, {reg.print(), "fp", offset_str});
         } else if (type->is_int32_type()) {
-            append_inst(STORE WORD, {reg.print(), "$fp", offset_str});
+            append_inst(STORE_WORD, {reg.print(), "fp", offset_str});
         } else { // Pointer
-            append_inst(STORE DOUBLE, {reg.print(), "$fp", offset_str});
+            append_inst(STORE_DOUBLE, {reg.print(), "fp", offset_str});
         }
     } else {
         auto addr = Reg::t(8);
         load_large_int64(offset, addr);
-        append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
+        append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
         if (type->is_int1_type()) {
-            append_inst(STORE BYTE, {reg.print(), addr.print(), "0"});
+            append_inst(STORE_BYTE, {reg.print(), addr.print(), "0"});
         } else if (type->is_int32_type()) {
-            append_inst(STORE WORD, {reg.print(), addr.print(), "0"});
+            append_inst(STORE_WORD, {reg.print(), addr.print(), "0"});
         } else { // Pointer
-            append_inst(STORE DOUBLE, {reg.print(), addr.print(), "0"});
+            append_inst(STORE_DOUBLE, {reg.print(), addr.print(), "0"});
         }
     }
 }
@@ -469,34 +496,34 @@ void CodeGenRegister::store_from_greg_string(Value *val, string reg) {
     auto *type = val->get_type();
     if (IS_IMM_12(offset)) {
         if (type->is_int1_type()) {
-            append_inst(STORE BYTE, {reg, "$fp", offset_str});
+            append_inst(STORE_BYTE, {reg, "fp", offset_str});
         } else if (type->is_int32_type()) {
-            append_inst(STORE WORD, {reg, "$fp", offset_str});
+            append_inst(STORE_WORD, {reg, "fp", offset_str});
         } else { // Pointer
-            append_inst(STORE DOUBLE, {reg, "$fp", offset_str});
+            append_inst(STORE_DOUBLE, {reg, "fp", offset_str});
         }
     } else {
         auto addr = Reg::t(8);
         load_large_int64(offset, addr);
-        append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
+        append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
         if (type->is_int1_type()) {
-            append_inst(STORE BYTE, {reg, addr.print(), "0"});
+            append_inst(STORE_BYTE, {reg, addr.print(), "0"});
         } else if (type->is_int32_type()) {
-            append_inst(STORE WORD, {reg, addr.print(), "0"});
+            append_inst(STORE_WORD, {reg, addr.print(), "0"});
         } else { // Pointer
-            append_inst(STORE DOUBLE, {reg, addr.print(), "0"});
+            append_inst(STORE_DOUBLE, {reg, addr.print(), "0"});
         }
     }
 }
 void CodeGenRegister::store_from_greg_offset(int offset , string reg) {
     auto offset_str = std::to_string(offset);
     if (IS_IMM_12(offset)) {
-        append_inst(STORE DOUBLE, {reg, "$fp", offset_str});
+        append_inst(STORE_DOUBLE, {reg, "fp", offset_str});
     } else {
         auto addr = Reg::t(8);
         load_large_int64(offset, addr);
-        append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-        append_inst(STORE DOUBLE, {reg, addr.print(), "0"});
+        append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+        append_inst(STORE_DOUBLE, {reg, addr.print(), "0"});
     }
 }
 void CodeGenRegister::load_to_freg(Value *val, const FReg &freg) {
@@ -508,12 +535,12 @@ void CodeGenRegister::load_to_freg(Value *val, const FReg &freg) {
         auto offset = context.offset_map.at(val);
         auto offset_str = std::to_string(offset);
         if (IS_IMM_12(offset)) {
-            append_inst(FLOAD SINGLE, {freg.print(), "$fp", offset_str});
+            append_inst(FLOAD_SINGLE, {freg.print(), "fp", offset_str});
         } else {
             auto addr = Reg::t(8);
             load_large_int64(offset, addr);
-            append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-            append_inst(FLOAD SINGLE, {freg.print(), addr.print(), "0"});
+            append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+            append_inst(FLOAD_SINGLE, {freg.print(), addr.print(), "0"});
         }
     }
 }
@@ -526,24 +553,24 @@ void CodeGenRegister::load_to_freg_string(Value *val, string freg) {
         auto offset = context.offset_map.at(val);
         auto offset_str = std::to_string(offset);
         if (IS_IMM_12(offset)) {
-            append_inst(FLOAD SINGLE, {freg, "$fp", offset_str});
+            append_inst(FLOAD_SINGLE, {freg, "fp", offset_str});
         } else {
             auto addr = Reg::t(8);
             load_large_int64(offset, addr);
-            append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-            append_inst(FLOAD SINGLE, {freg, addr.print(), "0"});
+            append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+            append_inst(FLOAD_SINGLE, {freg, addr.print(), "0"});
         }
     }
 }
 void CodeGenRegister::load_to_freg_offset(int offset, string freg) {
         auto offset_str = std::to_string(offset);
         if (IS_IMM_12(offset)) {
-            append_inst(FLOAD SINGLE, {freg, "$fp", offset_str});
+            append_inst(FLOAD_SINGLE, {freg, "fp", offset_str});
         } else {
             auto addr = Reg::t(8);
             load_large_int64(offset, addr);
-            append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-            append_inst(FLOAD SINGLE, {freg, addr.print(), "0"});
+            append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+            append_inst(FLOAD_SINGLE, {freg, addr.print(), "0"});
         }
 }
 void CodeGenRegister::load_float_imm(float val, const FReg &r) {
@@ -561,35 +588,35 @@ void CodeGenRegister::store_from_freg(Value *val, const FReg &r) {
     auto offset = context.offset_map.at(val);
     if (IS_IMM_12(offset)) {
         auto offset_str = std::to_string(offset);
-        append_inst(FSTORE SINGLE, {r.print(), "$fp", offset_str});
+        append_inst(FSTORE_SINGLE, {r.print(), "fp", offset_str});
     } else {
         auto addr = Reg::t(8);
         load_large_int64(offset, addr);
-        append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-        append_inst(FSTORE SINGLE, {r.print(), addr.print(), "0"});
+        append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+        append_inst(FSTORE_SINGLE, {r.print(), addr.print(), "0"});
     }
 }
 void CodeGenRegister::store_from_freg_string(Value *val, string r) {
     auto offset = context.offset_map.at(val);
     if (IS_IMM_12(offset)) {
         auto offset_str = std::to_string(offset);
-        append_inst(FSTORE SINGLE, {r, "$fp", offset_str});
+        append_inst(FSTORE_SINGLE, {r, "fp", offset_str});
     } else {
         auto addr = Reg::t(8);
         load_large_int64(offset, addr);
-        append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-        append_inst(FSTORE SINGLE, {r, addr.print(), "0"});
+        append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+        append_inst(FSTORE_SINGLE, {r, addr.print(), "0"});
     }
 }
 void CodeGenRegister::store_from_freg_offset(int offset, string r) {
     if (IS_IMM_12(offset)) {
         auto offset_str = std::to_string(offset);
-        append_inst(FSTORE SINGLE, {r, "$fp", offset_str});
+        append_inst(FSTORE_SINGLE, {r, "fp", offset_str});
     } else {
         auto addr = Reg::t(8);
         load_large_int64(offset, addr);
-        append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-        append_inst(FSTORE SINGLE, {r, addr.print(), "0"});
+        append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+        append_inst(FSTORE_SINGLE, {r, addr.print(), "0"});
     }
 }
 
@@ -599,15 +626,15 @@ void CodeGenRegister::gen_ret() {
         auto value = return_inst->get_operand(0);
         auto is_float = value->get_type()->is_float_type();
         auto reg = value2reg(value);//现在这个value应该在这个reg里边了
-        if (is_float and reg != "$fa0")//要观察现在这个数据是不是在a0这个位置
-            append_inst("fmov.s $fa0, " + reg);
-        else if (not is_float and reg != "$a0")
-            append_inst("or $a0, $zero, " + reg);
+        if (is_float and reg != "fa0")//要观察现在这个数据是不是在a0这个位置
+            append_inst("fmov.s fa0, " + reg);
+        else if (not is_float and reg != "a0")
+            append_inst("or a0, zero, " + reg);
     } else {
-        append_inst("addi.w $a0, $zero, 0");        
+        append_inst("addi a0, zero, 0");        
     }
 
-    append_inst("b " + func_exit_label_name(context.func));
+    append_inst("j " + func_exit_label_name(context.func));
 }
 
 void CodeGenRegister::gen_br() {
@@ -637,15 +664,15 @@ void CodeGenRegister::gen_br() {
 
                     auto sreg=value2reg(src,0);
                     auto [dest_reg, find] = getRegName(dest, 0);
-                    append_inst("or "+dest_reg+", "+"$zero, " +sreg);
+                    append_inst("or "+dest_reg+", "+"zero, " +sreg);
                     if(!find){
                         store_from_greg_string(dest,dest_reg);//move 操作
                     }
                 }
             }
         }
-        append_inst("addi.w $t0,$zero,0");
-        append_inst("blt $t0,"+con_reg+","+label_name(tbb));
+        append_inst("addi t0,zero,0");
+        append_inst("blt t0,"+con_reg+","+label_name(tbb));
 
         p1=std::make_pair(context.bb,fbb);
         if(context.phi_path.find(p1)!=context.phi_path.end()){//存在phi
@@ -665,14 +692,14 @@ void CodeGenRegister::gen_br() {
 
                     auto sreg=value2reg(src,0);
                     auto [dest_reg, find] = getRegName(dest, 0);
-                    append_inst("or "+dest_reg+", "+"$zero, " +sreg);
+                    append_inst("or "+dest_reg+", "+"zero, " +sreg);
                     if(!find){
                         store_from_greg_string(dest,dest_reg);//move 操作
                     }
                 }
             }
         }
-        append_inst("b "+label_name(fbb));
+        append_inst("j "+label_name(fbb));
 
         //throw not_implemented_error{__FUNCTION__};
     } else {
@@ -717,13 +744,13 @@ void CodeGenRegister::gen_br() {
 
             }
         }
-        append_inst("b " + label_name(branchbb));
+        append_inst("j " + label_name(branchbb));
     }
 }
 
 void CodeGenRegister::gen_binary() {
     //TODO:处理二元运算符情况，注意与栈式分配的差别    
-    // 分别将左右操作数加载到 $t0 $t1
+    // 分别将左右操作数加载到 t0 t1
     auto sreg0=value2reg(context.inst->get_operand(0),0);
     LOG(DEBUG)<<sreg0;
     auto sreg1=value2reg(context.inst->get_operand(1),1);
@@ -733,19 +760,19 @@ void CodeGenRegister::gen_binary() {
     // 根据指令类型生成汇编
     switch (context.inst->get_instr_type()) {
     case Instruction::add:
-        output.emplace_back("add.w "+dest_reg+", "+sreg0+", "+sreg1);
+        output.emplace_back("add "+dest_reg+", "+sreg0+", "+sreg1);
         break;
     case Instruction::sub:
-        output.emplace_back("sub.w "+dest_reg+", "+sreg0+", "+sreg1);
+        output.emplace_back("sub "+dest_reg+", "+sreg0+", "+sreg1);
         break;
     case Instruction::mul:
-        output.emplace_back("mul.w "+dest_reg+", "+sreg0+", "+sreg1);
+        output.emplace_back("mul "+dest_reg+", "+sreg0+", "+sreg1);
         break;
     case Instruction::sdiv:
-        output.emplace_back("div.w "+dest_reg+", "+sreg0+", "+sreg1);
+        output.emplace_back("div "+dest_reg+", "+sreg0+", "+sreg1);
         break;
     case Instruction::srem:
-        output.emplace_back("mod.w "+dest_reg+", "+sreg0+", "+sreg1);
+        output.emplace_back("mod "+dest_reg+", "+sreg0+", "+sreg1);
         break;
     default:
         assert(false);
@@ -763,7 +790,7 @@ void CodeGenRegister::gen_alloca() {
     //std:: cout<<shuzu_offset<<std::endl;
     auto [dest, find] = getRegName(context.inst,0);
     load_large_int32(shuzu_offset,Reg::t(0));
-    append_inst("sub.d "+dest+",$fp,$t0");// fp-base-size
+    append_inst(SUB + dest+",fp,t0");// fp-base-size
     if(!find){
         store_from_greg_string(context.inst, dest);//load这个操作产生了一个新的左值，我们需要把这个现在在ft中的左值放到栈里边
     }
@@ -788,11 +815,11 @@ void CodeGenRegister::gen_load() {
         
     } else {
         if(type->is_int1_type()){
-            append_inst("ld.b "+dest+", "+sreg+", 0");
+            append_inst(LOAD_BYTE, {dest, sreg, 0});
         }else if(type->is_int32_type()){
-            append_inst("ld.w "+dest+", "+sreg+", 0");
+            append_inst(LOAD_WORD, {dest, sreg, 0});
         }else{
-            append_inst("ld.d "+dest+", "+sreg+", 0");
+            append_inst(LOAD_DOUBLE, {dest, sreg, 0});
         }
         if(!find){
             store_from_greg_string(context.inst, dest);//load这个操作产生了一个新的左值，我们需要把这个现在在ft中的左值放到栈里边
@@ -806,14 +833,14 @@ void CodeGenRegister::gen_store() {
     auto pst_reg=value2reg(ptr,1);
     auto data_reg=value2reg(context.inst->get_operand(0),0);
     if (type->is_float_type()) {
-        append_inst("fst.s "+data_reg+", "+pst_reg+", 0");//M[t1+0]=t0
+        append_inst("fsw "+data_reg+", "+pst_reg+", 0");//M[t1+0]=t0
     } else {
         if(type->is_int1_type()){
-            append_inst("st.b "+data_reg+", "+pst_reg+", 0");//M[t1+0]=t0
+            append_inst("sb "+data_reg+", "+pst_reg+", 0");//M[t1+0]=t0
         }else if(type->is_int32_type()){
-            append_inst("st.w "+data_reg+", "+pst_reg+", 0");
+            append_inst("st "+data_reg+", "+pst_reg+", 0");
         }else{
-            append_inst("st.d "+data_reg+", "+pst_reg+", 0");
+            append_inst("sd "+data_reg+", "+pst_reg+", 0");
         }
         // TODO load 整数类型的数据
     }
@@ -840,32 +867,32 @@ void CodeGenRegister::gen_icmp() {
     // 根据指令类型生成汇编
     switch (context.inst->get_instr_type()) {
     case Instruction::eq:
-        append_inst("slt $t8,"+sreg1+","+sreg0);
-        append_inst("slt $t0,"+sreg0+","+sreg1);
-        append_inst("or $t0,$t0,$t8");
-        append_inst("addi.w $t8,$zero,1");
-        append_inst("sub.w  "+dest_reg+",$t8,$t0");
+        append_inst("slt t8,"+sreg1+","+sreg0);
+        append_inst("slt t0,"+sreg0+","+sreg1);
+        append_inst("or t0,t0,t8");
+        append_inst("addi t8,zero,1");
+        append_inst("sub  "+dest_reg+",t8,t0");
         break;
     case Instruction::ne:
-        append_inst("slt $t8,"+sreg1+","+sreg0);
-        append_inst("slt $t0,"+sreg0+","+sreg1);
-        append_inst("or "+dest_reg+",$t0,$t8");
+        append_inst("slt t8,"+sreg1+","+sreg0);
+        append_inst("slt t0,"+sreg0+","+sreg1);
+        append_inst("or "+dest_reg+",t0,t8");
         break;
     case Instruction::gt:
         append_inst("slt "+dest_reg+","+sreg1+","+sreg0);
         break;
     case Instruction::ge:
         append_inst("slt "+dest_reg+","+sreg0+","+sreg1);
-        append_inst("addi.w $t8,$zero,1");
-        append_inst("sub.w "+dest_reg+",$t8,"+dest_reg);
+        append_inst("addi t8,zero,1");
+        append_inst("sub "+dest_reg+",t8,"+dest_reg);
         break;
     case Instruction::lt:
           append_inst("slt "+dest_reg+","+sreg0+","+sreg1);
         break;
     case Instruction::le:
         append_inst("slt "+dest_reg+","+sreg1+","+sreg0);
-        append_inst("addi.w $t8,$zero,1");
-        append_inst("sub.w "+dest_reg+",$t8,"+dest_reg);
+        append_inst("addi t8,zero,1");
+        append_inst("sub "+dest_reg+",t8,"+dest_reg);
         break;
     default:
         assert(false);
@@ -890,34 +917,34 @@ void CodeGenRegister::gen_fcmp() {
     std::string fnum=std::to_string(fcmpcnt);
     switch (context.inst->get_instr_type()) {
     case Instruction::feq:
-        append_inst("fcmp.seq.s $fcc0, "+sreg0+", "+sreg1);
+        append_inst("fcmp.seq.s fcc0, "+sreg0+", "+sreg1);
         break;
     case Instruction::fne:
-        append_inst("fcmp.sne.s $fcc0, "+sreg0+", "+sreg1);
+        append_inst("fcmp.sne.s fcc0, "+sreg0+", "+sreg1);
         break;
     case Instruction::fgt:
-        append_inst("fcmp.slt.s $fcc0, "+sreg1+", "+sreg0);
+        append_inst("fcmp.slt.s fcc0, "+sreg1+", "+sreg0);
         break;
     case Instruction::fge:
-        append_inst("fcmp.sle.s $fcc0, "+sreg1+", "+sreg0);
+        append_inst("fcmp.sle.s fcc0, "+sreg1+", "+sreg0);
         break;
     case Instruction::flt:
-        append_inst("fcmp.slt.s $fcc0, "+sreg0+", "+sreg1);
+        append_inst("fcmp.slt.s fcc0, "+sreg0+", "+sreg1);
         break;
     case Instruction::fle:
-        append_inst("fcmp.sle.s $fcc0, "+sreg0+", "+sreg1);
+        append_inst("fcmp.sle.s fcc0, "+sreg0+", "+sreg1);
         break;
     default:
         assert(false);
     }
-    append_inst("bcnez      $fcc0, float_true"+fnum);
-    append_inst("b          float_false"+fnum);
+    append_inst("bcnez      fcc0, float_true"+fnum);
+    append_inst("j          float_false"+fnum);
     append_inst("float_true"+fnum, ASMInstruction::Label);
-    append_inst("addi.w     "+dest_reg+", $zero, 1");
-    append_inst("b          float_exit"+fnum);
+    append_inst("addi     "+dest_reg+", zero, 1");
+    append_inst("j          float_exit"+fnum);
     append_inst("float_false"+fnum, ASMInstruction::Label);
-    append_inst("addi.w     "+dest_reg+", $zero, 0");
-    append_inst("b          float_exit"+fnum);
+    append_inst("addi     "+dest_reg+", zero, 0");
+    append_inst("j          float_exit"+fnum);
     append_inst("float_exit"+fnum, ASMInstruction::Label);
 
     if(!find){
@@ -977,24 +1004,24 @@ void CodeGenRegister::value4call_out(Value *v, int cnt) {//把value放到reg里�
                 auto offset=(-1)*float_reg_offset(regmap[v]);
                 if (IS_IMM_12(offset)) {
                     auto offset_str = std::to_string(offset);
-                    append_inst(FLOAD SINGLE,{regname(cnt+1,true), "$fp", to_string(offset)});
+                    append_inst(FLOAD_SINGLE,{regname(cnt+1,true), "fp", to_string(offset)});
                 } else {
                     auto addr = Reg::t(8);
                     load_large_int64(offset, addr);
-                    append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-                    append_inst(FLOAD SINGLE, {regname(cnt+1,true), addr.print(), "0"});
+                    append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+                    append_inst(FLOAD_SINGLE, {regname(cnt+1,true), addr.print(), "0"});
                 }
-            //append_inst("fld.s $fa"+to_string(cnt)+" ,$fp, "+to_string(()));
+            //append_inst("fld.s fa"+to_string(cnt)+" ,fp, "+to_string(()));
         }else{
                 auto offset=(-1)*int_reg_offset(regmap[v]);
                 if (IS_IMM_12(offset)) {
                     auto offset_str = std::to_string(offset);
-                    append_inst(LOAD DOUBLE,{regname(cnt+1,false), "$fp", to_string(offset)});
+                    append_inst(LOAD_DOUBLE,{regname(cnt+1,false), "fp", to_string(offset)});
                 } else {
                     auto addr = Reg::t(8);
                     load_large_int64(offset, addr);
-                    append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-                    append_inst(LOAD DOUBLE, {regname(cnt+1,false), addr.print(), "0"});
+                    append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+                    append_inst(LOAD_DOUBLE, {regname(cnt+1,false), addr.print(), "0"});
                 }
         }
     }
@@ -1009,10 +1036,10 @@ void CodeGenRegister::gen_zext() {
     auto *type = context.inst->get_type();
 
     if (type->is_float_type()) {
-        append_inst("movgr2fr.w "+sreg0+","+dest_reg);//放到合适的位置
+        append_inst("movgr2fr "+sreg0+","+dest_reg);//放到合适的位置
     } else {
         if(sreg0!=dest_reg){
-            append_inst("add.d "+dest_reg+", $zero, "+sreg0);
+            append_inst("add "+dest_reg+", zero, "+sreg0);
         }
         
     }
@@ -1032,22 +1059,22 @@ void CodeGenRegister::store_from_greg_parameter(Value *val, const Reg &reg) {
     auto *type = val->get_type();
     if (IS_IMM_12(offset)) {
         if (type->is_int1_type()) {
-            append_inst(STORE BYTE, {reg.print(), "$sp", offset_str});
+            append_inst(STORE_BYTE, {reg.print(), "sp", offset_str});
         } else if (type->is_int32_type()) {
-            append_inst(STORE WORD, {reg.print(), "$sp", offset_str});
+            append_inst(STORE_WORD, {reg.print(), "sp", offset_str});
         } else { // Pointer
-            append_inst(STORE DOUBLE, {reg.print(), "$sp", offset_str});
+            append_inst(STORE_DOUBLE, {reg.print(), "sp", offset_str});
         }
     } else {
         auto addr = Reg::t(8);
         load_large_int64(offset, addr);
-        append_inst(ADD DOUBLE, {addr.print(), "$sp", addr.print()});
+        append_inst(ADD DOUBLE, {addr.print(), "sp", addr.print()});
         if (type->is_int1_type()) {
-            append_inst(STORE BYTE, {reg.print(), addr.print(), "0"});
+            append_inst(STORE_BYTE, {reg.print(), addr.print(), "0"});
         } else if (type->is_int32_type()) {
-            append_inst(STORE WORD, {reg.print(), addr.print(), "0"});
+            append_inst(STORE_WORD, {reg.print(), addr.print(), "0"});
         } else { // Pointer
-            append_inst(STORE DOUBLE, {reg.print(), addr.print(), "0"});
+            append_inst(STORE_DOUBLE, {reg.print(), addr.print(), "0"});
         }
     }
 }
@@ -1055,12 +1082,12 @@ void CodeGenRegister::store_from_freg_parameter(Value *val, const FReg &r) {
     auto offset = context.offset_call.at(val);//
     if (IS_IMM_12(offset)) {
         auto offset_str = std::to_string(offset);
-        append_inst(FSTORE SINGLE, {r.print(), "$sp", offset_str});
+        append_inst(FSTORE_SINGLE, {r.print(), "sp", offset_str});
     } else {
         auto addr = Reg::t(8);
         load_large_int64(offset, addr);
-        append_inst(ADD DOUBLE, {addr.print(), "$sp", addr.print()});
-        append_inst(FSTORE SINGLE, {r.print(), addr.print(), "0"});
+        append_inst(ADD DOUBLE, {addr.print(), "sp", addr.print()});
+        append_inst(FSTORE_SINGLE, {r.print(), addr.print(), "0"});
     }
 }
 void CodeGenRegister::gen_call() {
@@ -1071,48 +1098,48 @@ void CodeGenRegister::gen_call() {
     auto *type = val->get_type();//只能是 1 32 64
     if (IS_IMM_12(offset)) {
         if (type->is_int1_type()) {//bool
-            append_inst(LOAD BYTE, {reg.print(), "$fp", offset_str});
-            //ld.b $f0 $fp,-x
+            append_inst(LOAD_BYTE, {reg.print(), "fp", offset_str});
+            //lb f0 fp,-x
         } else if (type->is_int32_type()) {//int
-            append_inst(LOAD WORD, {reg.print(), "$fp", offset_str});
-            //ld.w $f0 $fp,-x
+            append_inst(LOAD_WORD, {reg.print(), "fp", offset_str});
+            //lw f0 fp,-x
         } else { // Pointer
-            append_inst(LOAD DOUBLE, {reg.print(), "$fp", offset_str});
+            append_inst(LOAD_DOUBLE, {reg.print(), "fp", offset_str});
         }
     } else {
         load_large_int64(offset, reg);//先把这个大的offset搞出来
-        append_inst(ADD DOUBLE, {reg.print(), "$fp", reg.print()});//和fp做运算
+        append_inst(ADD DOUBLE, {reg.print(), "fp", reg.print()});//和fp做运算
         if (type->is_int1_type()) {
-            append_inst(LOAD BYTE, {reg.print(), reg.print(), "0"});
+            append_inst(LOAD_BYTE, {reg.print(), reg.print(), "0"});
         } else if (type->is_int32_type()) {
-            append_inst(LOAD WORD, {reg.print(), reg.print(), "0"});
+            append_inst(LOAD_WORD, {reg.print(), reg.print(), "0"});
         } else { // Pointer
-            append_inst(LOAD DOUBLE, {reg.print(), reg.print(), "0"});
+            append_inst(LOAD_DOUBLE, {reg.print(), reg.print(), "0"});
         }
     }*/
     for(int i=1;i<=R_USABLE;i++){
         int offset=int_reg_offset(i)*(-1);
         if (IS_IMM_12(offset)) {
             auto offset_str = std::to_string(offset);
-            append_inst(STORE DOUBLE,{regname(i,false), "$fp", to_string(offset)});
+            append_inst(STORE_DOUBLE,{regname(i,false), "fp", to_string(offset)});
         } else {
             auto addr = Reg::t(8);
             load_large_int64(offset, addr);
-            append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-            append_inst(STORE DOUBLE, {regname(i,false), addr.print(), "0"});
+            append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+            append_inst(STORE_DOUBLE, {regname(i,false), addr.print(), "0"});
         }
-        //append_inst(STORE DOUBLE,{regname(i,false), "$fp", to_string(offset)});
+        //append_inst(STORE_DOUBLE,{regname(i,false), "fp", to_string(offset)});
     }
     for(int i=1;i<=FR_USABLE;i++){
         int offset=float_reg_offset(i)*(-1);
         if (IS_IMM_12(offset)) {
             auto offset_str = std::to_string(offset);
-            append_inst(FSTORE SINGLE,{regname(i,true), "$fp", to_string(offset)});
+            append_inst(FSTORE_SINGLE,{regname(i,true), "fp", to_string(offset)});
         } else {
             auto addr = Reg::t(8);
             load_large_int64(offset, addr);
-            append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-            append_inst(FSTORE SINGLE, {regname(i,true), addr.print(), "0"});
+            append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+            append_inst(FSTORE_SINGLE, {regname(i,true), addr.print(), "0"});
         }
     }//先搬运寄存器
     auto *callInst = static_cast<CallInst *>(context.inst);
@@ -1180,25 +1207,25 @@ void CodeGenRegister::gen_call() {
                 int offset=int_reg_offset(i)*(-1);
                 if (IS_IMM_12(offset)) {
                     auto offset_str = std::to_string(offset);
-                    append_inst(LOAD DOUBLE,{regname(i,false), "$fp", to_string(offset)});
+                    append_inst(LOAD_DOUBLE,{regname(i,false), "fp", to_string(offset)});
                 } else {
                     auto addr = Reg::t(8);
                     load_large_int64(offset, addr);
-                    append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-                    append_inst(LOAD DOUBLE, {regname(i,false), addr.print(), "0"});
+                    append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+                    append_inst(LOAD_DOUBLE, {regname(i,false), addr.print(), "0"});
                 }
-                //append_inst(STORE DOUBLE,{regname(i,false), "$fp", to_string(offset)});
+                //append_inst(STORE_DOUBLE,{regname(i,false), "fp", to_string(offset)});
             }
             for(int i=1;i<=FR_USABLE;i++){
                 int offset=float_reg_offset(i)*(-1);
                 if (IS_IMM_12(offset)) {
                     auto offset_str = std::to_string(offset);
-                    append_inst(FLOAD SINGLE,{regname(i,true), "$fp", to_string(offset)});
+                    append_inst(FLOAD_SINGLE,{regname(i,true), "fp", to_string(offset)});
                 } else {
                     auto addr = Reg::t(8);
                     load_large_int64(offset, addr);
-                    append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-                    append_inst(FLOAD SINGLE, {regname(i,true), addr.print(), "0"});
+                    append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+                    append_inst(FLOAD_SINGLE, {regname(i,true), addr.print(), "0"});
                 }
             }//先搬运寄存器
 
@@ -1208,14 +1235,14 @@ void CodeGenRegister::gen_call() {
             if(!find){
                 store_from_freg(context.inst, FReg::fa(0));//load这个操作产生了一个新的左值，我们需要把这个现在在ft中的左值放到栈里边
             }else{
-                append_inst("fmov.s "+dest_reg+",$fa0");
+                append_inst("fmov.s "+dest_reg+",fa0");
             }
             
         }else {
             if(!find){
                 store_from_greg(context.inst, Reg::a(0));//直接放回去就可以了
             }else{
-                append_inst("addi.d "+dest_reg+",$a0,0");
+                append_inst("addi "+dest_reg+",a0,0");
             }
         }
         if(!find){
@@ -1223,25 +1250,25 @@ void CodeGenRegister::gen_call() {
                 int offset=int_reg_offset(i)*(-1);
                 if (IS_IMM_12(offset)) {
                     auto offset_str = std::to_string(offset);
-                    append_inst(LOAD DOUBLE,{regname(i,false), "$fp", to_string(offset)});
+                    append_inst(LOAD_DOUBLE,{regname(i,false), "fp", to_string(offset)});
                 } else {
                     auto addr = Reg::t(8);
                     load_large_int64(offset, addr);
-                    append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-                    append_inst(LOAD DOUBLE, {regname(i,false), addr.print(), "0"});
+                    append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+                    append_inst(LOAD_DOUBLE, {regname(i,false), addr.print(), "0"});
                 }
-                //append_inst(STORE DOUBLE,{regname(i,false), "$fp", to_string(offset)});
+                //append_inst(STORE_DOUBLE,{regname(i,false), "fp", to_string(offset)});
             }
             for(int i=1;i<=FR_USABLE;i++){
                 int offset=float_reg_offset(i)*(-1);
                 if (IS_IMM_12(offset)) {
                     auto offset_str = std::to_string(offset);
-                    append_inst(FLOAD SINGLE,{regname(i,true), "$fp", to_string(offset)});
+                    append_inst(FLOAD_SINGLE,{regname(i,true), "fp", to_string(offset)});
                 } else {
                     auto addr = Reg::t(8);
                     load_large_int64(offset, addr);
-                    append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-                    append_inst(FLOAD SINGLE, {regname(i,true), addr.print(), "0"});
+                    append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+                    append_inst(FLOAD_SINGLE, {regname(i,true), addr.print(), "0"});
                 }
             }//先搬运寄存器
         }else{
@@ -1254,12 +1281,12 @@ void CodeGenRegister::gen_call() {
                 }    
                  if (IS_IMM_12(offset)) {
                     auto offset_str = std::to_string(offset);
-                    append_inst(LOAD DOUBLE,{regname(i,false), "$fp", to_string(offset)});
+                    append_inst(LOAD_DOUBLE,{regname(i,false), "fp", to_string(offset)});
                 } else {
                     auto addr = Reg::t(8);
                     load_large_int64(offset, addr);
-                    append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-                    append_inst(LOAD DOUBLE, {regname(i,false), addr.print(), "0"});
+                    append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+                    append_inst(LOAD_DOUBLE, {regname(i,false), addr.print(), "0"});
                 }
             }
             for(int i=1;i<=FR_USABLE;i++){
@@ -1270,12 +1297,12 @@ void CodeGenRegister::gen_call() {
                 }    
                 if (IS_IMM_12(offset)) {
                     auto offset_str = std::to_string(offset);
-                    append_inst(FLOAD SINGLE,{regname(i,true), "$fp", to_string(offset)});
+                    append_inst(FLOAD_SINGLE,{regname(i,true), "fp", to_string(offset)});
                 } else {
                     auto addr = Reg::t(8);
                     load_large_int64(offset, addr);
-                    append_inst(ADD DOUBLE, {addr.print(), "$fp", addr.print()});
-                    append_inst(FLOAD SINGLE, {regname(i,true), addr.print(), "0"});
+                    append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
+                    append_inst(FLOAD_SINGLE, {regname(i,true), addr.print(), "0"});
                 }
             }
         }
@@ -1294,9 +1321,9 @@ void CodeGenRegister::gen_call() {
         if(type->is_void_type()){
             //什么都不做
         }else if(type->is_float_type()) {
-            append_inst("addi.d "+dest_reg+",$a0,0");
+            append_inst("addi "+dest_reg+",a0,0");
         }else {
-            append_inst("fmov.s"+dest_reg+",$fa0");
+            append_inst("fmov.s"+dest_reg+",fa0");
         } 
     }*/
     
@@ -1358,19 +1385,19 @@ void CodeGenRegister::gen_gep() {
         LOG(DEBUG)<<context.inst->get_operand(0)->get_type()->get_pointer_element_type()->print();
         auto weight=context.inst->get_operand(0)->get_type()->get_pointer_element_type();
         //weight=static_cast<const ArrayType *>(weight)->get_element_type();//start from 2
-        append_inst("add.d $t0,$zero,$zero");
+        append_inst("add t0,zero,zero");
         for(int j=1;j<=len-1;j++){
             auto idx=value2reg(context.inst->get_operand(j),1);//这是一个指针，初始指针
             //t1放着这个维度的下标
             int val=weight->get_size();
             if (IS_IMM_12(val)) {//t8 放着这个维度的后缀乘积
-                append_inst(ADDI WORD, {"$t8", "$zero", std::to_string(val)});
-                /* addi.w $f1, $zero, 4 */
+                append_inst(ADDI WORD, {"t8", "zero", std::to_string(val)});
+                /* addi f1, zero, 4 */
             } else {
                 load_large_int32(val, Reg::t(8));//太大了
             }
-            append_inst("mul.d $t8,"+idx+",$t8");//*扩大倍数
-            append_inst("add.d $t0,$t0,$t8");//添加到t0身上
+            append_inst("mul t8,"+idx+",t8");//*扩大倍数
+            append_inst("add t0,t0,t8");//添加到t0身上
             
             //LOG(DEBUG)<<"++++++++++++++++++++++++"<<weight->get_size()<<" "<<static_cast<ConstantInt *>(context.inst->get_operand(j))->get_value();
             if(j==len-1)continue;
@@ -1379,11 +1406,11 @@ void CodeGenRegister::gen_gep() {
         auto [dest_reg, find] = getRegName(context.inst, 0);//result in t1
         auto *ptr = context.inst->get_operand(0);//在指针类型auto*和auto没有任何区别
         auto ptr_reg=value2reg(ptr,1);
-        append_inst("add.d "+dest_reg+","+ptr_reg+",$t0");//基础值
+        append_inst("add "+dest_reg+","+ptr_reg+",t0");//基础值
        // load_large_int32(idx,Reg::t(1));//这个是常数，也就是数组下标，已经扩大了4倍了
-        //append_inst("addi.d $t2,$zero,"+std::to_string(context.inst->get_type()->get_pointer_element_type()->get_size()));
-        //append_inst("mul.d $t1,$t1,$t2");//*4
-       // append_inst("add.d $t0,$t0,$t1");
+        //append_inst("addi t2,zero,"+std::to_string(context.inst->get_type()->get_pointer_element_type()->get_size()));
+        //append_inst("mul t1,t1,t2");//*4
+       // append_inst("add t0,t0,t1");
         if(!find){
             store_from_greg_string(context.inst, dest_reg);
         }
@@ -1393,11 +1420,11 @@ void CodeGenRegister::gen_gep() {
         auto *ptr = context.inst->get_operand(0);//在指针类型auto*和auto没有任何区别
         auto ptr_reg=value2reg(ptr,1);
         auto idx=value2reg(context.inst->get_operand(1),0);//这个是常数，也就是数组下标
-        //append_inst("addi.d $t2,$zero,"+std::to_string(context.inst->get_type()->get_pointer_element_type()->get_size()));
-        append_inst("add.d $t8,"+idx+" , "+idx);
-        append_inst("add.d $t8,$t8,$t8");//*4
-        append_inst("add.d "+dest_reg+",$t8,"+ptr_reg);//基础值。
-      //  append_inst("add.d "+dest_reg+",$zero,$t8");
+        //append_inst("addi t2,zero,"+std::to_string(context.inst->get_type()->get_pointer_element_type()->get_size()));
+        append_inst("add t8,"+idx+" , "+idx);
+        append_inst("add t8,t8,t8");//*4
+        append_inst("add "+dest_reg+",t8,"+ptr_reg);//基础值。
+      //  append_inst("add "+dest_reg+",zero,t8");
         if(!find){
             store_from_greg_string(context.inst, dest_reg);
         }
@@ -1417,8 +1444,8 @@ void CodeGenRegister::gen_sitofp() {
     LOG(DEBUG)<<sreg0;
     auto [dest_reg, find] = getRegName(context.inst, 0);
     LOG(DEBUG)<<dest_reg; 
-    append_inst("movgr2fr.w $ft0,"+sreg0);
-    append_inst("ffint.s.w " +dest_reg+", $ft0");
+    append_inst("movgr2fr ft0,"+sreg0);
+    append_inst("ffint.s " +dest_reg+", ft0");
     if(!find){
         store_from_freg_string(context.inst,dest_reg);//move 操作
     }
@@ -1430,8 +1457,8 @@ void CodeGenRegister::gen_fptosi() {
     LOG(DEBUG)<<sreg0;
     auto [dest_reg, find] = getRegName(context.inst, 0);
     LOG(DEBUG)<<dest_reg; 
-    append_inst("ftintrz.w.s $ft1,"+sreg0);
-    append_inst("movfr2gr.s "+dest_reg+", $ft1");
+    append_inst("ftintrz.s ft1,"+sreg0);
+    append_inst("movfr2gr.s "+dest_reg+", ft1");
     if(!find){
         store_from_greg_string(context.inst,dest_reg);//move 操作
     }
@@ -1510,7 +1537,7 @@ void CodeGenRegister::run() {
 
     /* 使用 GNU 伪指令为全局变量分配空间
      * 你可以使用 `la.local` 指令将标签 (全局变量) 的地址载入寄存器中, 比如
-     * 要将 `a` 的地址载入 $t0, 只需要 `la.local $t0, a`
+     * 要将 `a` 的地址载入 t0, 只需要 `la.local t0, a`
      */
     LOG(DEBUG)<<"start to run codegen";
     if (!m->get_global_variable().empty()) {

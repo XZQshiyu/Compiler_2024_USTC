@@ -20,46 +20,90 @@ inline bool IS_IMM_12(int x) { return x <= IMM_12_MAX and x >= IMM_12_MIN; }
 #define PROLOGUE_OFFSET_BASE 16 // $ra $fp
 #define PROLOGUE_ALIGN 16
 
-/* 龙芯指令 */
-// Arithmetic
-#define ADD "add"
-#define SUB "sub"
-#define MUL "mul"
-#define DIV "div"
 
-#define ADDI "addi"
+  /* 龙芯指令 */
+  // Arithmetic
+  // #define ADD "add"
+  // #define SUB "sub"
+  // #define MUL "mul"
+  // #define DIV "div"
 
-#define FADD "fadd"
-#define FSUB "fsub"
-#define FMUL "fmul"
-#define FDIV "fdiv"
+  // #define ADDI "addi"
 
-#define ORI "ori"
+  // #define FADD "fadd"
+  // #define FSUB "fsub"
+  // #define FMUL "fmul"
+  // #define FDIV "fdiv"
 
-#define LU12I_W "lu12i.w"
-#define LU32I_D "lu32i.d"
-#define LU52I_D "lu52i.d"
+  // #define ORI "ori"
 
-// Data transfer (greg <-> freg)
-#define GR2FR "movgr2fr"
-#define FR2GR "movfr2gr"
+  // #define LU12I_W "lu12i.w"
+  // #define LU32I_D "lu32i.d"
+  // #define LU52I_D "lu52i.d"
 
-// Memory access
-#define LOAD "ld"
-#define STORE "st"
-#define FLOAD "fld"
-#define FSTORE "fst"
+  // // Data transfer (greg <-> freg)
+  // #define GR2FR "movgr2fr"
+  // #define FR2GR "movfr2gr"
 
-#define BYTE ".b"
-#define HALF_WORD ".h"
-#define WORD ".w"
-#define DOUBLE ".d"
+  // // Memory access
+  // #define LOAD "ld"
+  // #define STORE "st"
+  // #define FLOAD "fld"
+  // #define FSTORE "fst"
 
-#define SINGLE ".s" // float
-#define LONG ".l"
+  // #define BYTE ".b"
+  // #define HALF_WORD ".h"
+  // #define WORD ".w"
+  // #define DOUBLE ".d"
 
-// ASM syntax sugar
-#define LOAD_ADDR "la.local"
+  // #define SINGLE ".s" // float
+  // #define LONG ".l"
+
+  // // ASM syntax sugar
+  // #define LOAD_ADDR "la.local"
+
+
+    /* RISC-V指令 */
+    // Arithmetic
+    #define ADD "add"
+    #define SUB "sub"
+    #define MUL "mul"
+    #define DIV "div"
+    #define SLLI "slli"
+    #define ADDI "addi"
+  
+    #define FADD "fadd"
+    #define FSUB "fsub"
+    #define FMUL "fmul"
+    #define FDIV "fdiv"
+  
+    #define ORI "ori"
+  
+    #define LU12I_W "lui"
+  
+    // Data transfer (greg <-> freg)
+    #define GR2FR "fcvt.s.w"
+    #define FR2GR "fcvt.w.s"
+  
+    // Memory access
+    #define LOAD_BYTE "lb"
+    #define LOAD_WORD "lw"
+    #define LOAD_DOUBLE "ld"
+    #define STORE_BYTE "sb"
+    #define STORE_WORD "sw"
+    #define STORE_DOUBLE "sd"
+
+    #define FLOAD_SINGLE "flw"
+    #define FSTORE_SINGLE "fsw"
+  
+    #define BYTE ""
+    #define HALF_WORD ""
+    #define WORD ""
+    #define DOUBLE ""
+  
+    // ASM syntax sugar
+    #define LOAD_ADDR "la"
+
 
 // errors
 class not_implemented_error : public std::logic_error {
