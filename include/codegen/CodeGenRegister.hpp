@@ -11,6 +11,7 @@
 #include "Module.hpp"
 #include "Value.hpp"
 #include "liverange.hpp"
+#include "logging.hpp"
 #include "regalloc.hpp"
 #include <cassert>
 #include <cstring>
@@ -176,8 +177,13 @@ class CodeGenRegister {
             if(i==-100) name="ft0";
             else if (1 <= i and i <= 8)
                 name = "fa" + to_string(i - 1);
-            else if (9 <= i and i <= FR_USABLE)
-                name = "ft" + to_string(i - 9 + 2);
+            else if (9 <= i and i <= FR_USABLE){
+                if(i - 9 + 2 >= 12) {
+                    LOG(ERROR) << "i: " << i - 9 + 2;
+                    name = "fs" + to_string(i - 9 + 2 - 12 + 8);
+                }
+                else name = "ft" + to_string(i - 9 + 2);
+            }
             else
                 name = "WRONG_REG_" + to_string(i);
         } else {
