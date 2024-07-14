@@ -48,7 +48,8 @@ class CodeGenRegister {
         LOG(DEBUG) << "11";
         auto content = std::string(inst) + " ";
         string instr(inst);
-        if(instr == "lb" || instr == "lh" || instr == "lw" || instr == "ld" || instr == "sb" || instr == "sh" || instr == "sw" || instr == "sd"){
+        if(instr == "lb" || instr == "lh" || instr == "lw" || instr == "ld" || instr == "sb" || instr == "sh" || instr == "sw" || instr == "sd"
+            || instr == "flw" || instr == "fsw" ){
             assert(args.size() == 3);
             content += *(args.begin()) + ", " + *(args.begin() + 2) + "(" + *(args.begin() + 1) + ")";
         }

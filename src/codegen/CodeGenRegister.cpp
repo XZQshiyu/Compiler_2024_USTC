@@ -834,14 +834,14 @@ void CodeGenRegister::gen_store() {
     auto pst_reg=value2reg(ptr,1);
     auto data_reg=value2reg(context.inst->get_operand(0),0);
     if (type->is_float_type()) {
-        append_inst("fsw "+data_reg+", "+pst_reg+", 0");//M[t1+0]=t0
+        append_inst("fsw "+data_reg+", 0(" + pst_reg + ")");//M[t1+0]=t0
     } else {
         if(type->is_int1_type()){
-            append_inst("sb "+data_reg+", "+pst_reg+", 0");//M[t1+0]=t0
+            append_inst("sb "+data_reg+", "+ "0("+pst_reg+")");//M[t1+0]=t0
         }else if(type->is_int32_type()){
-            append_inst("st "+data_reg+", "+pst_reg+", 0");
+            append_inst("st "+data_reg+", "+ "0("+pst_reg+")");
         }else{
-            append_inst("sd "+data_reg+", "+pst_reg+", 0");
+            append_inst("sd "+data_reg+", "+ "0("+pst_reg+")");
         }
         // TODO load 整数类型的数据
     }

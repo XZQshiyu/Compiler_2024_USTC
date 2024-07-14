@@ -39,7 +39,6 @@ std::string Reg::print() const {
 }
 
 std::string FReg::print() const {
-
     if (0 <= id and id <= 7) {
         return "fa" + std::to_string(id);
     }
