@@ -839,7 +839,7 @@ void CodeGenRegister::gen_store() {
         if(type->is_int1_type()){
             append_inst("sb "+data_reg+", "+ "0("+pst_reg+")");//M[t1+0]=t0
         }else if(type->is_int32_type()){
-            append_inst("st "+data_reg+", "+ "0("+pst_reg+")");
+            append_inst("sw "+data_reg+", "+ "0("+pst_reg+")");
         }else{
             append_inst("sd "+data_reg+", "+ "0("+pst_reg+")");
         }
