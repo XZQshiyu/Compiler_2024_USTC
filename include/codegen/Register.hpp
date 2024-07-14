@@ -66,15 +66,18 @@ struct FReg {
 
     static FReg fa(unsigned i) {
         assert(0 <= i and i <= 7);
-        return FReg(i);
+        return FReg(i + 10);
     }
     static FReg ft(unsigned i) {
         assert(0 <= i and i <= 15);
-        return FReg(i + 8);
+        if (i >= 12) return FReg(i + 12);
+        else if (i >= 8) return FReg(i + 20);
+        else return FReg(i);
     }
     static FReg fs(unsigned i) {
         assert(0 <= i and i <= 7);
-        return FReg(i + 24);
+        if (i <= 1) return FReg(i + 8);
+        else return FReg(i + 16);
     }
 };
 
