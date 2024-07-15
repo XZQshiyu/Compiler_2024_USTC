@@ -1201,7 +1201,7 @@ void CodeGenRegister::gen_call() {
    
 
 
-    append_inst("bl "+ops[0]->get_name());
+    append_inst("jl "+ops[0]->get_name());
     if(type->is_void_type()){
         //什么都不做
             for(int i=1;i<=R_USABLE;i++){
