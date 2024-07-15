@@ -190,8 +190,10 @@ class CodeGenRegister {
             if(i==-100) name="t0";
             else if (1 <= i and i <= 8)
                 name = "a" + to_string(i - 1);
-            else if (9 <= i and i <= R_USABLE)
+            else if (9 <= i and i < R_USABLE)
                 name = "t" + to_string(i - 9 + 2);
+            else if (i == R_USABLE)
+                name = "s10";
             else
                 name = "WRONG_REG_" + to_string(i);
         }
