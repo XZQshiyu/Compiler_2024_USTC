@@ -51,7 +51,10 @@ class CodeGenRegister {
         string instr(inst);
         if(instr == "lb" || instr == "lh" || instr == "lw" || instr == "ld" || instr == "sb" || instr == "sh" || instr == "sw" || instr == "sd"
             || instr == "flw" || instr == "fsw" ){
-            assert(args.size() == 3);
+            if(args.size() != 3){
+                LOG(DEBUG) << "no";
+                assert(false);
+            }
             content += *(args.begin()) + ", " + *(args.begin() + 2) + "(" + *(args.begin() + 1) + ")";
         }
         else {
