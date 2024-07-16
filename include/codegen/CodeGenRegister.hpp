@@ -97,7 +97,7 @@ class CodeGenRegister {
             //move to treg
             if(tinstr == "ldx" || tinstr == "sdx"){
                 append_inst("add", {treg, reg2, treg});
-                append_inst(instr_ir.c_str(), {reg1, "0(", treg, ")"});
+                append_inst(instr_ir.c_str(), {reg1, treg, "0"});
             }
             else append_inst(tinstr.c_str(),{reg1, treg});
             //move to target
