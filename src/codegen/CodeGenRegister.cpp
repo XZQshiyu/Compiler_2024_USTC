@@ -122,7 +122,7 @@ void CodeGenRegister::value4call(Value *v, int cnt) {//把value放到reg里边�
                     auto offset_str = std::to_string(offset);
                     append_inst(FLOAD_SINGLE,{regname(cnt,true), "fp", to_string(offset)});
                 } else {
-                    auto addr = Reg::t(8);
+                    auto addr = Reg::s(11);
                     load_large_int64(offset, addr);
                     append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
                     append_inst(FLOAD_SINGLE, {regname(cnt,true), addr.print(), "0"});
@@ -134,7 +134,7 @@ void CodeGenRegister::value4call(Value *v, int cnt) {//把value放到reg里边�
                     auto offset_str = std::to_string(offset);
                     append_inst(LOAD_DOUBLE,{regname(cnt,false), "fp", to_string(offset)});
                 } else {
-                    auto addr = Reg::t(8);
+                    auto addr = Reg::s(11);
                     load_large_int64(offset, addr);
                     append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
                     append_inst(LOAD_DOUBLE, {regname(cnt,false), addr.print(), "0"});
@@ -479,7 +479,7 @@ void CodeGenRegister::store_from_greg(Value *val, const Reg &reg) {
             append_inst(STORE_DOUBLE, {reg.print(), "fp", offset_str});
         }
     } else {
-        auto addr = Reg::t(8);
+        auto addr = Reg::s(11);
         load_large_int64(offset, addr);
         append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
         if (type->is_int1_type()) {
@@ -504,7 +504,7 @@ void CodeGenRegister::store_from_greg_string(Value *val, string reg) {
             append_inst(STORE_DOUBLE, {reg, "fp", offset_str});
         }
     } else {
-        auto addr = Reg::t(8);
+        auto addr = Reg::s(11);
         load_large_int64(offset, addr);
         append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
         if (type->is_int1_type()) {
@@ -521,7 +521,7 @@ void CodeGenRegister::store_from_greg_offset(int offset , string reg) {
     if (IS_IMM_12(offset)) {
         append_inst(STORE_DOUBLE, {reg, "fp", offset_str});
     } else {
-        auto addr = Reg::t(8);
+        auto addr = Reg::s(11);
         load_large_int64(offset, addr);
         append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
         append_inst(STORE_DOUBLE, {reg, addr.print(), "0"});
@@ -538,7 +538,7 @@ void CodeGenRegister::load_to_freg(Value *val, const FReg &freg) {
         if (IS_IMM_12(offset)) {
             append_inst(FLOAD_SINGLE, {freg.print(), "fp", offset_str});
         } else {
-            auto addr = Reg::t(8);
+            auto addr = Reg::s(11);
             load_large_int64(offset, addr);
             append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
             append_inst(FLOAD_SINGLE, {freg.print(), addr.print(), "0"});
@@ -556,7 +556,7 @@ void CodeGenRegister::load_to_freg_string(Value *val, string freg) {
         if (IS_IMM_12(offset)) {
             append_inst(FLOAD_SINGLE, {freg, "fp", offset_str});
         } else {
-            auto addr = Reg::t(8);
+            auto addr = Reg::s(11);
             load_large_int64(offset, addr);
             append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
             append_inst(FLOAD_SINGLE, {freg, addr.print(), "0"});
@@ -568,7 +568,7 @@ void CodeGenRegister::load_to_freg_offset(int offset, string freg) {
         if (IS_IMM_12(offset)) {
             append_inst(FLOAD_SINGLE, {freg, "fp", offset_str});
         } else {
-            auto addr = Reg::t(8);
+            auto addr = Reg::s(11);
             load_large_int64(offset, addr);
             append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
             append_inst(FLOAD_SINGLE, {freg, addr.print(), "0"});
@@ -576,13 +576,13 @@ void CodeGenRegister::load_to_freg_offset(int offset, string freg) {
 }
 void CodeGenRegister::load_float_imm(float val, const FReg &r) {
     int32_t bytes = *reinterpret_cast<int32_t *>(&val);
-    load_large_int32(bytes, Reg::t(8));
-    append_inst(GR2FR WORD, {r.print(), Reg::t(8).print()});
+    load_large_int32(bytes, Reg::s(11));
+    append_inst(GR2FR WORD, {r.print(), Reg::s(11).print()});
 }
 void CodeGenRegister::load_float_imm_string(float val, string r) {
     int32_t bytes = *reinterpret_cast<int32_t *>(&val);
-    load_large_int32(bytes, Reg::t(8));
-    append_inst(GR2FR WORD, {r, Reg::t(8).print()});
+    load_large_int32(bytes, Reg::s(11));
+    append_inst(GR2FR WORD, {r, Reg::s(11).print()});
 }
 
 void CodeGenRegister::store_from_freg(Value *val, const FReg &r) {
@@ -591,7 +591,7 @@ void CodeGenRegister::store_from_freg(Value *val, const FReg &r) {
         auto offset_str = std::to_string(offset);
         append_inst(FSTORE_SINGLE, {r.print(), "fp", offset_str});
     } else {
-        auto addr = Reg::t(8);
+        auto addr = Reg::s(11);
         load_large_int64(offset, addr);
         append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
         append_inst(FSTORE_SINGLE, {r.print(), addr.print(), "0"});
@@ -603,7 +603,7 @@ void CodeGenRegister::store_from_freg_string(Value *val, string r) {
         auto offset_str = std::to_string(offset);
         append_inst(FSTORE_SINGLE, {r, "fp", offset_str});
     } else {
-        auto addr = Reg::t(8);
+        auto addr = Reg::s(11);
         load_large_int64(offset, addr);
         append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
         append_inst(FSTORE_SINGLE, {r, addr.print(), "0"});
@@ -614,7 +614,7 @@ void CodeGenRegister::store_from_freg_offset(int offset, string r) {
         auto offset_str = std::to_string(offset);
         append_inst(FSTORE_SINGLE, {r, "fp", offset_str});
     } else {
-        auto addr = Reg::t(8);
+        auto addr = Reg::s(11);
         load_large_int64(offset, addr);
         append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
         append_inst(FSTORE_SINGLE, {r, addr.print(), "0"});
@@ -1007,7 +1007,7 @@ void CodeGenRegister::value4call_out(Value *v, int cnt) {//把value放到reg里�
                     auto offset_str = std::to_string(offset);
                     append_inst(FLOAD_SINGLE,{regname(cnt+1,true), "fp", to_string(offset)});
                 } else {
-                    auto addr = Reg::t(8);
+                    auto addr = Reg::s(11);
                     load_large_int64(offset, addr);
                     append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
                     append_inst(FLOAD_SINGLE, {regname(cnt+1,true), addr.print(), "0"});
@@ -1019,7 +1019,7 @@ void CodeGenRegister::value4call_out(Value *v, int cnt) {//把value放到reg里�
                     auto offset_str = std::to_string(offset);
                     append_inst(LOAD_DOUBLE,{regname(cnt+1,false), "fp", to_string(offset)});
                 } else {
-                    auto addr = Reg::t(8);
+                    auto addr = Reg::s(11);
                     load_large_int64(offset, addr);
                     append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
                     append_inst(LOAD_DOUBLE, {regname(cnt+1,false), addr.print(), "0"});
@@ -1067,7 +1067,7 @@ void CodeGenRegister::store_from_greg_parameter(Value *val, const Reg &reg) {
             append_inst(STORE_DOUBLE, {reg.print(), "sp", offset_str});
         }
     } else {
-        auto addr = Reg::t(8);
+        auto addr = Reg::s(11);
         load_large_int64(offset, addr);
         append_inst(ADD DOUBLE, {addr.print(), "sp", addr.print()});
         if (type->is_int1_type()) {
@@ -1085,7 +1085,7 @@ void CodeGenRegister::store_from_freg_parameter(Value *val, const FReg &r) {
         auto offset_str = std::to_string(offset);
         append_inst(FSTORE_SINGLE, {r.print(), "sp", offset_str});
     } else {
-        auto addr = Reg::t(8);
+        auto addr = Reg::s(11);
         load_large_int64(offset, addr);
         append_inst(ADD DOUBLE, {addr.print(), "sp", addr.print()});
         append_inst(FSTORE_SINGLE, {r.print(), addr.print(), "0"});
@@ -1124,7 +1124,7 @@ void CodeGenRegister::gen_call() {
             auto offset_str = std::to_string(offset);
             append_inst(STORE_DOUBLE,{regname(i,false), "fp", to_string(offset)});
         } else {
-            auto addr = Reg::t(8);
+            auto addr = Reg::s(11);
             load_large_int64(offset, addr);
             append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
             append_inst(STORE_DOUBLE, {regname(i,false), addr.print(), "0"});
@@ -1137,7 +1137,7 @@ void CodeGenRegister::gen_call() {
             auto offset_str = std::to_string(offset);
             append_inst(FSTORE_SINGLE,{regname(i,true), "fp", to_string(offset)});
         } else {
-            auto addr = Reg::t(8);
+            auto addr = Reg::s(11);
             load_large_int64(offset, addr);
             append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
             append_inst(FSTORE_SINGLE, {regname(i,true), addr.print(), "0"});
@@ -1210,7 +1210,7 @@ void CodeGenRegister::gen_call() {
                     auto offset_str = std::to_string(offset);
                     append_inst(LOAD_DOUBLE,{regname(i,false), "fp", to_string(offset)});
                 } else {
-                    auto addr = Reg::t(8);
+                    auto addr = Reg::s(11);
                     load_large_int64(offset, addr);
                     append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
                     append_inst(LOAD_DOUBLE, {regname(i,false), addr.print(), "0"});
@@ -1223,7 +1223,7 @@ void CodeGenRegister::gen_call() {
                     auto offset_str = std::to_string(offset);
                     append_inst(FLOAD_SINGLE,{regname(i,true), "fp", to_string(offset)});
                 } else {
-                    auto addr = Reg::t(8);
+                    auto addr = Reg::s(11);
                     load_large_int64(offset, addr);
                     append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
                     append_inst(FLOAD_SINGLE, {regname(i,true), addr.print(), "0"});
@@ -1253,7 +1253,7 @@ void CodeGenRegister::gen_call() {
                     auto offset_str = std::to_string(offset);
                     append_inst(LOAD_DOUBLE,{regname(i,false), "fp", to_string(offset)});
                 } else {
-                    auto addr = Reg::t(8);
+                    auto addr = Reg::s(11);
                     load_large_int64(offset, addr);
                     append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
                     append_inst(LOAD_DOUBLE, {regname(i,false), addr.print(), "0"});
@@ -1266,7 +1266,7 @@ void CodeGenRegister::gen_call() {
                     auto offset_str = std::to_string(offset);
                     append_inst(FLOAD_SINGLE,{regname(i,true), "fp", to_string(offset)});
                 } else {
-                    auto addr = Reg::t(8);
+                    auto addr = Reg::s(11);
                     load_large_int64(offset, addr);
                     append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
                     append_inst(FLOAD_SINGLE, {regname(i,true), addr.print(), "0"});
@@ -1284,7 +1284,7 @@ void CodeGenRegister::gen_call() {
                     auto offset_str = std::to_string(offset);
                     append_inst(LOAD_DOUBLE,{regname(i,false), "fp", to_string(offset)});
                 } else {
-                    auto addr = Reg::t(8);
+                    auto addr = Reg::s(11);
                     load_large_int64(offset, addr);
                     append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
                     append_inst(LOAD_DOUBLE, {regname(i,false), addr.print(), "0"});
@@ -1300,7 +1300,7 @@ void CodeGenRegister::gen_call() {
                     auto offset_str = std::to_string(offset);
                     append_inst(FLOAD_SINGLE,{regname(i,true), "fp", to_string(offset)});
                 } else {
-                    auto addr = Reg::t(8);
+                    auto addr = Reg::s(11);
                     load_large_int64(offset, addr);
                     append_inst(ADD DOUBLE, {addr.print(), "fp", addr.print()});
                     append_inst(FLOAD_SINGLE, {regname(i,true), addr.print(), "0"});
@@ -1395,7 +1395,7 @@ void CodeGenRegister::gen_gep() {
                 append_inst(ADDI WORD, {"s11", "zero", std::to_string(val)});
                 /* addi f1, zero, 4 */
             } else {
-                load_large_int32(val, Reg::t(8));//太大了
+                load_large_int32(val, Reg::s(11));//太大了
             }
             append_inst("mul s11,"+idx+",s11");//*扩大倍数
             append_inst("add t0,t0,s11");//添加到t0身上
