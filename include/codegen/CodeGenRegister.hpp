@@ -95,7 +95,11 @@ class CodeGenRegister {
         } else {
             assert(value2reg(ConstantInt::get(imm, m), tid, treg) == treg);
             //move to treg
-            append_inst(tinstr.c_str(),{reg1,reg2,treg});
+            if(tinstr == "ldx" || tinstr == "sdx"){
+                append_inst("add", {treg, reg2, treg});
+                append_inst(instr_ir.c_str(), {reg1, "0(", treg, ")"});
+            }
+            else append_inst(tinstr.c_str(),{reg1, treg});
             //move to target
         }
     }
