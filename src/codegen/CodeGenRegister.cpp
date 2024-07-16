@@ -1196,7 +1196,7 @@ void CodeGenRegister::gen_call() {
         }
         //bl
         LOG(DEBUG)<<ops[0]->print();
-
+        uintptr_t r;
     }
    
 

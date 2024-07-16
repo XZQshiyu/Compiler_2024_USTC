@@ -1,5 +1,5 @@
 #pragma once
-
+#include <string>
 #include <stdexcept>
 
 /* 关于位宽 */
