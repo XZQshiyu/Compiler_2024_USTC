@@ -214,6 +214,74 @@ public:
             delete p;
             return ret;
         }
+        T *get_prev(const iterator &it)
+        {
+            auto p = it.ptr_;
+            if(p == head_)
+            {
+                throw std::runtime_error("get_prev on head");
+            }
+            else if(!is_node(p))
+            {
+                throw std::runtime_error("get_prev a node not in the list");
+            }
+            else
+            {
+                return p->prev_;
+            }
+        }
+        T *get_next(const iterator &it)
+        {
+            auto p = it.ptr_;
+            if(p == tail_)
+            {
+                throw std::runtime_error("get_next on tail");
+            }
+            else if(!is_node(p))
+            {
+                throw std::runtime_error("get_next a node not in the list");
+            }
+            else
+            {
+                return p->next_;
+            }
+        }
+        void insert_after(const iterator &it, T *p)
+        {
+            auto p_it = it.ptr_;
+            if(p_it == tail_)
+            {
+                throw std::runtime_error("insert after tail");
+            }
+            else if(!is_node(p_it))
+            {
+                throw std::runtime_error("insert a node not in the list");
+            }
+            p->prev_ = p_it;
+            p->next_ = p_it->next_;
+            p_it->next_->prev_ = p;
+            p_it->next_ = p;
+            size_++;
+            mark_node(p);
+        }
+        void insert_before(const iterator &it, T *p)
+        {
+            auto p_it = it.ptr_;
+            if(p_it == head_)
+            {
+                throw std::runtime_error("insert before head");
+            }
+            else if(!is_node(p_it))
+            {
+                throw std::runtime_error("insert a node not in the list");
+            }
+            p->prev_ = p_it->prev_;
+            p->next_ = p_it;
+            p_it->prev_->next_ = p;
+            p_it->prev_ = p;
+            size_++;
+            mark_node(p);
+        }
 
         T *remove(const iterator &it)
         {

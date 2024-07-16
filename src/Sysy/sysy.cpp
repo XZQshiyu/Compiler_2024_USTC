@@ -129,6 +129,7 @@ int main(int argc, char **argv)
         LOG(INFO) << "finish mem2reg and start deadcode";
         PM.add_pass<DeadCode>();
     }
+    // 指令降级
     if (config.const_prop)
     {
         PM.add_pass<ConstPropagation>();

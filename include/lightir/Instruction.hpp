@@ -73,7 +73,7 @@ public:
   Instruction(Type *ty, OpID id, BasicBlock *parent = nullptr);
   Instruction(const Instruction &) = delete;
   virtual ~Instruction() = default;
-
+  
   BasicBlock *get_parent() { return parent_; }
   const BasicBlock *get_parent() const { return parent_; }
   void set_parent(BasicBlock *parent) { this->parent_ = parent; }
