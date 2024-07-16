@@ -803,7 +803,7 @@ void CodeGenRegister::gen_load() {
     //相当于alloca，最后传进来的最后存储的头指针，但是我们要把数据放到alloca出来的数组里
     //
     if (type->is_float_type()) {
-        append_inst(FSTORE_SINGLE + string(" ") +dest+", "+sreg+", 0");//ft0=M[t0+0]
+        append_inst(FSTORE_SINGLE,{dest, sreg, "0"});//ft0=M[t0+0]
         if(!find){
             store_from_freg_string(context.inst, dest);//load这个操作产生了一个新的左值，我们需要把这个现在在ft中的左值放到栈里边
         }
@@ -829,7 +829,7 @@ void CodeGenRegister::gen_store() {
     auto pst_reg=value2reg(ptr,1);
     auto data_reg=value2reg(context.inst->get_operand(0),0);
     if (type->is_float_type()) {
-        append_inst(FSTORE_SINGLE + string(" ")+data_reg+", 0(" + pst_reg + ")");//M[t1+0]=t0
+        append_inst(FSTORE_SINGLE ,{data_reg, pst_reg + "0"});//M[t1+0]=t0
     } else {
         if(type->is_int1_type()){
             append_inst("sb "+data_reg+", "+ "0("+pst_reg+")");//M[t1+0]=t0
