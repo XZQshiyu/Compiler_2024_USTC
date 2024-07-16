@@ -19,6 +19,7 @@
 #include <deque>
 #include <memory>
 #include <ostream>
+#include <queue>
 #include <sstream>
 #include <string>
 #include <sys/types.h>
@@ -802,7 +803,7 @@ void CodeGenRegister::gen_load() {
     //相当于alloca，最后传进来的最后存储的头指针，但是我们要把数据放到alloca出来的数组里
     //
     if (type->is_float_type()) {
-        append_inst("fld.s "+dest+", "+sreg+", 0");//ft0=M[t0+0]
+        append_inst(FSTORE_SINGLE + string(" ") +dest+", "+sreg+", 0");//ft0=M[t0+0]
         if(!find){
             store_from_freg_string(context.inst, dest);//load这个操作产生了一个新的左值，我们需要把这个现在在ft中的左值放到栈里边
         }
@@ -1031,7 +1032,7 @@ void CodeGenRegister::gen_zext() {
     auto *type = context.inst->get_type();
 
     if (type->is_float_type()) {
-        append_inst("movgr2fr "+sreg0+","+dest_reg);//放到合适的位置
+        append_inst(GR2FR + string(" ")+sreg0+","+dest_reg);//放到合适的位置
     } else {
         if(sreg0!=dest_reg){
             append_inst("add "+dest_reg+", zero, "+sreg0);
@@ -1439,8 +1440,8 @@ void CodeGenRegister::gen_sitofp() {
     LOG(DEBUG)<<sreg0;
     auto [dest_reg, find] = getRegName(context.inst, 0);
     LOG(DEBUG)<<dest_reg; 
-    append_inst("movgr2fr ft0,"+sreg0);
-    append_inst("ffint.s " +dest_reg+", ft0");
+    append_inst(GR2FR " ft0,"+sreg0);
+    // append_inst("ffint.s " +dest_reg+", ft0");
     if(!find){
         store_from_freg_string(context.inst,dest_reg);//move 操作
     }
@@ -1452,8 +1453,9 @@ void CodeGenRegister::gen_fptosi() {
     LOG(DEBUG)<<sreg0;
     auto [dest_reg, find] = getRegName(context.inst, 0);
     LOG(DEBUG)<<dest_reg; 
-    append_inst("ftintrz.s ft1,"+sreg0);
-    append_inst("movfr2gr.s "+dest_reg+", ft1");
+    // append_inst("ftintrz.s ft1,"+sreg0);
+    // append_inst(FR2GR + string(" ") + dest_reg+", ft1");
+    append_inst(FR2GR, {dest_reg, sreg0, "rtz"});
     if(!find){
         store_from_greg_string(context.inst,dest_reg);//move 操作
     }
@@ -1681,7 +1683,7 @@ void CodeGenRegister::run() {
     append_inst(".text", ASMInstruction::Atrribute);
     append_inst(".align 2",ASMInstruction::Atrribute);  
     for (auto &func : m->get_functions()) {
-        
+
         if (not func.is_declaration()) {
             LOG(DEBUG)<<" "<<func.get_name(); 
             LRA.run(&func);  // 执行寄存器分配算法，将结果存储在LRA对象中
