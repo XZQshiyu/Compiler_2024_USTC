@@ -346,16 +346,10 @@ void CodeGenRegister::load_to_greg_string(Value *val, string reg) {
 }
 
 void CodeGenRegister::load_large_int32(int32_t val, const Reg &reg) {
-    int32_t high_20 = val >> 12; // si20
-    uint32_t low_12 = val & LOW_12_MASK;
-    append_inst(LU12I_W, {reg.print(), std::to_string(high_20)});
-    append_inst(ORI, {reg.print(), reg.print(), std::to_string(low_12)});
+    append_inst(LI, {reg.print(), std::to_string(val)});
 }
 void CodeGenRegister::load_large_int32_string(int32_t val, string reg) {
-    int32_t high_20 = val >> 12; // si20
-    uint32_t low_12 = val & LOW_12_MASK;
-    append_inst(LU12I_W, {reg, std::to_string(high_20)});
-    append_inst(ORI, {reg, reg, std::to_string(low_12)});
+    append_inst(LI, {reg, std::to_string(val)});
 }
 
 

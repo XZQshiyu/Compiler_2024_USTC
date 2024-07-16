@@ -78,6 +78,7 @@ inline bool IS_IMM_12(int x) { return x <= IMM_12_MAX and x >= IMM_12_MIN; }
     #define FDIV "fdiv"
   
     #define ORI "ori"
+    #define LI "li"
   
     #define LU12I_W "lui"
   
