@@ -149,7 +149,7 @@ void CodeGenRegister::value4call(Value *v, int cnt) {//把value放到reg里边�
 void CodeGenRegister::gencopy(string lhs_reg, string rhs_reg, bool is_float) {
     if (rhs_reg != lhs_reg) {
         if (is_float)
-            append_inst("fmov.s " + lhs_reg + ", " + rhs_reg);
+            append_inst("fmv.s " + lhs_reg + ", " + rhs_reg);
         else
             append_inst("or " + lhs_reg + ", zero, " + rhs_reg);
     }
@@ -623,7 +623,7 @@ void CodeGenRegister::gen_ret() {
         auto is_float = value->get_type()->is_float_type();
         auto reg = value2reg(value);//现在这个value应该在这个reg里边了
         if (is_float and reg != "fa0")//要观察现在这个数据是不是在a0这个位置
-            append_inst("fmov.s fa0, " + reg);
+            append_inst("fmv.s fa0, " + reg);
         else if (not is_float and reg != "a0")
             append_inst("or a0, zero, " + reg);
     } else {
@@ -652,7 +652,7 @@ void CodeGenRegister::gen_br() {
                 if(type->is_float_type()){
                     auto sreg=value2reg(src,0);
                     auto [dest_reg, find] = getRegName(dest, 0);
-                    append_inst("fmov.s "+dest_reg+", " +sreg);
+                    append_inst("fmv.s "+dest_reg+", " +sreg);
                     if(!find){
                         store_from_freg_string(dest,dest_reg);//move 操作
                     }
@@ -680,7 +680,7 @@ void CodeGenRegister::gen_br() {
                 if(type->is_float_type()){
                     auto sreg=value2reg(src,0);
                     auto [dest_reg, find] = getRegName(dest, 0);
-                    append_inst("fmov.s "+dest_reg+", " +sreg);
+                    append_inst("fmv.s "+dest_reg+", " +sreg);
                     if(!find){
                         store_from_freg_string(dest,dest_reg);//move 操作
                     }
@@ -829,7 +829,7 @@ void CodeGenRegister::gen_store() {
     auto pst_reg=value2reg(ptr,1);
     auto data_reg=value2reg(context.inst->get_operand(0),0);
     if (type->is_float_type()) {
-        append_inst("fsw "+data_reg+", 0(" + pst_reg + ")");//M[t1+0]=t0
+        append_inst(FSTORE_SINGLE + string(" ")+data_reg+", 0(" + pst_reg + ")");//M[t1+0]=t0
     } else {
         if(type->is_int1_type()){
             append_inst("sb "+data_reg+", "+ "0("+pst_reg+")");//M[t1+0]=t0
@@ -913,27 +913,27 @@ void CodeGenRegister::gen_fcmp() {
     std::string fnum=std::to_string(fcmpcnt);
     switch (context.inst->get_instr_type()) {
     case Instruction::feq:
-        append_inst("fcmp.seq.s fcc0, "+sreg0+", "+sreg1);
+        append_inst("feq.s s9, "+sreg0+", "+sreg1);
         break;
     case Instruction::fne:
-        append_inst("fcmp.sne.s fcc0, "+sreg0+", "+sreg1);
+        append_inst("fne.s s9, "+sreg0+", "+sreg1);
         break;
     case Instruction::fgt:
-        append_inst("fcmp.slt.s fcc0, "+sreg1+", "+sreg0);
+        append_inst("flt.s s9, "+sreg1+", "+sreg0);
         break;
     case Instruction::fge:
-        append_inst("fcmp.sle.s fcc0, "+sreg1+", "+sreg0);
+        append_inst("fle.s s9, "+sreg1+", "+sreg0);
         break;
     case Instruction::flt:
-        append_inst("fcmp.slt.s fcc0, "+sreg0+", "+sreg1);
+        append_inst("flt.s s9, "+sreg0+", "+sreg1);
         break;
     case Instruction::fle:
-        append_inst("fcmp.sle.s fcc0, "+sreg0+", "+sreg1);
+        append_inst("fle.s s9, "+sreg0+", "+sreg1);
         break;
     default:
         assert(false);
     }
-    append_inst("bcnez      fcc0, float_true"+fnum);
+    append_inst("bnez      s9, float_true"+fnum);
     append_inst("j          float_false"+fnum);
     append_inst("float_true"+fnum, ASMInstruction::Label);
     append_inst("addi     "+dest_reg+", zero, 1");
@@ -1231,7 +1231,7 @@ void CodeGenRegister::gen_call() {
             if(!find){
                 store_from_freg(context.inst, FReg::fa(0));//load这个操作产生了一个新的左值，我们需要把这个现在在ft中的左值放到栈里边
             }else{
-                append_inst("fmov.s "+dest_reg+",fa0");
+                append_inst("fmv.s "+dest_reg+",fa0");
             }
             
         }else {
