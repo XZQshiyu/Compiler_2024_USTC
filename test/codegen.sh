@@ -89,16 +89,16 @@ for case in $testcases; do
 	check_return_value $? 0 "CE" "sysy compiler error" || continue
 
 	# gcc compile asm to executable
-	loongarch64-unknown-linux-gnu-gcc -static \
+	riscv64-linux-gnu-gcc -static \
 		"$asm_file" "$io_dir"/io.c -o "$exe_file" \
 		>>$LOG
 	check_return_value $? 0 "CE" "loong gcc compiler error" || continue
 
 	# qemu run
 	if [ -e "$in_file" ]; then
-		exec_cmd="qemu-loongarch64 $exe_file >$out_file <$in_file"
+		exec_cmd="./$exe_file >$out_file <$in_file"
 	else
-		exec_cmd="qemu-loongarch64 $exe_file >$out_file"
+		exec_cmd="./$exe_file >$out_file"
 	fi
 
 	start=$(date +%s%N)  # 获取当前时间的纳秒时间戳
