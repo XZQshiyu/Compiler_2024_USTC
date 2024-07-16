@@ -93,7 +93,6 @@ string define_replacement(string origin_file)
         {
             outfile << strLine << std::endl;
         }
-        //   LOG(DEBUG)<<"123123123\n";
     }
     outfile.close();
     return "define_temp.sy";
@@ -124,19 +123,19 @@ int main(int argc, char **argv)
 
     PassManager PM(m.get());
 
-    LOG(INFO) << "before mem2reg";
-    for(auto &func : m->get_functions())
-    {
-        LOG(INFO) << func.get_name();
-        for(auto &bb : func.get_basic_blocks())
-        {
-            LOG(INFO) << bb.get_name();
-            for(auto &ins : bb.get_instructions())
-            {
-                LOG(INFO) << ins.print() << " " << ins.tag();
-            }
-        }
-    }
+    // LOG(INFO) << "before mem2reg";
+    // for(auto &func : m->get_functions())
+    // {
+    //     LOG(INFO) << func.get_name();
+    //     for(auto &bb : func.get_basic_blocks())
+    //     {
+    //         LOG(INFO) << bb.get_name();
+    //         for(auto &ins : bb.get_instructions())
+    //         {
+    //             LOG(INFO) << ins.print() << " " << ins.tag();
+    //         }
+    //     }
+    // }
 
     if (config.mem2reg)
     {
