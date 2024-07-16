@@ -123,20 +123,6 @@ int main(int argc, char **argv)
 
     PassManager PM(m.get());
 
-    // LOG(INFO) << "before mem2reg";
-    // for(auto &func : m->get_functions())
-    // {
-    //     LOG(INFO) << func.get_name();
-    //     for(auto &bb : func.get_basic_blocks())
-    //     {
-    //         LOG(INFO) << bb.get_name();
-    //         for(auto &ins : bb.get_instructions())
-    //         {
-    //             LOG(INFO) << ins.print() << " " << ins.tag();
-    //         }
-    //     }
-    // }
-
     if (config.mem2reg)
     {
         PM.add_pass<Mem2Reg>();
@@ -167,7 +153,7 @@ int main(int argc, char **argv)
     if (config.emitllvm)
     {
         auto abs_path = std::filesystem::canonical(config.input_file);
-        output_stream << "; ModuleID = 'cminus'\n";
+        output_stream << "; ModuleID = 'sysy'\n";
         output_stream << "source_filename = " << abs_path << "\n\n";
         output_stream << m->print();
     }
