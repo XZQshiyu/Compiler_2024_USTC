@@ -85,17 +85,3 @@
 ==========./functional//84_long_array2.sy==========
 ==========./functional//85_long_code.sy==========
 ==========./functional//86_long_code2.sy==========
-==========./functional//87_many_params.sy==========
-==========./functional//88_many_params2.sy==========
-==========./functional//89_many_globals.sy==========
-==========./functional//90_many_locals.sy==========
-==========./functional//91_many_locals2.sy==========
-==========./functional//92_register_alloc.sy==========
-==========./functional//93_nested_calls.sy==========
-==========./functional//94_nested_loops.sy==========
-==========./functional//95_float.sy==========
-==========./functional//96_matrix_add.sy==========
-==========./functional//97_matrix_sub.sy==========
-==========./functional//98_matrix_mul.sy==========
-==========./functional//99_matrix_tran.sy==========
-==========./functional//define_temp.sy==========
