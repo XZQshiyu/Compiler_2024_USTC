@@ -1440,7 +1440,7 @@ void CodeGenRegister::gen_sitofp() {
     LOG(DEBUG)<<sreg0;
     auto [dest_reg, find] = getRegName(context.inst, 0);
     LOG(DEBUG)<<dest_reg; 
-    append_inst(GR2FR " ft0,"+sreg0);
+    append_inst(GR2FR ,{dest_reg, sreg0});
     // append_inst("ffint.s " +dest_reg+", ft0");
     if(!find){
         store_from_freg_string(context.inst,dest_reg);//move 操作
