@@ -572,12 +572,12 @@ void CodeGenRegister::load_to_freg_offset(int offset, string freg) {
 void CodeGenRegister::load_float_imm(float val, const FReg &r) {
     int32_t bytes = *reinterpret_cast<int32_t *>(&val);
     load_large_int32(bytes, Reg::s(11));
-    append_inst(GR2FR WORD, {r.print(), Reg::s(11).print()});
+    append_inst("fmov.s.x", {r.print(), Reg::s(11).print()});
 }
 void CodeGenRegister::load_float_imm_string(float val, string r) {
     int32_t bytes = *reinterpret_cast<int32_t *>(&val);
     load_large_int32(bytes, Reg::s(11));
-    append_inst(GR2FR WORD, {r, Reg::s(11).print()});
+    append_inst("fmov.s.x", {r, Reg::s(11).print()});
 }
 
 void CodeGenRegister::store_from_freg(Value *val, const FReg &r) {
