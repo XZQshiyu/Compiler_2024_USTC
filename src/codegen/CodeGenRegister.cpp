@@ -916,7 +916,8 @@ void CodeGenRegister::gen_fcmp() {
         append_inst("feq.s s9, "+sreg0+", "+sreg1);
         break;
     case Instruction::fne:
-        append_inst("fne.s s9, "+sreg0+", "+sreg1);
+        append_inst("feq.s s9, "+sreg0+", "+sreg1);
+        append_inst("fneg.s s9, s9");
         break;
     case Instruction::fgt:
         append_inst("flt.s s9, "+sreg1+", "+sreg0);
