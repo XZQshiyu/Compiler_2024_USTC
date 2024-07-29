@@ -445,20 +445,20 @@ Value *CminusfBuilder::visit(ASTDef &node)
                 }
                 auto temp_dim = std::vector<Value *>(context.exp_lists.size() + 1, CONST_INT(0));
                 temp = builder->create_gep(temp, temp_dim);
-                if (current_type == TYPE_INT)
-                {
-                    auto mem_set = scope.find("memset_int");
-                    // LOG(ERROR) << mem_set->get_name();
-                    auto call = builder->create_call(mem_set, {temp, CONST_INT(len)});
-                    call->set_name("memset_int_call");
-                }
-                else
-                {
-                    auto mem_set = scope.find("memset_float");
-                    // LOG(DEBUG) << mem_set->get_type()->print() << "+++";
-                    auto call = builder->create_call(mem_set, {temp, CONST_INT(len)});
-                    call->set_name("memset_float_call");
-                }
+                // if (current_type == TYPE_INT)
+                // {
+                //     auto mem_set = scope.find("memset_int");
+                //     // LOG(ERROR) << mem_set->get_name();
+                //     auto call = builder->create_call(mem_set, {temp, CONST_INT(len)});
+                //     call->set_name("memset_int_call");
+                // }
+                // else
+                // {
+                //     auto mem_set = scope.find("memset_float");
+                //     // LOG(DEBUG) << mem_set->get_type()->print() << "+++";
+                //     auto call = builder->create_call(mem_set, {temp, CONST_INT(len)});
+                //     call->set_name("memset_float_call");
+                // }
                 // LOG(DEBUG) << initval.size();
                 for (auto val = 0u; val < initval.size(); val++)
                 {
