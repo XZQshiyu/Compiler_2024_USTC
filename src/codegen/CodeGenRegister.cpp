@@ -768,7 +768,7 @@ void CodeGenRegister::gen_binary() {
         output.emplace_back("div "+dest_reg+", "+sreg0+", "+sreg1);
         break;
     case Instruction::srem:
-        output.emplace_back("rem "+dest_reg+", "+sreg0+", "+sreg1);
+        output.emplace_back("remw "+dest_reg+", "+sreg0+", "+sreg1);
         break;
     default:
         assert(false);
