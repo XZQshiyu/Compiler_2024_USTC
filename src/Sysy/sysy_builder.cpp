@@ -450,14 +450,14 @@ Value *CminusfBuilder::visit(ASTDef &node)
                 {
                     auto mem_set = scope.find("memset");
                     // LOG(ERROR) << mem_set->get_name();
-                    auto call = builder->create_call(mem_set, {temp, CONST_INT(0), CONST_INT(len)});
+                    auto call = builder->create_call(mem_set, {temp, CONST_INT(0), CONST_INT(len * 4)});
                     call->set_name("memset_int_call");
                 }
                 else
                 {
                     auto mem_set = scope.find("memset");
                     // LOG(DEBUG) << mem_set->get_type()->print() << "+++";
-                    auto call = builder->create_call(mem_set, {temp, CONST_INT(0), CONST_INT(len)});
+                    auto call = builder->create_call(mem_set, {temp, CONST_INT(0), CONST_INT(len * 4)});
                     call->set_name("memset_float_call");
                 }
                 // LOG(DEBUG) << initval.size();
