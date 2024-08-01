@@ -51,7 +51,6 @@ public:
 
   void set_instr_name();
   std::string print();
-  bool tag = true;
 
 private:
   ilist<BasicBlock> basic_blocks_;

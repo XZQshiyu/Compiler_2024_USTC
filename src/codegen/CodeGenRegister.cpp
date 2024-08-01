@@ -1840,5 +1840,13 @@ std::string CodeGenRegister::print() const {
     for (const auto &inst : output) {
         result += inst.format();
     }
+    auto sub = result.find("memset_int");
+    if(sub != string::npos){
+        result.replace(sub, 10, "memset");
+    }
+    sub = result.find("memset_float");
+    if(sub != string::npos){
+        result.replace(sub, 12, "memset");
+    }
     return result;
 }

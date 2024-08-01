@@ -38,7 +38,7 @@ public:
     bool push(const std::string &name, Value *val)
     {
         auto result = inner[inner.size() - 1].insert({name, val});
-        return result.second;
+        return result->second;
     }
     bool push(const std::pair<std::string &, std::vector<unsigned int>> name, const_val val)
     {
@@ -54,26 +54,6 @@ public:
             if (iter != s->end())
             {
                 return iter->second;
-            }
-        }
-
-        // Name not found: handled here?
-        LOG(DEBUG) << name ;
-        assert(false && ("Name not found in scope"));
-
-        return nullptr;
-    }
-
-    Value *find(const std::string &name, bool a)
-    {
-        for (auto s = inner.rbegin(); s != inner.rend(); s++)
-        {
-            auto iter = s->find(name);
-            if (iter != s->end())
-            {
-                auto temp = iter->second->get_name();
-                auto func = static_cast<Function*>(iter->second);
-                if(func->tag == a) return iter->second;
             }
         }
 
@@ -101,7 +81,7 @@ public:
     }
 
 private:
-    std::vector<std::map<std::string, Value *>> inner;
+    std::vector<std::multimap<std::string, Value *>> inner;
     std::vector<std::map<std::pair<std::string &, std::vector<unsigned int>>, const_val>> const_map;
 };
 class CminusfBuilder : public ASTVisitor
@@ -202,7 +182,7 @@ public:
         memset_int_params.push_back(TyInt32);
         memset_int_params.push_back(TyInt32);
         auto memset_int_type = FunctionType::get(TyVoid, memset_int_params);
-        auto memset_int_fun = Function::create(memset_int_type, "memset", module.get());
+        auto memset_int_fun = Function::create(memset_int_type, "memset_int", module.get());
         // memset_int_fun->set_name("memset_int");
 
         // void memset_float(float *s, int n)
@@ -211,8 +191,7 @@ public:
         memset_float_params.push_back(TyInt32);
         memset_float_params.push_back(TyInt32);
         auto memset_float_type = FunctionType::get(TyVoid, memset_float_params);
-        auto memset_float_fun = Function::create(memset_float_type, "memset", module.get());
-        memset_float_fun->tag = false;
+        auto memset_float_fun = Function::create(memset_float_type, "memset_float", module.get());
         // memset_float_fun->set_name("memset_int");
 
         scope.enter();
@@ -230,8 +209,8 @@ public:
         scope.push("after_main", after_main_fun);
         scope.push("_sysy_starttime", _sysy_starttime_fun);
         scope.push("_sysy_stoptime", _sysy_stoptime_fun);
-        scope.push("memset", memset_int_fun);
-        scope.push("memset", memset_float_fun);
+        scope.push("memset_int", memset_int_fun);
+        scope.push("memset_float", memset_float_fun);
     }
 
     std::unique_ptr<Module> getModule() { return std::move(module); }
