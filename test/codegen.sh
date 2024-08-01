@@ -90,7 +90,7 @@ for case in $testcases; do
 
 	# gcc compile asm to executable
 	riscv64-linux-gnu-gcc -static \
-		"$asm_file" "$io_dir"/io.c stdlib.h -o "$exe_file" \
+		"$asm_file" "$io_dir"/io.c string.h -o "$exe_file" \
 		>>$LOG
 	check_return_value $? 0 "CE" "loong gcc compiler error" || continue
 
