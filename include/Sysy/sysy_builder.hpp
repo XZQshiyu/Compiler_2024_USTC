@@ -11,6 +11,7 @@
 #include <map>
 #include <memory>
 #include <stack>
+#include <string>
 
 class Scope
 {
@@ -53,6 +54,25 @@ public:
             if (iter != s->end())
             {
                 return iter->second;
+            }
+        }
+
+        // Name not found: handled here?
+        LOG(DEBUG) << name ;
+        assert(false && ("Name not found in scope"));
+
+        return nullptr;
+    }
+
+    Value *find(const std::string &name, std::string a)
+    {
+        for (auto s = inner.rbegin(); s != inner.rend(); s++)
+        {
+            auto iter = s->find(name);
+            if (iter != s->end())
+            {
+                auto temp = iter->second->get_name();
+                if(iter->second->get_name() == a) return iter->second;
             }
         }
 
@@ -181,16 +201,17 @@ public:
         memset_int_params.push_back(TyInt32);
         memset_int_params.push_back(TyInt32);
         auto memset_int_type = FunctionType::get(TyVoid, memset_int_params);
-        auto memset_int_fun = Function::create(memset_int_type, "memset", module.get());
-        memset_int_fun->set_name("memset");
+        auto memset_int_fun = Function::create(memset_int_type, "memset_int", module.get());
+        memset_int_fun->set_name("memset_int");
 
         // void memset_float(float *s, int n)
-        // std::vector<Type *> memset_float_params;
-        // memset_float_params.push_back(TyFloat_ptr);
-        // memset_float_params.push_back(TyInt32);
-        // auto memset_float_type = FunctionType::get(TyVoid, memset_float_params);
-        // auto memset_float_fun = Function::create(memset_float_type, "memset_float", module.get());
-        // memset_float_fun->set_name("memset_float");
+        std::vector<Type *> memset_float_params;
+        memset_float_params.push_back(TyFloat_ptr);
+        memset_float_params.push_back(TyInt32);
+        memset_float_params.push_back(TyInt32);
+        auto memset_float_type = FunctionType::get(TyVoid, memset_float_params);
+        auto memset_float_fun = Function::create(memset_float_type, "memset_float", module.get());
+        memset_float_fun->set_name("memset_int");
 
         scope.enter();
         scope.push("getint", getint_fun);
@@ -208,7 +229,7 @@ public:
         scope.push("_sysy_starttime", _sysy_starttime_fun);
         scope.push("_sysy_stoptime", _sysy_stoptime_fun);
         scope.push("memset", memset_int_fun);
-        // scope.push("memset_float", memset_float_fun);
+        scope.push("memset", memset_float_fun);
     }
 
     std::unique_ptr<Module> getModule() { return std::move(module); }

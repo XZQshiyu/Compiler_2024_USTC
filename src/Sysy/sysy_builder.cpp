@@ -448,14 +448,14 @@ Value *CminusfBuilder::visit(ASTDef &node)
                 temp = builder->create_gep(temp, temp_dim);
                 if (current_type == TYPE_INT)
                 {
-                    auto mem_set = scope.find("memset");
+                    auto mem_set = scope.find("memset", "memset_int");
                     // LOG(ERROR) << mem_set->get_name();
                     auto call = builder->create_call(mem_set, {temp, CONST_INT(0), CONST_INT(len * 4)});
                     call->set_name("memset_int_call");
                 }
                 else
                 {
-                    auto mem_set = scope.find("memset");
+                    auto mem_set = scope.find("memset", "memset_float");
                     // LOG(DEBUG) << mem_set->get_type()->print() << "+++";
                     auto call = builder->create_call(mem_set, {temp, CONST_INT(0), CONST_INT(len * 4)});
                     call->set_name("memset_float_call");
