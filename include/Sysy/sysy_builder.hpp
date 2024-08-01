@@ -64,7 +64,7 @@ public:
         return nullptr;
     }
 
-    Value *find(const std::string &name, std::string a)
+    Value *find(const std::string &name, bool a)
     {
         for (auto s = inner.rbegin(); s != inner.rend(); s++)
         {
@@ -72,7 +72,8 @@ public:
             if (iter != s->end())
             {
                 auto temp = iter->second->get_name();
-                if(iter->second->get_name() == a) return iter->second;
+                auto func = static_cast<Function*>(iter->second);
+                if(func->tag == a) return iter->second;
             }
         }
 
@@ -201,8 +202,8 @@ public:
         memset_int_params.push_back(TyInt32);
         memset_int_params.push_back(TyInt32);
         auto memset_int_type = FunctionType::get(TyVoid, memset_int_params);
-        auto memset_int_fun = Function::create(memset_int_type, "memset_int", module.get());
-        memset_int_fun->set_name("memset_int");
+        auto memset_int_fun = Function::create(memset_int_type, "memset", module.get());
+        // memset_int_fun->set_name("memset_int");
 
         // void memset_float(float *s, int n)
         std::vector<Type *> memset_float_params;
@@ -210,8 +211,9 @@ public:
         memset_float_params.push_back(TyInt32);
         memset_float_params.push_back(TyInt32);
         auto memset_float_type = FunctionType::get(TyVoid, memset_float_params);
-        auto memset_float_fun = Function::create(memset_float_type, "memset_float", module.get());
-        memset_float_fun->set_name("memset_int");
+        auto memset_float_fun = Function::create(memset_float_type, "memset", module.get());
+        memset_float_fun->tag = false;
+        // memset_float_fun->set_name("memset_int");
 
         scope.enter();
         scope.push("getint", getint_fun);
