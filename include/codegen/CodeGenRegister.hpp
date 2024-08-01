@@ -317,7 +317,7 @@ class CodeGenRegister {
     RA::RegAllocator RA_int, RA_float;
     LRA::LiveRangeAnalyzer LRA_call;
     RA::RegAllocator RA_int_call, RA_float_call;
-    std::set<string> outside_func={"getint","getch","getfloat","getarray","getfarray","putint","putch","putarray","putfloat","putfarray","memset","_sysy_starttime","_sysy_stoptime"};
+    std::set<string> outside_func={"getint","getch","getfloat","getarray","getfarray","putint","putch","putarray","putfloat","putfarray","memset_int", "memset_float","_sysy_starttime","_sysy_stoptime"};
     std::map<BasicBlock *, std::vector<std::pair<Value *, Value *>>> phi_map;
     std::map<Constant *, std::string> ROdata;
     std::map<Function *,map<Value *,int>> RA_float_result,RA_int_result;
