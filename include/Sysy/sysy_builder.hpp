@@ -57,7 +57,8 @@ public:
         }
 
         // Name not found: handled here?
-        assert(false && ("Name not found in scope"+name).c_str());
+        LOG(DEBUG) << name ;
+        assert(false && ("Name not found in scope"));
 
         return nullptr;
     }
@@ -181,7 +182,7 @@ public:
         memset_int_params.push_back(TyInt32);
         auto memset_int_type = FunctionType::get(TyVoid, memset_int_params);
         auto memset_int_fun = Function::create(memset_int_type, "memset", module.get());
-        memset_int_fun->set_name("memset_int");
+        memset_int_fun->set_name("memset");
 
         // void memset_float(float *s, int n)
         // std::vector<Type *> memset_float_params;
@@ -206,7 +207,7 @@ public:
         scope.push("after_main", after_main_fun);
         scope.push("_sysy_starttime", _sysy_starttime_fun);
         scope.push("_sysy_stoptime", _sysy_stoptime_fun);
-        scope.push("memset_int", memset_int_fun);
+        scope.push("memset", memset_int_fun);
         // scope.push("memset_float", memset_float_fun);
     }
 
