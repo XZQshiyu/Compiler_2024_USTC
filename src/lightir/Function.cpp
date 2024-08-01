@@ -131,11 +131,6 @@ std::string Argument::print() {
     std::string arg_ir;
     arg_ir += this->get_type()->print();
     arg_ir += " %";
-    if(this->get_name() == "memset_int")
-        arg_ir += "memset";
-    else if (this->get_name() == "memset_float")
-        arg_ir += "memset";
-    else
         arg_ir += this->get_name();
     return arg_ir;
 }

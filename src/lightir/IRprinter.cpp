@@ -13,11 +13,6 @@ std::string print_as_op(Value *v, bool print_ty) {
     if (dynamic_cast<GlobalVariable *>(v)) {
         op_ir += "@" + v->get_name();
     } else if (dynamic_cast<Function *>(v)) {
-        if(v->get_name() == "memset_int")
-            op_ir += "@memset";
-        else if (v->get_name() == "memset_float")
-            op_ir += "@memset";
-        else
         op_ir += "@" + v->get_name();
     } else if (dynamic_cast<Constant *>(v)) {
         op_ir += v->print();
