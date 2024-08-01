@@ -89,8 +89,8 @@ for case in $testcases; do
 	check_return_value $? 0 "CE" "sysy compiler error" || continue
 
 	# gcc compile asm to executable
-	riscv64-linux-gnu-gcc -static \
-		"$asm_file" "$io_dir"/io.c string.h -o "$exe_file" \
+	riscv64-linux-gnu-gcc -lc -static \
+		"$asm_file" "$io_dir"/io.c -o "$exe_file" \
 		>>$LOG
 	check_return_value $? 0 "CE" "loong gcc compiler error" || continue
 
