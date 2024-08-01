@@ -57,7 +57,7 @@ public:
         }
 
         // Name not found: handled here?
-        assert(false && "Name not found in scope");
+        assert(false && ("Name not found in scope"+name).c_str());
 
         return nullptr;
     }
