@@ -1,13 +1,9 @@
 #ifndef REGALLOCA_HPP
 #define REGALLOCA_HPP
-#include "Function.hpp"
-#include "Value.hpp"
-#include "liverange.hpp"
-#include "logging.hpp"
-
-#include <iostream>
-#include <string>
-#include <regex>
+#include "../lightir/Function.hpp"
+#include "../lightir/Value.hpp"
+#include "./liverange.hpp"
+#include "../common/logging.hpp"
 
 using namespace LRA;
 

@@ -72,6 +72,7 @@ public:
    * @ty: result type */
   Instruction(Type *ty, OpID id, BasicBlock *parent = nullptr);
   Instruction(const Instruction &) = delete;
+  // Instruction &operator=(const Instruction &) = delete;  // 显式删除拷贝赋值运算符
   virtual ~Instruction() = default;
   
   BasicBlock *get_parent() { return parent_; }
@@ -216,6 +217,9 @@ public:
   static ICmpInst *create_eq(Value *v1, Value *v2, BasicBlock *bb);
   static ICmpInst *create_ne(Value *v1, Value *v2, BasicBlock *bb);
 
+  Value *get_lhs() { return this->get_operand(0); }
+  Value *get_rhs() { return this->get_operand(1); }
+
   virtual std::string print() override;
 };
 
@@ -235,6 +239,8 @@ public:
   static FCmpInst *create_feq(Value *v1, Value *v2, BasicBlock *bb);
   static FCmpInst *create_fne(Value *v1, Value *v2, BasicBlock *bb);
 
+  Value *get_lhs() { return this->get_operand(0); }
+  Value *get_rhs() { return this->get_operand(1); }
   virtual std::string print() override;
 };
 

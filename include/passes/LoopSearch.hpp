@@ -15,6 +15,10 @@ using CFGNodePtr    = std::shared_ptr<CFGNode>;
 using CFGNodePtrSet = std::unordered_set<std::shared_ptr<CFGNode>>;
 using BBset_t       = std::unordered_set<BasicBlock *>;
 
+// analysis pass 
+/*
+    
+*/
 class LoopSearch : public Pass {
 public:
     explicit LoopSearch(Module *m, bool dump = false) : Pass(m), dump(dump) {}

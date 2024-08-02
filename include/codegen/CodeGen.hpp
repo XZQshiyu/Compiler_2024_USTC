@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ASMInstruction.hpp"
-#include "Module.hpp"
-#include "Register.hpp"
+#include "../../include/codegen/ASMInstruction.hpp"
+#include "../../include/lightir/Module.hpp"
+#include "../../include/codegen/Register.hpp"
 #include<map>
 #include<utility>
 #include<set>

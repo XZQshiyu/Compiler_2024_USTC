@@ -1,15 +1,13 @@
 #ifndef LIVERANGE_HPP
 #define LIVERANGE_HPP
 
-#include "Function.hpp"
-#include "Module.hpp"
-#include "Value.hpp"
+#include "../lightir/Function.hpp"
+#include "../lightir/Module.hpp"
+#include "../lightir/Value.hpp"
 
-#include <iostream>
 #include <map>
 #include <set>
 #include <vector>
-#include <regex>
 
 using std::map;
 using std::pair;

@@ -1,28 +1,30 @@
 #pragma once
 
-#include "ASMInstruction.hpp"
-#include "Module.hpp"
-#include "Register.hpp"
-#include "BasicBlock.hpp"
-#include "Constant.hpp"
-#include "Function.hpp"
-#include "IRprinter.hpp"
-#include "Instruction.hpp"
-#include "Module.hpp"
-#include "Value.hpp"
-#include "liverange.hpp"
-#include "regalloc.hpp"
-#include <functional>
+#include "./ASMInstruction.hpp"
+#include "../lightir/Module.hpp"
+#include "./Register.hpp"
+#include "../lightir/BasicBlock.hpp"
+#include "../lightir/Constant.hpp"
+#include "../lightir/Function.hpp"
+#include "../lightir/Instruction.hpp"
+#include "../lightir/Module.hpp"
+#include "../lightir/Value.hpp"
+#include "./liverange.hpp"
+#include "../common/logging.hpp"
+#include "./regalloc.hpp"
+#include <cassert>
+#include <cstring>
+#include <string>
 
 // #define STACK_ALIGN(x) (((x / 16) + (x % 16 ? 1 : 0)) * 16)
 #define STACK_ALIGN(x) ALIGN(x, 16)
 #define CONST_0 ConstantInt::get(0, m)
-#define FP "$fp"
-#define SP "$sp"
-#define RA_reg "$ra"
-// #a = 8, #t = 9, reserve $t0, $t1 $t8 for temporary
+#define FP "s0"
+#define SP "sp"
+#define RA_reg "ra"
+// #a = 8, #t = 9, reserve t0, t1 t8 for temporary
 #define R_USABLE (17 - 3)
-// #fa = 8, #ft=16, reserve $ft0, $ft1 for temporary
+// #fa = 8, #ft=16, reserve ft0, ft1 for temporary
 #define FR_USABLE (24 - 2)
 #define ARG_R 8
 
@@ -42,12 +44,24 @@ class CodeGenRegister {
     void
     append_inst(const char *inst, std::initializer_list<std::string> args,
                 ASMInstruction::InstType ty = ASMInstruction::Instruction) {
+        LOG(DEBUG) << "11";
         auto content = std::string(inst) + " ";
-        for (const auto &arg : args) {
-            content += arg + ", ";
+        string instr(inst);
+        if(instr == "lb" || instr == "lh" || instr == "lw" || instr == "ld" || instr == "sb" || instr == "sh" || instr == "sw" || instr == "sd"
+            || instr == "flw" || instr == "fsw" ){
+            if(args.size() != 3){
+                LOG(DEBUG) << "no";
+                assert(false);
+            }
+            content += *(args.begin()) + ", " + *(args.begin() + 2) + "(" + *(args.begin() + 1) + ")";
         }
-        content.pop_back();
-        content.pop_back();
+        else {
+            for (const auto &arg : args) {
+                content += arg + ", ";
+            }
+            content.pop_back();
+            content.pop_back();
+        }
         output.emplace_back(content, ty);
     }
 
@@ -68,7 +82,7 @@ class CodeGenRegister {
                          int bits = 12,
                          bool u = false){
         /* this function will tranfser
-            * `addi.d $a0, $fp, imm` to `add.d $a0, $fp, tmp_ireg` if imm
+            * `addi.d a0, fp, imm` to `add.d a0, fp, tmp_ireg` if imm
             * overfloats for `addi.d`. During the time we move `imm` to `tmp_ireg`,
             * another tmp ireg will be used, they can be same, but we must specify
             * it.
@@ -82,7 +96,11 @@ class CodeGenRegister {
         } else {
             assert(value2reg(ConstantInt::get(imm, m), tid, treg) == treg);
             //move to treg
-            append_inst(tinstr.c_str(),{reg1,reg2,treg});
+            if(tinstr == "ldx" || tinstr == "stx"){
+                append_inst("add", {treg, reg2, treg});
+                append_inst(instr_ir.c_str(), {reg1, treg, "0"});
+            }
+            else append_inst(tinstr.c_str(),{reg1, treg, reg2});
             //move to target
         }
     }
@@ -161,19 +179,25 @@ class CodeGenRegister {
         string name;
         if (is_float) {
             // assert(false && "not implemented!");
-            if(i==-100) name="$ft0";
+            if(i==-100) name="ft0";
             else if (1 <= i and i <= 8)
-                name = "$fa" + to_string(i - 1);
-            else if (9 <= i and i <= FR_USABLE)
-                name = "$ft" + to_string(i - 9 + 2);
+                name = "fa" + to_string(i - 1);
+            else if (9 <= i and i <= FR_USABLE){
+                if(i - 9 + 2 >= 12) {
+                    name = "fs" + to_string(i - 9 + 2 - 12 + 8);
+                }
+                else name = "ft" + to_string(i - 9 + 2);
+            }
             else
                 name = "WRONG_REG_" + to_string(i);
         } else {
-            if(i==-100) name="$t0";
+            if(i==-100) name="t0";
             else if (1 <= i and i <= 8)
-                name = "$a" + to_string(i - 1);
-            else if (9 <= i and i <= R_USABLE)
-                name = "$t" + to_string(i - 9 + 2);
+                name = "a" + to_string(i - 1);
+            else if (9 <= i and i < R_USABLE)
+                name = "t" + to_string(i - 9 + 2);
+            else if (i == R_USABLE)
+                name = "s10";
             else
                 name = "WRONG_REG_" + to_string(i);
         }
@@ -183,7 +207,7 @@ class CodeGenRegister {
 
     string tmpregname(int i, bool is_float) const {//只会用到t0 or t1
         assert(i == 0 or i == 1);
-        return (is_float ? "$ft" : "$t") + to_string(i);
+        return (is_float ? "ft" : "t") + to_string(i);
     }
 
     static pair<int, int> immRange(int bit, bool u) {
@@ -220,14 +244,15 @@ class CodeGenRegister {
     }
 
     static string suffix(Type *type) {
-        int len = typeLen(type);
-        switch (len) {
-        case 1: return ".b";
-        case 2: return ".h";
-        case 4: return type->is_float_type() ? ".s" : ".w";
-        case 8: return ".d";
-        }
-        assert(false && "no such suffix");
+        return "";
+        // int len = typeLen(type);
+        // switch (len) {
+        // case 1: return ".b";
+        // case 2: return ".h";
+        // case 4: return type->is_float_type() ? ".s" : ".w";
+        // case 8: return ".d";
+        // }
+        // assert(false && "no such suffix");
     }
 
     bool no_stack_alloca(Instruction *instr) const {//不需要栈分配的情况
@@ -289,7 +314,7 @@ class CodeGenRegister {
     RA::RegAllocator RA_int, RA_float;
     LRA::LiveRangeAnalyzer LRA_call;
     RA::RegAllocator RA_int_call, RA_float_call;
-    std::set<string> outside_func={"getint","getch","getfloat","getarray","getfarray","putint","putch","putarray","putfloat","putfarray","memset_int","memset_float","_sysy_starttime","_sysy_stoptime"};
+std::set<string> outside_func={"getint","getch","getfloat","getarray","getfarray","putint","putch","putarray","putfloat","putfarray","memset_int", "memset_float","_sysy_starttime","_sysy_stoptime"};
     std::map<BasicBlock *, std::vector<std::pair<Value *, Value *>>> phi_map;
     std::map<Constant *, std::string> ROdata;
     std::map<Function *,map<Value *,int>> RA_float_result,RA_int_result;

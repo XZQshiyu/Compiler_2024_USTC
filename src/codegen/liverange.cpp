@@ -1,13 +1,12 @@
-#include "liverange.hpp"
+#include "../../include/codegen/liverange.hpp"
 #include <stack>
 #include <map>
-#include "BasicBlock.hpp"
-#include "Function.hpp"
-#include "logging.hpp"
+#include "../../include/lightir/BasicBlock.hpp"
+#include "../../include/lightir/Function.hpp"
+#include "../../include/common/logging.hpp"
 #include<algorithm>
 #include<utility>
 
-#include <deque>
 
 using namespace LRA;
 

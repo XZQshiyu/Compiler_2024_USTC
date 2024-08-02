@@ -9,4 +9,5 @@ add_library(
     LoopInvHoist.cpp
     LoopSearch.cpp
     gvn.cpp
+    loop_info.cpp
 )

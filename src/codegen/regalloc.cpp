@@ -1,8 +1,8 @@
-#include "regalloc.hpp"
+#include "../../include/codegen/regalloc.hpp"
 
-#include "Function.hpp"
-#include "Instruction.hpp"
-#include "liverange.hpp"
+#include "../../include/lightir/Function.hpp"
+#include "../../include/lightir/Instruction.hpp"
+#include "../../include/codegen/liverange.hpp"
 
 #include <algorithm>
 

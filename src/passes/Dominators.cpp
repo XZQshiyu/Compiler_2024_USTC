@@ -121,21 +121,6 @@ void Dominators::create_idom(Function *f)
             }
         }
     }
-    // for(auto it : post_order)
-    // {
-        
-    //     LOG(INFO) << it->get_name() << " : " << idom_[it]->get_name();
-    // }
-    // std::cout << "immediate dominance of each basicblock" << std::endl;
-    // for (auto &bb : f->get_basic_blocks())
-    // {
-    //     if (idom_[&bb] != nullptr)
-    //         std::cout << "idom[" << bb.get_name() << "] is " << get_idom(&bb)->get_name() << std::endl;
-    //     else
-    //         std::cout << "idom[" << bb.get_name() << "] is "
-    //                   << "nullptr" << std::endl;
-    // }
-    // std::cout << std::endl;
 }
 
 void Dominators::create_dominance_frontier(Function *f)
@@ -164,18 +149,6 @@ void Dominators::create_dominance_frontier(Function *f)
             }
         }
     }
-
-    // std::cout << "print the dominance frontiers " << std::endl;
-    // for (auto &bb : f->get_basic_blocks())
-    // {
-    //     std::cout << bb.get_name() << " dominance frontiers is : { ";
-    //     for (auto &frontier : dom_frontier_[&bb])
-    //     {
-    //         std::cout << frontier->get_name() << " ";
-    //     }
-    //     std::cout << "}" << std::endl;
-    // }
-    // std::cout << std::endl;
 }
 
 void Dominators::create_dom_tree_succ(Function *f)
@@ -191,20 +164,4 @@ void Dominators::create_dom_tree_succ(Function *f)
         else
             dom_tree_succ_blocks_[idom_[&b]].insert(&b);
     }
-    // std::cout << "print the dominance tree succ " << std::endl;
-    // for (auto &bb : f->get_basic_blocks())
-    // {
-    //     std::cout << bb.get_name() << " : ";
-    //     for (auto &succ : dom_tree_succ_blocks_[&bb])
-    //     {
-    //         if (succ == nullptr)
-    //         {
-    //             std::cout << "nullptr";
-    //             break;
-    //         }
-    //         else
-    //             std::cout << succ->get_name() << " ";
-    //     }
-    //     std::cout << std::endl;
-    // }
 }

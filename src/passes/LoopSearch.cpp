@@ -149,7 +149,7 @@ CFGNodePtr LoopSearch::find_loop_base(std::shared_ptr<CFGNodePtrSet> set, CFGNod
 }
 void LoopSearch::run()
 {
-    // 函数块列表，对每个函数，找出其所有的循环，和循环的入口，便于循环不变量外提使用
+    // 函数块列表，对每个函数，找出其所有的循环，和循环的入口
     // 对于每个函数，先通过tarjan找到外层循环，然后破坏外层循环的入口结点，再调用tarjan算法找其内层子循环
     auto &func_list = m_->get_functions();
     for (auto &func1 : func_list)
@@ -250,10 +250,6 @@ void LoopSearch::run()
 
             // TODO:
             reserved.clear();
-            // for (auto node : nodes)
-            // {
-            //     delete node;
-            // }
             for (auto node : nodes)
                 node.reset();
             nodes.clear();
