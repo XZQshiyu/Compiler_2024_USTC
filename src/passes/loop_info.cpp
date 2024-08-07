@@ -11,19 +11,25 @@
 
 void LoopInfo::run()
 {
+    LOG(INFO) << "start loop info";
     // 清空原先存在的循环信息
     clear();
     // 得到dominator信息
     dominators_ = std::make_unique<Dominators>(m_);
     // 建立支配树
     dominators_->run();
+    LOG(INFO) << "dominators done";
 
     for (auto &func : m_->get_functions())
     {
         // 忽略所有的外部io库函数(只有函数声明)
         // TODO: 这里有一个问题，是否存在有声明的函数，但是没有定义的函数
         if (func.is_declaration())
+        {
+            LOG(INFO) << "skip " << func.get_name();
             continue;
+        }
+        LOG(INFO) << "start " << func.get_name();
         // 对于每个func, 找到所有循环信息
         std::unordered_map<BasicBlock *, loop_info_struct> loops;
         for (auto &bb : func.get_basic_blocks())
@@ -93,6 +99,7 @@ void LoopInfo::run()
         }
         func_loop_info_[&func].func_loops = std::move(loops);
     }
+    print_loop_info();
 }
 
 std::set<BasicBlock *> LoopInfo::find_loop_by_latch(BasicBlock *header, BasicBlock *latch)
@@ -238,4 +245,60 @@ auto LoopInfo::scev_analysis(BasicBlock *header, const loop_info_struct &loop) -
     if(ret.initial == nullptr || ret.step == nullptr)
         return std::nullopt;
     return ret;
+}
+
+std::vector<BasicBlock *> LoopInfo::func_loop_info::get_topo_order() const 
+{
+    std::vector<BasicBlock *> ret;
+    std::unordered_map<BasicBlock *, size_t> parent_cnt;
+    for(auto &loop : func_loops)
+    {
+        parent_cnt[loop.first] = 0;
+    }
+    for(auto &loop : func_loops)
+    {
+        for(auto &sub_loop : loop.second.sub_loops)
+        {
+            parent_cnt[sub_loop]++;
+        }
+    }
+    while(!parent_cnt.empty())
+    {
+        for(auto it = parent_cnt.begin(); it != parent_cnt.end();)
+        {
+            if(it->second == 0)
+            {
+                ret.push_back(it->first);
+                for(auto &sub_loop : func_loops.at(it->first).sub_loops)
+                {
+                    parent_cnt[sub_loop]--;
+                }
+                it = parent_cnt.erase(it);
+            }
+            else
+            {
+                it++;
+            }
+        }
+    }
+    return ret;
+} 
+
+void LoopInfo::print_loop_info() const {
+    for (auto &&[func, func_loop] : func_loop_info_) {
+        std::cout << func->get_name() << std::endl;
+        for (auto &&[header, loop] : func_loop.func_loops) {
+            std::cout << "loop latches: " << header->get_name() << std::endl;
+            for (auto &&latch : loop.latches) {
+                std::cout << latch->get_name() << ' ';
+            }
+            std::cout << std::endl;
+            std::cout << "loop bbs: " << std::endl;
+            for (auto &&bb : loop.loop_bbs) {
+                std::cout << bb->get_name() << ' ';
+            }
+            std::cout << std::endl;
+        }
+        std::cout << std::endl;
+    }
 }

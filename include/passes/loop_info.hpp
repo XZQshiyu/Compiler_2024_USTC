@@ -68,7 +68,7 @@ class LoopInfo : public Pass
         // 支配树信息
         std::unique_ptr<Dominators> dominators_;
         
-
+        void print_loop_info() const;
 };
 
 #endif  

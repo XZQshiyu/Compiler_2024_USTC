@@ -4,6 +4,7 @@
 #include <iostream>
 #include <list>
 #include <string>
+#include <cassert>
 
 class Type;
 class Value;
@@ -29,6 +30,27 @@ class Value {
     void replace_use_with_if(Value *new_val, std::function<bool(Use*)> pred);
 
     virtual std::string print() = 0;
+
+    template<typename T>
+    T* as() 
+    {
+      static_assert(std::is_base_of<Value, T>::value, "T must be a subclass of Value");
+      const auto ptr = dynamic_cast<T*>(this);
+      assert(ptr);
+      return ptr;
+    }
+    template <typename T>
+    [[nodiscard]] const T* as() const {
+        static_assert(std::is_base_of<Value, T>::value, "T must be a subclass of Value");
+        const auto ptr = dynamic_cast<const T*>(this);
+        assert(ptr);
+        return ptr;
+    }
+    template <typename T>
+    [[nodiscard]] bool is() const {
+        static_assert(std::is_base_of<Value, T>::value, "T must be a subclass of Value");
+        return dynamic_cast<const T*>(this);
+    }
 
   private:
     Type *type_;

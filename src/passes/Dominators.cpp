@@ -1,5 +1,6 @@
 #include "Dominators.hpp"
 #include "logging.hpp"
+#include <fstream>
 void Dominators::run()
 {
     LOG(INFO) << "enter here";
@@ -36,6 +37,31 @@ void Dominators::post_order_traversal(BasicBlock *bb, BBSet &visit)
     }
     post_order_num[bb] = post_order.size();
     post_order.push_back(bb);
+    post_order_map[bb->get_parent()].push_back(bb);
+}
+void Dominators::print_dfs_post_order()
+{
+    for(auto &f : m_->get_functions())
+    {
+        LOG(INFO) << f.get_name();
+        int cnt = 0;
+        for(auto &bb : post_order_map[&f])
+        {
+            LOG(INFO) << bb->get_name() << " : " << cnt++;
+        }
+    }
+}
+void Dominators::print_dfs_reverse_post_order()
+{
+    for(auto &f : m_->get_functions())
+    {
+        LOG(INFO) << f.get_name();
+        int cnt = 0;
+        for(auto &bb : reverse_post_order_map[&f])
+        {
+            LOG(INFO) << bb->get_name() << " : " << cnt++;
+        }
+    }
 }
 void Dominators::create_idom(Function *f)
 {
@@ -52,17 +78,9 @@ void Dominators::create_idom(Function *f)
     post_order.reverse();
     for(auto it : post_order)
     {
-        LOG(INFO) << it->get_name();
+        reverse_post_order_map[it->get_parent()].push_back(it);
         idom_[it] = nullptr;
     }
-    /*
-    std::cout << "postorder of the basicblocks is : " << std::endl;
-    for (auto bb : post_order)
-    {
-        std::cout << bb->get_name() << " : " << post_order_num[bb] << std::endl;
-    }
-    std::cout << std::endl;
-    */
     // initialize the dominators arry
     idom_[entry] = entry;
     bool changed = true;
@@ -164,4 +182,50 @@ void Dominators::create_dom_tree_succ(Function *f)
         else
             dom_tree_succ_blocks_[idom_[&b]].insert(&b);
     }
+}
+
+void Dominators::dump_cfg(Function *f)
+{
+    if(f->is_declaration())
+        return;
+    std::vector<std::string> edge_set;
+    for (auto &bb : f->get_basic_blocks()) {
+        for (auto succ : bb.get_succ_basic_blocks()) {
+            edge_set.push_back('\t' + bb.get_name() + "->" + succ->get_name() + ";\n");
+        }
+    }
+    std::string digraph = "digraph G {\n";
+    for (auto &edge : edge_set) {
+        digraph += edge;
+    }
+    digraph += "}\n";
+    std::ofstream file_output;
+    file_output.open(f->get_name() + "_cfg.dot", std::ios::out);
+    file_output << digraph;
+    file_output.close();
+    std::string dot_cmd = "dot -Tpng " + f->get_name() + "_cfg.dot" + " -o " + f->get_name() + "_cfg.png";
+    std::system(dot_cmd.c_str());
+}
+
+void Dominators::dump_dominator_tree(Function *f)
+{
+    if(f->is_declaration())
+        return;
+    std::vector<std::string> edge_set;
+    for (auto &b : f->get_basic_blocks()) {
+        if (idom_.find(&b) != idom_.end() && idom_[&b] != &b) {
+            edge_set.push_back('\t' + idom_[&b]->get_name() + "->" + b.get_name() + ";\n");
+        }
+    }
+    std::string digraph = "digraph G {\n";
+    for (auto &edge : edge_set) {
+        digraph += edge;
+    }
+    digraph += "}\n";
+    std::ofstream file_output;
+    file_output.open(f->get_name() + "_dom_tree.dot", std::ios::out);
+    file_output << digraph;
+    file_output.close();
+    std::string dot_cmd = "dot -Tpng " + f->get_name() + "_dom_tree.dot" + " -o " + f->get_name() + "_dom_tree.png";
+    std::system(dot_cmd.c_str());
 }

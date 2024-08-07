@@ -276,7 +276,7 @@ public:
   static BranchInst *create_br(BasicBlock *if_true, BasicBlock *bb);
 
   bool is_cond_br() const { return get_num_operand() == 3; }
-
+  Value *get_condition() const { return this->get_operand(0); }
   virtual std::string print() override;
 };
 
@@ -483,5 +483,15 @@ public:
     this->add_operand(val);
     this->add_operand(pre_bb);
   }
+  std::vector<std::pair<Value *, BasicBlock *>> get_phi_pairs()
+  {
+    std::vector<std::pair<Value *, BasicBlock *>> res;
+    for (size_t i = 0; i < get_num_operand(); i += 2)
+    {
+      res.push_back({this->get_operand(i), this->get_operand(i + 1)->as<BasicBlock>()});
+    }
+    return res;
+  }
+
   virtual std::string print() override;
 };

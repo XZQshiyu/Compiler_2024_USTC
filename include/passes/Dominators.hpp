@@ -43,6 +43,12 @@ public:
 
     return false;
   }
+  void print_dfs_post_order();
+  void print_dfs_reverse_post_order();
+  void dump_cfg(Function *f);
+  void dump_dominator_tree(Function *f);
+  std::vector<BasicBlock *> get_post_order(Function *f) { return post_order_map[f]; }
+  std::vector<BasicBlock *> get_reverse_post_order(Function *f) { return reverse_post_order_map[f]; }
 
 private:
   void create_idom(Function *f);
@@ -58,4 +64,6 @@ private:
   std::map<BasicBlock *, BasicBlock *> idom_{};          // 直接支配
   std::map<BasicBlock *, BBSet> dom_frontier_{};         // 支配边界集合
   std::map<BasicBlock *, BBSet> dom_tree_succ_blocks_{}; // 支配树中的后继节点
+  std::unordered_map<Function *, std::vector<BasicBlock *>> post_order_map{};
+  std::unordered_map<Function *, std::vector<BasicBlock *>> reverse_post_order_map{};
 };

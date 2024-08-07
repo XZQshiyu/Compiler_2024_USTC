@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# 检查工具链是否安装
+if ! command -v riscv64-unknown-elf-gcc &> /dev/null; then
+    echo "riscv64-unknown-elf-gcc could not be found, please install the RISC-V toolchain."
+    exit 1
+fi
+
 project_dir=$(realpath ../)
 io_dir=$(realpath "$project_dir"/src/io)
 output_dir=code_stu
@@ -89,10 +95,10 @@ for case in $testcases; do
 	check_return_value $? 0 "CE" "sysy compiler error" || continue
 
 	# gcc compile asm to executable
-	riscv64-linux-gnu-gcc -static \
+	riscv64-unknown-elf-gcc -static \
 		"$asm_file" "$io_dir"/io.c -o "$exe_file" \
 		>>$LOG
-	check_return_value $? 0 "CE" "loong gcc compiler error" || continue
+	check_return_value $? 0 "CE" "riscv gcc compiler error" || continue
 
 	# qemu run
 	if [ -e "$in_file" ]; then
@@ -100,7 +106,6 @@ for case in $testcases; do
     else
         exec_cmd="qemu-riscv64 $exe_file >$out_file"
     fi
-
 
 	start=$(date +%s%N)  # 获取当前时间的纳秒时间戳
 
@@ -125,11 +130,6 @@ for case in $testcases; do
     	fi
 	fi
 	echo $ret >>"$out_file"
-	# sed -i '1{/^$/d;}' "$out_file"
-	# append return value 主函数的返回值是在这里被放回去的
-	# echo $ret >>"$out_file"
-
-	
 
 	# compare output
 	diff --strip-trailing-cr -wB "$std_out_file" "$out_file" -y >>$LOG

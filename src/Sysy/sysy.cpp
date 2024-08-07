@@ -8,6 +8,8 @@
 #include "PassManager.hpp"
 #include "sysy_builder.hpp"
 #include "gvn.hpp"
+#include "LoopAnalysis.hpp"
+// #include "loop_info.hpp"
 
 #include <filesystem>
 #include <fstream>
@@ -30,6 +32,8 @@ struct Config
     bool const_prop{false};
     bool gvn{false};
     bool loop_inv_hoist{false};
+    bool loop_info{false};
+    bool loop_analysis{false};
 
     Config(int argc, char **argv) : argc(argc), argv(argv)
     {
@@ -51,48 +55,29 @@ private:
 
 string define_replacement(string origin_file)
 {
-    // LOG(DEBUG)<<origin_file;
     std::fstream infile, outfile;
     infile.open(origin_file.c_str(), std::ios::in);
-    // LOG(DEBUG)<<infile.is_open();
-    // LOG(DEBUG)<<"in\n";
     std::string strname = "define_temp.sy";
     outfile.open(strname.c_str(), std::ios::out);
-    // LOG(DEBUG)<<"out "<<infile.is_open()<<"\n";
     if (!infile.is_open())
         return "";
-    // LOG(DEBUG)<<"out\n";
     std::string strLine;
 
-    // #define starttime() _sysy_starttime(__LINE__)
-    // #define stoptime()  _sysy_stoptime(__LINE__)
-
     int cntline = 0;
-    // LOG(DEBUG)<<cntline<<"\n";
     while (getline(infile, strLine))
     {
         cntline++;
-        //   LOG(DEBUG)<<cntline<<"\n";
         while (strLine[0] == '\t')
         {
             outfile << '\t';
-            LOG(INFO) << "tihuan";
             strLine.erase(strLine.begin());
         }
         if (strLine.find("starttime()") != string::npos)
-        {
-            LOG(INFO) << "find starttime()";
             outfile << "_sysy_starttime(" + std::to_string(cntline) + ");" << std::endl;
-        }
         else if (strLine.find("stoptime()") != string::npos)
-        {
-            LOG(INFO) << "find stoptime()";
             outfile << "_sysy_stoptime(" + std::to_string(cntline) + ");" << std::endl;
-        }
         else
-        {
             outfile << strLine << std::endl;
-        }
     }
     outfile.close();
     return "define_temp.sy";
@@ -122,13 +107,24 @@ int main(int argc, char **argv)
     }
 
     PassManager PM(m.get());
+    
 
-    if (config.mem2reg)
+    /*
+        transform the llvm ir to SSA form
+        without ssa form, loop analysis and optimization will be difficult
+    */
+    PM.add_pass<Mem2Reg>();
+    PM.add_pass<DeadCode>();
+    // analysis pass
+    // if(config.loop_info)
+    // {
+    //     PM.add_pass<LoopInfo>();
+    // }
+    if(config.loop_analysis)
     {
-        PM.add_pass<Mem2Reg>();
-        LOG(INFO) << "finish mem2reg and start deadcode";
-        PM.add_pass<DeadCode>();
+        PM.add_pass<LoopAnalysis>();
     }
+    // transform pass
     // 指令降级
     if (config.const_prop)
     {
@@ -212,6 +208,14 @@ void Config::parse_cmd_line()
         else if (argv[i] == "-loop-inv-hoist"s)
         {
             loop_inv_hoist = true;
+        }
+        else if (argv[i] == "-loop-info"s)
+        {
+            loop_info = true;
+        }
+        else if(argv[i] == "-loop-analysis"s)
+        {
+            loop_analysis = true;
         }
         else
         {

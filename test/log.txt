@@ -1,87 +1,0 @@
-==========./functional//00_main.sy==========
-==========./functional//01_var_defn2.sy==========
-==========./functional//02_var_defn3.sy==========
-==========./functional//03_arr_defn2.sy==========
-==========./functional//04_arr_defn3.sy==========
-==========./functional//05_arr_defn4.sy==========
-==========./functional//06_const_var_defn2.sy==========
-==========./functional//07_const_var_defn3.sy==========
-==========./functional//08_const_array_defn.sy==========
-==========./functional//09_func_defn.sy==========
-==========./functional//10_var_defn_func.sy==========
-==========./functional//11_add2.sy==========
-==========./functional//12_addc.sy==========
-==========./functional//13_sub2.sy==========
-==========./functional//14_subc.sy==========
-==========./functional//15_mul.sy==========
-==========./functional//16_mulc.sy==========
-==========./functional//17_div.sy==========
-==========./functional//18_divc.sy==========
-==========./functional//19_mod.sy==========
-==========./functional//20_rem.sy==========
-==========./functional//21_if_test2.sy==========
-==========./functional//22_if_test3.sy==========
-==========./functional//23_if_test4.sy==========
-==========./functional//24_if_test5.sy==========
-==========./functional//25_while_if.sy==========
-==========./functional//26_while_test1.sy==========
-==========./functional//27_while_test2.sy==========
-==========./functional//28_while_test3.sy==========
-==========./functional//29_break.sy==========
-==========./functional//30_continue.sy==========
-==========./functional//31_while_if_test1.sy==========
-==========./functional//32_while_if_test2.sy==========
-==========./functional//33_while_if_test3.sy==========
-==========./functional//34_arr_expr_len.sy==========
-==========./functional//35_op_priority1.sy==========
-==========./functional//36_op_priority2.sy==========
-==========./functional//37_op_priority3.sy==========
-==========./functional//38_op_priority4.sy==========
-==========./functional//39_op_priority5.sy==========
-==========./functional//40_unary_op.sy==========
-==========./functional//41_unary_op2.sy==========
-==========./functional//42_empty_stmt.sy==========
-==========./functional//43_logi_assign.sy==========
-==========./functional//44_stmt_expr.sy==========
-==========./functional//45_comment1.sy==========
-==========./functional//46_hex_defn.sy==========
-==========./functional//47_hex_oct_add.sy==========
-==========./functional//48_assign_complex_expr.sy==========
-==========./functional//49_if_complex_expr.sy==========
-==========./functional//50_short_circuit.sy==========
-==========./functional//51_short_circuit3.sy==========
-==========./functional//52_scope.sy==========
-==========./functional//53_scope2.sy==========
-==========./functional//54_hidden_var.sy==========
-==========./functional//55_sort_test1.sy==========
-==========./functional//56_sort_test2.sy==========
-==========./functional//57_sort_test3.sy==========
-==========./functional//58_sort_test4.sy==========
-==========./functional//59_sort_test5.sy==========
-==========./functional//60_sort_test6.sy==========
-==========./functional//61_sort_test7.sy==========
-==========./functional//62_percolation.sy==========
-==========./functional//63_big_int_mul.sy==========
-==========./functional//64_calculator.sy==========
-==========./functional//65_color.sy==========
-==========./functional//66_exgcd.sy==========
-==========./functional//67_reverse_output.sy==========
-==========./functional//68_brainfk.sy==========
-==========./functional//69_expr_eval.sy==========
-==========./functional//70_dijkstra.sy==========
-==========./functional//71_full_conn.sy==========
-==========./functional//72_hanoi.sy==========
-==========./functional//73_int_io.sy==========
-==========./functional//74_kmp.sy==========
-==========./functional//75_max_flow.sy==========
-==========./functional//76_n_queens.sy==========
-==========./functional//77_substr.sy==========
-==========./functional//78_side_effect.sy==========
-==========./functional//79_var_name.sy==========
-==========./functional//80_chaos_token.sy==========
-==========./functional//81_skip_spaces.sy==========
-==========./functional//82_long_func.sy==========
-==========./functional//83_long_array.sy==========
-==========./functional//84_long_array2.sy==========
-==========./functional//85_long_code.sy==========
-==========./functional//86_long_code2.sy==========
