@@ -18,9 +18,9 @@ void LoopAnalysis::run()
     LOG(INFO) << "dominators done";
 
     LOG(INFO) << "dominator tree dfs post order";
-    dominators_->print_dfs_post_order();
+    // dominators_->print_dfs_post_order();
     LOG(INFO) << "dominator tree dfs reverse post order";
-    dominators_->print_dfs_reverse_post_order();
+    // dominators_->print_dfs_reverse_post_order();
     // for(auto &f : m_->get_functions())
     // {
     //     if(f.is_declaration())
@@ -34,170 +34,241 @@ void LoopAnalysis::run()
         if(f.is_declaration())
             continue;
         std::vector<Loop> loops;
-        auto block_list = dominators_->get_post_order(&f);
+        auto block_list = dominators_->get_reverse_post_order(&f);
         LOG(INFO) << "func_name: " << f.get_name();
-        for(auto bb : block_list)
+        // get loop body
+        std::unordered_map<BasicBlock *, Loop> loop_map;
+        for(auto &bb : f.get_basic_blocks())
         {
-            LOG(INFO) << "block name: " << bb->get_name();
-            const auto last_inst = bb->get_terminator();
-            // 结束指令必须是br/ret, 这里筛选出br
-            if(last_inst->get_instr_type() != Instruction::OpID::br)
-                continue;
-            // 筛选条件跳转指令
-            const auto br = last_inst->as<BranchInst>();
-            if(!br->is_cond_br())
-                continue;
-            LOG(INFO) << "header block name: " << bb->get_name();
-            const auto cmp = br->get_condition();
-            auto cmp_inst = cmp->as<ICmpInst>();
-            auto lhs = cmp_inst->get_operand(0);
-            auto rhs = cmp_inst->get_operand(1);
-            
-            Value *indvar = nullptr;
-            int step = 0;
-            LOG(INFO) << br->print();
-            LOG(INFO) << cmp_inst->print();
-            if(lhs->is<Instruction>() && lhs->as<Instruction>()->is_phi())
+            LOG(INFO) << "bb_name: " << bb.get_name();
+            // get header, body, latch
+            for(auto &pre_bb : bb.get_pre_basic_blocks())
             {
-                LOG(INFO) << lhs->get_name() << " is phi";
-                auto phi_inst = lhs->as<PhiInst>();
-                for(auto [val, bb] : phi_inst->get_phi_pairs())
+                LOG(INFO) << "pre_bb_name: " << pre_bb->get_name();
+                if(dominators_->is_dom(&bb, pre_bb))
                 {
-                    if(val->is<IBinaryInst>())
+                    LOG(INFO) << "find a header";
+                    LOG(INFO) << "pre_bb_name: " << pre_bb->get_name();
+                    if(loop_map.find(&bb) == loop_map.end())
                     {
-                        auto bin_inst = val->as<IBinaryInst>();
-                        if(bin_inst->get_instr_type() == Instruction::OpID::add)
+                        LOG(INFO) << "create a new loop";
+                        Loop loop;
+                        loop.header = &bb;
+                        loop_map[&bb] = loop; 
+                    }
+                    LOG(INFO) << "add latch";
+                    auto &loop = loop_map[&bb];
+                    LOG(INFO) << "finish add latch";
+                    loop.latch.push_back(pre_bb);
+                    // get body
+                    LOG(INFO) << "get loop body";
+                    loop.body.merge(get_loop_body(&bb, pre_bb));
+                    // LOG(INFO) << "reach here";
+                }
+                LOG(INFO) << "finish";
+            }
+            // get exit and preheader
+            if(loop_map.find(&bb) != loop_map.end())
+            {
+                // pre_header
+                auto &loop = loop_map[&bb];
+                LOG(INFO) << bb.get_name();
+                LOG(INFO) << "loop header: " << loop.header->get_name();
+                std::vector<BasicBlock*> pre_bb_list;
+                for(auto pre_bb : bb.get_pre_basic_blocks())
+                {
+                    if(loop.body.find(pre_bb) == loop.body.end())
+                    {
+                        pre_bb_list.push_back(pre_bb);
+                    }
+                }
+                if(pre_bb_list.size() == 1 && pre_bb_list[0]->get_succ_basic_blocks().size() == 1)
+                {
+                    loop.preheader = pre_bb_list[0];
+                }
+                // exit block
+                auto header = loop.header;
+                for(auto succ_bb :header->get_succ_basic_blocks())
+                {
+                    if(loop.body.find(succ_bb) == loop.body.end())
+                    {
+                        loop.exit = succ_bb;
+                        break;
+                    }
+                }
+                // get indvar, initial, bound, step
+                if(loop.latch.size() > 1)
+                {
+                    LOG(INFO) << "latch size > 1";
+                    continue;
+                }
+                if(loop.exit == loop.header)
+                {
+                    LOG(INFO) << "exit == header";
+                    continue;
+                }
+                auto branch = header->get_terminator()->as<BranchInst>();
+                if(!branch->is_cond_br())
+                {
+                    LOG(INFO) << "branch is not cond_br";
+                    continue;
+                }
+                auto cond = branch->get_condition();
+                if(!cond->is<ICmpInst>())
+                {
+                    LOG(INFO) << "cond is not icmp";
+                    continue;
+                }
+                auto icmp = cond->as<ICmpInst>();
+                if(icmp->get_operand(0)->is<PhiInst>())
+                {
+                    auto phi = icmp->get_operand(0)->as<PhiInst>();
+                    LOG(INFO) << phi->get_name();
+                    loop.indvar = phi;
+                    loop.bound = icmp->get_operand(1);
+                    auto pairs = phi->get_phi_pairs();
+                    for(auto &pair : pairs)
+                    {
+                        LOG(INFO) << pair.first->print() << " " << pair.second->get_name();
+                        if(pair.second == loop.preheader)
                         {
-                            indvar = lhs->as<PhiInst>();
-                            step = bin_inst->get_operand(1)->as<ConstantInt>()->get_value();
-                            break;
+                            loop.initial = pair.first;
+                        }
+                        else
+                        {
+                            auto next = pair.first;
+                            if(next->is<IBinaryInst>())
+                            {
+                                auto bin = next->as<IBinaryInst>();
+                                if(bin->get_instr_type() == Instruction::OpID::add)
+                                {
+                                    loop.it_type = Instruction::OpID::add;
+                                    if(bin->get_operand(0) == phi)
+                                    {
+                                        loop.step = bin->get_operand(1);
+                                    }
+                                    else if(bin->get_operand(1) == phi)
+                                    {
+                                        loop.step = bin->get_operand(0);
+                                    }
+                                }
+                                else if(bin->get_instr_type() == Instruction::OpID::sub)
+                                {
+                                    loop.it_type = Instruction::OpID::sub;
+                                    if(bin->get_operand(0) == phi)
+                                    {
+                                        loop.step = bin->get_operand(1);
+                                    }
+                                    else if(bin->get_operand(1) == phi)
+                                    {
+                                        loop.step = bin->get_operand(0);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
-            }
-            else if(rhs->is<Instruction>() && rhs->as<Instruction>()->is_phi())
-            {
-                LOG(INFO) << rhs->get_name() << " is phi";
-                auto phi_inst = rhs->as<PhiInst>();
-                for(auto [val, bb] : phi_inst->get_phi_pairs())
+                else if(icmp->get_operand(1)->is<PhiInst>())
                 {
-                    if(val->is<IBinaryInst>())
+                    auto phi = icmp->get_operand(1)->as<PhiInst>();
+                    loop.indvar = phi;
+                    loop.bound = icmp->get_operand(0);
+                    auto pairs = phi->get_phi_pairs();
+                    for(auto &pair : pairs)
                     {
-                        auto bin_inst = val->as<IBinaryInst>();
-                        if(bin_inst->get_instr_type() == Instruction::OpID::add)
+                        if(pair.second == loop.preheader)
                         {
-                            indvar = rhs->as<PhiInst>();
-                            step = bin_inst->get_operand(1)->as<ConstantInt>()->get_value();
-                            break;
+                            loop.initial = pair.first;
+                        }
+                        else
+                        {
+                            auto next = pair.first;
+                            if(next->is<IBinaryInst>())
+                            {
+                                auto bin = next->as<IBinaryInst>();
+                                if(bin->get_instr_type() == Instruction::OpID::add)
+                                {
+                                    loop.it_type = Instruction::OpID::add;
+                                    if(bin->get_operand(0) == phi)
+                                    {
+                                        loop.step = bin->get_operand(1);
+                                    }
+                                    else if(bin->get_operand(1) == phi)
+                                    {
+                                        loop.step = bin->get_operand(0);
+                                    }
+                                }
+                                else if(bin->get_instr_type() == Instruction::OpID::sub)
+                                {
+                                    loop.it_type = Instruction::OpID::sub;
+                                    if(bin->get_operand(0) == phi)
+                                    {
+                                        loop.step = bin->get_operand(1);
+                                    }
+                                    else if(bin->get_operand(1) == phi)
+                                    {
+                                        loop.step = bin->get_operand(0);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
+                else
+                {
+                    LOG(INFO) << "icmp is not phi";
+                    continue;
+                }
+
             }
-            else
-                continue;
-            LOG(INFO) << "reach_here_1";
-            if(step == 0)
-                continue;
-            LOG(INFO) << "reach_here_2";
-            // 获取循环头和尾
-            const auto header = bb;
             
-            const auto exit = br->get_operand(2)->as<BasicBlock>();
-            if(!dominators_->is_dom(header, bb))
-                continue;
-            LOG(INFO) << "reach_here_3";
-            auto indvar_inst = indvar->as<Instruction>();
-            if(!indvar_inst->is_phi() || indvar_inst->get_parent() != header)
-                continue;
-            LOG(INFO) << "reach_here_4";
-            if(!is_invariant(lhs == indvar ? rhs : lhs, header))
-                continue;
-            LOG(INFO) << "reach_here_5";
-            Value *initial = nullptr;
-            if(!get_initial_value(indvar, latch, initial))
-                continue;
-            LOG(INFO) << "reach_here_6";
-            if(!check_cmp_condition(cmp_inst, initial, lhs == indvar ? rhs : lhs, step))
-                continue;
-            LOG(INFO) << "reach_here_7";
-            loops.push_back({header, latch, indvar, lhs, initial, lhs == indvar ? rhs : lhs, step});
+        }
+        LOG(INFO) << "finish get loop body";
+        for(auto it : loop_map)
+        {
+            loops.push_back(it.second);
         }
         loop_info[&f] = loops;
     }
-
+    LOG(INFO) << "finish loop analysis";
     print_loop_info();
 }
-bool LoopAnalysis::match_indvar_step(Value *val, Value*& indvar, int& step)
-{
-    if(!val->is<IBinaryInst>())
-        return false;
-    auto bin_inst = val->as<IBinaryInst>();
-    if(bin_inst->get_instr_type() != Instruction::OpID::add)
-        return false;
-    auto lhs = bin_inst->get_operand(0);
-    indvar = lhs;
-    auto rhs = bin_inst->get_operand(1);
-    if(!rhs->is<ConstantInt>())
-        return false;
-    step = rhs->as<ConstantInt>()->get_value();
-    return true;
-}
 
-bool LoopAnalysis::is_invariant(Value *val, BasicBlock *header)
+std::set<BasicBlock *> LoopAnalysis::get_loop_body(BasicBlock *header, BasicBlock *latch)
 {
-    // 判断 val 是否在循环头部是不变的
-    if(val->is<ConstantInt>())
-        return true;
-    if(val->is<Argument>())
-        return true;
-    if(!val->is<Instruction>())
-        return false;
-    auto inst = val->as<Instruction>();
-    return dominators_->is_dom(inst->get_parent(), header);
-}
-bool LoopAnalysis::get_initial_value(Value *phi, BasicBlock *latch, Value *&initial)
-{
-    // 获取循环变量的初始值
-    auto phi_inst = phi->as<PhiInst>();
-    for(auto [val, bb] : phi_inst->get_phi_pairs())
+    std::set<BasicBlock *> loop_body;
+    loop_body.insert(header);
+    loop_body.insert(latch);
+    std::queue<BasicBlock *> q;
+    q.push(latch);
+    while(!q.empty())
     {
-        if(bb != latch)
+        auto bb = q.front();
+        q.pop();
+        LOG(INFO) << "bb_name: " << bb->get_name();
+        if(bb == header)
+            continue;
+        for(auto *pre_bb : bb->get_pre_basic_blocks())
         {
-            if(initial)
-                return false;
-            initial = val;
+            if(loop_body.find(pre_bb) == loop_body.end())
+            {
+                loop_body.insert(pre_bb);
+                q.push(pre_bb);
+            }
         }
     }
-    return true;
+    return loop_body;
 }
 
-bool LoopAnalysis::check_cmp_condition(ICmpInst *cmp_inst, Value *initial, Value *bound, int step)
+std::vector<BasicBlock *> LoopAnalysis::get_topo_order(Function *f) const
 {
-    auto cmp = cmp_inst->get_instr_type();
-    if(cmp == ICmpInst::OpID::ne)
+    std::vector<BasicBlock *> block_list;
+    auto rpo = dominators_->get_reverse_post_order(f);
+    for(auto &bb : rpo)
     {
-        auto bound_val = bound->as<ConstantInt>()->get_value();
-        auto initial_val = initial->as<ConstantInt>()->get_value();
-        if((bound_val - initial_val) % step)
-            return false;
-        if(step > 0 && initial_val >= bound_val)
-            return false;
-        if(step < 0 && initial_val <= bound_val)
-            return false;
+        block_list.push_back(bb);
     }
-    else if(cmp == ICmpInst::OpID::lt)
-    {
-        if(step <= 0)
-            return false;
-    }
-    else if(cmp == ICmpInst::OpID::gt)
-    {
-        if(step >= 0)
-            return false;
-    }
-    else
-        return false;
-    return true;
+    return block_list;
 }
 
 void LoopAnalysis::print_loop_info() const {
@@ -206,13 +277,58 @@ void LoopAnalysis::print_loop_info() const {
         LOG(INFO) << "function: " << f.first->get_name();
         for(auto &loop : f.second)
         {
-            LOG(INFO) << "loop header: " << loop.header->get_name();
-            LOG(INFO) << "loop latch: " << loop.latch->get_name();
-            LOG(INFO) << "indvar: " << loop.indvar->get_name();
-            LOG(INFO) << "next: " << loop.next->get_name();
-            LOG(INFO) << "initial: " << loop.initial->get_name();
-            LOG(INFO) << "bound: " << loop.bound->get_name();
-            LOG(INFO) << "step: " << loop.step;
+            if(loop.body.empty())
+                continue;
+            LOG(INFO) << "loop header: " << (loop.header ? loop.header->get_name() : "nullptr");
+            LOG(INFO) << "loop preheader: " << (loop.preheader ? loop.preheader->get_name() : "nullptr");
+            LOG(INFO) << "loop latch: ";
+            for(auto &bb : loop.latch)
+            {
+                LOG(INFO) << bb->get_name();
+            }
+            LOG(INFO) << "loop body: ";
+            for(auto &bb : loop.body)
+            {
+                LOG(INFO) << bb->get_name();
+            }
+            LOG(INFO) << "loop exit: " << (loop.exit ? loop.exit->get_name() : "nullptr");
+            LOG(INFO) << "indvar: " << (loop.indvar ? loop.indvar->get_name() : "nullptr");
+            if(loop.initial->is<ConstantInt>())
+            {
+                LOG(INFO) << "initial: " << loop.initial->as<ConstantInt>()->get_value();
+            }
+            else if(loop.initial->is<Instruction>())
+            {
+                LOG(INFO) << "initial: " << loop.initial->get_name();
+            }
+            else
+                LOG(INFO) << "nullptr";
+            if(loop.bound->is<ConstantInt>())
+            {
+                LOG(INFO) << "bound: " << loop.bound->as<ConstantInt>()->get_value();
+            }
+            else if(loop.bound->is<Instruction>())
+            {
+                LOG(INFO) << "bound: " << loop.bound->get_name();
+            }
+            else
+                LOG(INFO) << "nullptr";
+            if(loop.step->is<ConstantInt>())
+            {
+                LOG(INFO) << "step: " << loop.step->as<ConstantInt>()->get_value();
+            }
+            else if(loop.step->is<Instruction>())
+            {
+                LOG(INFO) << "step: " << loop.step->get_name();
+            }
+            else
+                LOG(INFO) << "nullptr";
+            if(loop.it_type == Instruction::OpID::add)
+                LOG(INFO) << "it_type: add";
+            else if(loop.it_type == Instruction::OpID::sub)
+                LOG(INFO) << "it_type: sub";
+            else
+                LOG(INFO) << "nullptr";
         }
     }
 }

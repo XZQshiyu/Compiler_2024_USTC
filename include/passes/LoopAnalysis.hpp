@@ -19,14 +19,21 @@
 struct Loop final
 {
     BasicBlock *header;
-    BasicBlock *latch;
+    BasicBlock *preheader;
+    std::vector<BasicBlock *> latch;
+    std::set<BasicBlock *> body;
     BasicBlock *exit;
-    
+
     Value *indvar;
-    Value *next;
     Value *initial;
     Value *bound;
-    int step;
+    Value *step;
+    Instruction::OpID it_type;
+
+    // 默认构造函数
+    Loop() 
+        : header(nullptr), preheader(nullptr), exit(nullptr),
+          indvar(nullptr), initial(nullptr), bound(nullptr), step(nullptr), it_type(Instruction::OpID::add) {}
 };
 
 using loop_list = std::vector<Loop>;
@@ -41,11 +48,9 @@ public:
         loop_info.clear();
         dominators_.reset();
     }
-    bool match_indvar_step(Value *val, Value*& indvar, int& step);
-    bool is_invariant(Value *val, BasicBlock *header);
-    bool get_initial_value(Value *phi, BasicBlock *latch, Value *&initial);
-    bool check_cmp_condition(ICmpInst *cmp_inst, Value *initial, Value *bound, int step);
+    std::set<BasicBlock *> get_loop_body(BasicBlock *header, BasicBlock *latch);
     void print_loop_info() const;
+    std::vector<BasicBlock *> get_topo_order(Function *f) const;
     void run() override;
 private:
     std::unordered_map<Function *, loop_list> loop_info;

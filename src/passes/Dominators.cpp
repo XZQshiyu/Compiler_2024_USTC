@@ -189,14 +189,24 @@ void Dominators::dump_cfg(Function *f)
     if(f->is_declaration())
         return;
     std::vector<std::string> edge_set;
+    bool has_edges = false;
     for (auto &bb : f->get_basic_blocks()) {
-        for (auto succ : bb.get_succ_basic_blocks()) {
+        auto succ_blocks = bb.get_succ_basic_blocks();
+        if(!succ_blocks.empty())
+            has_edges = true;
+        for (auto succ : succ_blocks) {
             edge_set.push_back('\t' + bb.get_name() + "->" + succ->get_name() + ";\n");
         }
     }
     std::string digraph = "digraph G {\n";
-    for (auto &edge : edge_set) {
-        digraph += edge;
+    if (!has_edges && !f->get_basic_blocks().empty()) {
+        // 如果没有边且至少有一个基本块，添加一个自环以显示唯一的基本块
+        auto &bb = f->get_basic_blocks().front();
+        digraph += '\t' + bb.get_name() + ";\n";
+    } else {
+        for (auto &edge : edge_set) {
+            digraph += edge;
+        }
     }
     digraph += "}\n";
     std::ofstream file_output;
@@ -211,21 +221,36 @@ void Dominators::dump_dominator_tree(Function *f)
 {
     if(f->is_declaration())
         return;
+
     std::vector<std::string> edge_set;
+    bool has_edges = false; // 用于检查是否有边存在
+
     for (auto &b : f->get_basic_blocks()) {
         if (idom_.find(&b) != idom_.end() && idom_[&b] != &b) {
             edge_set.push_back('\t' + idom_[&b]->get_name() + "->" + b.get_name() + ";\n");
+            has_edges = true; // 如果存在支配边，标记为 true
         }
     }
+
     std::string digraph = "digraph G {\n";
-    for (auto &edge : edge_set) {
-        digraph += edge;
+
+    if (!has_edges && !f->get_basic_blocks().empty()) {
+        // 如果没有边且至少有一个基本块，直接添加该块以显示它
+        auto &b = f->get_basic_blocks().front();
+        digraph += '\t' + b.get_name() + ";\n";
+    } else {
+        for (auto &edge : edge_set) {
+            digraph += edge;
+        }
     }
+
     digraph += "}\n";
+
     std::ofstream file_output;
     file_output.open(f->get_name() + "_dom_tree.dot", std::ios::out);
     file_output << digraph;
     file_output.close();
+
     std::string dot_cmd = "dot -Tpng " + f->get_name() + "_dom_tree.dot" + " -o " + f->get_name() + "_dom_tree.png";
     std::system(dot_cmd.c_str());
 }

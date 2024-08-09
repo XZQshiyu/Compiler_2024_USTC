@@ -6,6 +6,7 @@
 #include <map>
 #include <set>
 #include <queue>
+#include <unordered_set>
 class Dominators : public Pass
 {
 public:
@@ -25,24 +26,27 @@ public:
     return dom_tree_succ_blocks_.at(bb);
   }
   bool is_dom(BasicBlock *domer, BasicBlock *domee) const
-  {
+{
     if (domer == domee)
     {
-      return true;
+        return true;
     }
 
+    std::unordered_set<BasicBlock *> visited; // 用于检测循环
     auto it = idom_.find(domee); // 从 domee 开始向上遍历
-    while (it != idom_.end() && it->second != domee)
-    { // 这里防止无限循环
-      if (it->second == domer)
-      {
-        return true;
-      }
-      it = idom_.find(it->second); // 向上遍历
+
+    while (it != idom_.end() && visited.find(it->second) == visited.end())
+    {
+        if (it->second == domer)
+        {
+            return true;
+        }
+        visited.insert(it->second); // 标记当前节点为已访问
+        it = idom_.find(it->second); // 向上遍历
     }
 
     return false;
-  }
+}
   void print_dfs_post_order();
   void print_dfs_reverse_post_order();
   void dump_cfg(Function *f);
