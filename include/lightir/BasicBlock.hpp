@@ -63,6 +63,22 @@ class BasicBlock : public Value, public ilist<BasicBlock>::node {
 
     virtual std::string print() override;
 
+    Instruction *clone_inst(const ilist<Instruction>::iterator &it, Instruction *other,
+                                    bool diff_func) {
+    auto other_bb = other->get_parent();
+    assert(diff_func || other_bb->get_parent() == get_parent());
+    if(is_terminated() && it == instr_list_.end())
+    // check for RetInst and BrInst
+    if (other->is_ret() or other->is_br())
+        assert(it == get_instructions().end());
+
+    /* About use chain and prev/succ:
+     * clone calls constructor of Instruction, which maintains use chain */
+    auto inst = other->clone(this);
+    instr_list_.insert(it, inst);
+    return inst;
+}
+
   private:
     BasicBlock(const BasicBlock &) = delete;
     explicit BasicBlock(Module *m, const std::string &name, Function *parent);

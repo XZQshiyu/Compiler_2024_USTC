@@ -13,6 +13,7 @@
 // #include <llvm/ADT/ilist_node.h>
 #include <map>
 #include <memory>
+#include <vector>
 
 class Module;
 class Argument;

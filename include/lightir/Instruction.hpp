@@ -2,8 +2,10 @@
 
 #include "Type.hpp"
 #include "User.hpp"
+#include "Value.hpp"
 #include "ilist.hpp"
 
+#include <cstddef>
 #include <cstdint>
 // #include <llvm/ADT/ilist_node.h>
 
@@ -139,7 +141,9 @@ public:
 
   bool isTerminator() const { return is_br() || is_ret(); }
 
-private:
+  virtual Instruction * clone(BasicBlock*) const;
+
+public:
   OpID op_id_;
   BasicBlock *parent_;
 };
@@ -147,6 +151,7 @@ private:
 template <typename Inst>
 class BaseInst : public Instruction
 {
+
 protected:
   template <typename... Args>
   static Inst *create(Args &&...args)
@@ -156,6 +161,14 @@ protected:
 
   template <typename... Args>
   BaseInst(Args &&...args) : Instruction(std::forward<Args>(args)...) {}
+
+// private:
+//   BaseInst(BasicBlock *prt, const BaseInst &other)
+//       : Instruction(prt, other.get_type(),
+//                     {other.operands().begin(), other.operands().end()}) {}
+
+public:
+  Instruction *clone(BasicBlock *prt) const {}
 };
 
 // integer binary operators class
@@ -181,6 +194,9 @@ public:
   static IBinaryInst *create_lshr(Value *v1, Value *v2, BasicBlock *bb);
 
   virtual std::string print() override;
+  Instruction *clone(BasicBlock *prt) const override {
+    return new IBinaryInst(op_id_, get_operand(0), get_operand(1), prt);
+  }
 };
 
 // float binary operators class
@@ -198,6 +214,7 @@ public:
   static FBinaryInst *create_fdiv(Value *v1, Value *v2, BasicBlock *bb);
 
   virtual std::string print() override;
+  Instruction *clone(BasicBlock *prt) const;
 };
 
 // integer compare operators class
@@ -217,6 +234,7 @@ public:
   static ICmpInst *create_ne(Value *v1, Value *v2, BasicBlock *bb);
 
   virtual std::string print() override;
+  Instruction *clone(BasicBlock *prt) const;
 };
 
 // float compare operators class
@@ -236,6 +254,7 @@ public:
   static FCmpInst *create_fne(Value *v1, Value *v2, BasicBlock *bb);
 
   virtual std::string print() override;
+  Instruction *clone(BasicBlock *prt) const;
 };
 
 // call operators class
@@ -252,6 +271,9 @@ public:
   FunctionType *get_function_type() const;
 
   virtual std::string print() override;
+  Instruction *clone(BasicBlock *prt) {
+  return new CallInst(get_function(), {get_operands().begin(), get_operands().end()}, prt);
+}
 };
 
 // branch operators class
@@ -260,6 +282,7 @@ class BranchInst : public BaseInst<BranchInst>
   friend BaseInst<BranchInst>;
 
 private:
+  
   BranchInst(Value *cond, BasicBlock *if_true, BasicBlock *if_false,
              BasicBlock *bb);
   ~BranchInst();
@@ -272,6 +295,12 @@ public:
   bool is_cond_br() const { return get_num_operand() == 3; }
 
   virtual std::string print() override;
+  Instruction *clone(BasicBlock *prt) const{
+    if(is_cond_br()) return new BranchInst(this->get_operand(0), (BasicBlock*)(get_operand(1))
+      , (BasicBlock*)(get_operand(2)), prt);
+  return new BranchInst(nullptr, (BasicBlock*)(get_operand(0))
+      , nullptr, prt);
+}
 };
 
 // return operators class
@@ -288,6 +317,7 @@ public:
   bool is_void_ret() const;
 
   virtual std::string print() override;
+  Instruction *clone(BasicBlock *prt) const;
 };
 
 // getelementptr operators class
@@ -305,6 +335,9 @@ public:
   Type *get_element_type() const;
 
   virtual std::string print() override;
+  Instruction *clone(BasicBlock *prt) const{
+  return new GetElementPtrInst(get_operand(0), {get_operands().begin() + 1, get_operands().end()}, prt);
+}
 };
 
 // store operators class
@@ -322,6 +355,7 @@ public:
   Value *get_lval() { return this->get_operand(1); }
 
   virtual std::string print() override;
+  Instruction *clone(BasicBlock *prt) const;
 };
 
 // load operators class
@@ -339,6 +373,7 @@ public:
   Type *get_load_type() const { return get_type(); };
 
   virtual std::string print() override;
+  Instruction *clone(BasicBlock *prt) const;
 };
 
 // alloca operators class
@@ -358,6 +393,7 @@ public:
   };
 
   virtual std::string print() override;
+  Instruction *clone(BasicBlock *prt) const;
 };
 
 // zext operators class
@@ -375,6 +411,7 @@ public:
   Type *get_dest_type() const { return get_type(); };
 
   virtual std::string print() override;
+  Instruction *clone(BasicBlock *prt) const;
 };
 
 class SextInst : public BaseInst<SextInst>
@@ -392,6 +429,7 @@ public:
   Type *get_dest_type() const { return get_type(); };
 
   virtual std::string print() override;
+  Instruction *clone(BasicBlock *prt) const;
 };
 
 // cast operators class
@@ -409,6 +447,7 @@ public:
   Type *get_dest_type() const { return get_type(); };
 
   virtual std::string print() override;
+  Instruction *clone(BasicBlock *prt) const;
 };
 
 class SiToFpInst : public BaseInst<SiToFpInst>
@@ -424,6 +463,7 @@ public:
   Type *get_dest_type() const { return get_type(); };
 
   virtual std::string print() override;
+  Instruction *clone(BasicBlock *prt) const;
 };
 
 class Ptr2IntInst : public BaseInst<Ptr2IntInst>
@@ -440,6 +480,7 @@ public:
 
   virtual std::string print() override;
   Value *get_ptr() { return this->get_operand(0); }
+  Instruction *clone(BasicBlock *prt) const;
 };
 
 class Int2PtrInst : public BaseInst<Int2PtrInst>
@@ -456,6 +497,7 @@ public:
 
   virtual std::string print() override;
   Value *get_int() { return this->get_operand(0); }
+  Instruction *clone(BasicBlock *prt) const;
 };
 
 // phi operators class
@@ -478,4 +520,67 @@ public:
     this->add_operand(pre_bb);
   }
   virtual std::string print() override;
+  Instruction *clone(BasicBlock *prt) const;
 };
+
+// Instruction *IBinaryInst::clone(BasicBlock *prt) const override {
+//   return new IBinaryInst(op_id_, get_operand(0), get_operand(1), prt);
+// }
+
+Instruction *FBinaryInst::clone(BasicBlock *prt) const  {
+  return new FBinaryInst(op_id_, get_operand(0), get_operand(1), prt);
+}
+
+Instruction *ICmpInst::clone(BasicBlock *prt) const  {
+  return new ICmpInst(op_id_, get_operand(0), get_operand(1), prt);
+}
+
+Instruction *FCmpInst::clone(BasicBlock *prt) const  {
+  return new FCmpInst(op_id_, get_operand(0), get_operand(1), prt);
+}
+
+
+
+Instruction *ReturnInst::clone(BasicBlock *prt) const  {
+  return new ReturnInst(get_operand(0), prt);
+}
+
+Instruction *StoreInst::clone(BasicBlock *prt) const  {
+  return new StoreInst(get_operand(0), get_operand(1), prt);
+}
+
+Instruction *LoadInst::clone(BasicBlock *prt) const  {
+  return new LoadInst(get_operand(0), prt);
+}
+
+Instruction *AllocaInst::clone(BasicBlock *prt) const  {
+  return new AllocaInst(get_type(), prt);
+}
+
+Instruction *ZextInst::clone(BasicBlock *prt) const  {
+  return new ZextInst(get_operand(0), get_type(), prt);
+}
+
+Instruction *SextInst::clone(BasicBlock *prt) const  {
+  return new SextInst(get_operand(0), get_type(), prt);
+}
+
+Instruction *FpToSiInst::clone(BasicBlock *prt) const  {
+  return new FpToSiInst(get_operand(0), get_type(), prt);
+}
+
+Instruction *SiToFpInst::clone(BasicBlock *prt) const  {
+  return new SiToFpInst(get_operand(0), get_type(), prt);
+}
+
+Instruction *Ptr2IntInst::clone(BasicBlock *prt) const  {
+  return new Ptr2IntInst(get_operand(0), get_type(), prt);
+}
+
+Instruction *Int2PtrInst::clone(BasicBlock *prt) const  {
+  return new Int2PtrInst(get_operand(0), get_type(), prt);
+}
+
+Instruction *PhiInst::clone(BasicBlock *prt) const  {
+  return new PhiInst(get_type(), {get_operands().begin(), get_operands().end()}, {}, prt);
+}

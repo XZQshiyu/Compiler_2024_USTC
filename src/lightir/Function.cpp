@@ -127,6 +127,7 @@ std::string Function::print() {
     return func_ir;
 }
 
+
 std::string Argument::print() {
     std::string arg_ir;
     arg_ir += this->get_type()->print();
