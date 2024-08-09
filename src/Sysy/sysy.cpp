@@ -8,6 +8,7 @@
 #include "PassManager.hpp"
 #include "sysy_builder.hpp"
 #include "gvn.hpp"
+#include "MathSimplify.hpp"
 
 #include <filesystem>
 #include <fstream>
@@ -30,6 +31,7 @@ struct Config
     bool const_prop{false};
     bool gvn{false};
     bool loop_inv_hoist{false};
+    bool math_simplify{false};
 
     Config(int argc, char **argv) : argc(argc), argv(argv)
     {
@@ -123,6 +125,15 @@ int main(int argc, char **argv)
 
     PassManager PM(m.get());
 
+    // 算术优化
+    if(config.math_simplify)
+    {
+        // PM.add_pass<DeadCode>();
+
+        PM.add_pass<MathSimplify>();
+        PM.add_pass<DeadCode>();
+    }
+
     if (config.mem2reg)
     {
         PM.add_pass<Mem2Reg>();
@@ -208,6 +219,10 @@ void Config::parse_cmd_line()
         else if (argv[i] == "-gvn"s)
         {
             gvn = true;
+        }
+        else if (argv[i] == "-math-simplify"s)
+        {
+            math_simplify = true;
         }
         else if (argv[i] == "-loop-inv-hoist"s)
         {

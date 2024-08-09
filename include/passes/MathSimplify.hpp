@@ -26,7 +26,6 @@ public:
     Instruction* srem(Value *value, ConstantInt * con , Instruction& instr, BasicBlock* bb);
 
 private:
-
     std::vector<Instruction *> wait_delete;
 };
 

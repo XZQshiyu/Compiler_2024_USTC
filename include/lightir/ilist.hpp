@@ -248,6 +248,8 @@ public:
         }
         void insert_after(const iterator &it, T *p)
         {
+            p->prev_->next_ = p->next_;
+
             auto p_it = it.ptr_;
             if(p_it == tail_)
             {
@@ -266,6 +268,8 @@ public:
         }
         void insert_before(const iterator &it, T *p)
         {
+            p->prev_->next_ = p->next_;
+            p->next_->prev_ = p->prev_;
             auto p_it = it.ptr_;
             if(p_it == head_)
             {
@@ -279,7 +283,7 @@ public:
             p->next_ = p_it;
             p_it->prev_->next_ = p;
             p_it->prev_ = p;
-            size_++;
+            // size_++;
             mark_node(p);
         }
 
