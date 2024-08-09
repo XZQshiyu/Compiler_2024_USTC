@@ -22,7 +22,10 @@ struct Loop final
     BasicBlock *preheader;
     std::vector<BasicBlock *> latch;
     std::set<BasicBlock *> body;
-    BasicBlock *exit;
+    std::unordered_map<BasicBlock *, BasicBlock *> exits;
+
+    // 子循环，用于topo排序
+    std::set<BasicBlock *> sub_loops;
 
     Value *indvar;
     Value *initial;
@@ -32,7 +35,7 @@ struct Loop final
 
     // 默认构造函数
     Loop() 
-        : header(nullptr), preheader(nullptr), exit(nullptr),
+        : header(nullptr), preheader(nullptr),
           indvar(nullptr), initial(nullptr), bound(nullptr), step(nullptr), it_type(Instruction::OpID::add) {}
 };
 

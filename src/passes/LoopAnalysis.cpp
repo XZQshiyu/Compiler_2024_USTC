@@ -20,7 +20,7 @@ void LoopAnalysis::run()
     LOG(INFO) << "dominator tree dfs post order";
     // dominators_->print_dfs_post_order();
     LOG(INFO) << "dominator tree dfs reverse post order";
-    // dominators_->print_dfs_reverse_post_order();
+    dominators_->print_dfs_reverse_post_order();
     // for(auto &f : m_->get_functions())
     // {
     //     if(f.is_declaration())
@@ -88,12 +88,36 @@ void LoopAnalysis::run()
                 }
                 // exit block
                 auto header = loop.header;
-                for(auto succ_bb :header->get_succ_basic_blocks())
+                for(auto bb_ : loop.body)
                 {
-                    if(loop.body.find(succ_bb) == loop.body.end())
+                    for(auto succ_bb : bb_->get_succ_basic_blocks())
                     {
-                        loop.exit = succ_bb;
-                        break;
+                        if(loop.body.find(succ_bb) == loop.body.end())
+                        {
+                            loop.exits[bb_] = succ_bb; 
+                            break;
+                        }
+                    }
+                }
+                // for(auto succ_bb :header->get_succ_basic_blocks())
+                // {
+                //     if(loop.body.find(succ_bb) == loop.body.end())
+                //     {
+                //         loop.exit = succ_bb;
+                //         break;
+                //     }
+                // }
+                // get subloop
+                for(auto &loop : loop_map)
+                {
+                    auto loop_header = loop.first;
+                    auto loop_it = loop.second;
+                    if(loop_header == &bb)
+                        continue;
+                    if(loop_it.body.find(&bb) != loop_it.body.end())
+                    {
+                        // LOG(INFO)  << "find a subloop";
+                        loop.second.sub_loops.insert(&bb);
                     }
                 }
                 // get indvar, initial, bound, step
@@ -102,9 +126,9 @@ void LoopAnalysis::run()
                     LOG(INFO) << "latch size > 1";
                     continue;
                 }
-                if(loop.exit == loop.header)
+                if(loop.exits.size() > 1)
                 {
-                    LOG(INFO) << "exit == header";
+                    LOG(INFO) << "exit size > 1";
                     continue;
                 }
                 auto branch = header->get_terminator()->as<BranchInst>();
@@ -219,18 +243,28 @@ void LoopAnalysis::run()
                     LOG(INFO) << "icmp is not phi";
                     continue;
                 }
-
             }
             
         }
         LOG(INFO) << "finish get loop body";
         for(auto it : loop_map)
         {
+            LOG(INFO) << it.second.sub_loops.size();
             loops.push_back(it.second);
         }
         loop_info[&f] = loops;
     }
     LOG(INFO) << "finish loop analysis";
+    for(auto &f : m_->get_functions())
+    {
+        if(f.is_declaration())
+            continue;
+        auto order = get_topo_order(&f);
+        for(auto &bb : order)
+        {
+            LOG(INFO) << bb->get_name();
+        }
+    }
     print_loop_info();
 }
 
@@ -259,16 +293,51 @@ std::set<BasicBlock *> LoopAnalysis::get_loop_body(BasicBlock *header, BasicBloc
     }
     return loop_body;
 }
-
+// 对循环进行topo排序
 std::vector<BasicBlock *> LoopAnalysis::get_topo_order(Function *f) const
 {
-    std::vector<BasicBlock *> block_list;
-    auto rpo = dominators_->get_reverse_post_order(f);
-    for(auto &bb : rpo)
+    std::vector<BasicBlock *> order;
+    std::map<BasicBlock *, int> indegree;
+    for(auto it : loop_info.at(f))
     {
-        block_list.push_back(bb);
+        indegree[it.header] = 0;
     }
-    return block_list;
+    for(auto &loop : loop_info.at(f))
+    {
+        for(auto sub_header : loop.sub_loops)
+        {
+            indegree[sub_header]++;
+        }
+    }
+    LOG(INFO) << indegree.size();
+    for(auto &it : indegree)
+    {
+        LOG(INFO) << it.first->get_name() << " " << it.second;
+    }
+    while(!indegree.empty())
+    {
+        bool changed = false;
+        for (auto it = indegree.begin(); it != indegree.end(); ) {
+        if (it->second == 0) {
+            order.push_back(it->first);
+            for (auto &loop : loop_info.at(f)) {
+                for(auto sub_header : loop.sub_loops)
+                {
+                    indegree[sub_header]--;
+                }
+            }
+            it = indegree.erase(it); // 使用迭代器安全删除元素
+            changed = true;
+        } else {
+            ++it;
+        }
+    }
+        if (!changed) {
+        // 如果没有任何节点被处理，直接退出，避免死循环
+        break;
+    }
+    }
+    return order;
 }
 
 void LoopAnalysis::print_loop_info() const {
@@ -291,7 +360,18 @@ void LoopAnalysis::print_loop_info() const {
             {
                 LOG(INFO) << bb->get_name();
             }
-            LOG(INFO) << "loop exit: " << (loop.exit ? loop.exit->get_name() : "nullptr");
+            LOG(INFO) << "loop exits: ";
+            for(auto &mapping : loop.exits)
+            {
+                LOG(INFO) << mapping.first->get_name() << " -> " << mapping.second->get_name();
+            }
+            LOG(INFO) << "loop subloops: ";
+            // LOG(INFO) << loop.sub_loops.size();
+            for(auto &bb : loop.sub_loops)
+            {
+                LOG(INFO) << "subloop header is: " << bb->get_name();
+            }
+            // LOG(INFO) << "loop exit: " << (loop.exit ? loop.exit->get_name() : "nullptr");
             LOG(INFO) << "indvar: " << (loop.indvar ? loop.indvar->get_name() : "nullptr");
             if(loop.initial->is<ConstantInt>())
             {
