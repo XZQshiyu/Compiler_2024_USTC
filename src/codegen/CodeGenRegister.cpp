@@ -780,13 +780,13 @@ void CodeGenRegister::gen_binary() {
         output.emplace_back("xor "+dest_reg+", "+sreg0+", "+sreg1);
         break;
     case Instruction::ashr:
-        output.emplace_back("sra "+dest_reg+", "+sreg0+", "+sreg1);
+        output.emplace_back("sraw "+dest_reg+", "+sreg0+", "+sreg1);
         break;
     case Instruction::lshr:
-        output.emplace_back("srl "+dest_reg+", "+sreg0+", "+sreg1);
+        output.emplace_back("srlw "+dest_reg+", "+sreg0+", "+sreg1);
         break;
     case Instruction::shl:
-        output.emplace_back("sll "+dest_reg+", "+sreg0+", "+sreg1);
+        output.emplace_back("sllw "+dest_reg+", "+sreg0+", "+sreg1);
         break;
     default:
         assert(false);
