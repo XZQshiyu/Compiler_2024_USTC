@@ -6,6 +6,7 @@
 #include "Mem2Reg.hpp"
 #include "Module.hpp"
 #include "PassManager.hpp"
+#include "MathSimplify.hpp"
 #include "sysy_builder.hpp"
 #include "gvn.hpp"
 
@@ -136,6 +137,11 @@ int main(int argc, char **argv)
                 LOG(INFO) << ins.print() << " " << ins.tag();
             }
         }
+    }
+    {
+        // PM.add_pass<DeadCode>();
+        PM.add_pass<MathSimplify>();
+        PM.add_pass<DeadCode>();
     }
 
     if (config.mem2reg)

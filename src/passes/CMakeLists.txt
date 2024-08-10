@@ -8,5 +8,6 @@ add_library(
     ConstPropagation.cpp
     LoopInvHoist.cpp
     LoopSearch.cpp
+    MathSimplify.cpp
     gvn.cpp
 )

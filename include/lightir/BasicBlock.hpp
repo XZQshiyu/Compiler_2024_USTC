@@ -50,6 +50,11 @@ class BasicBlock : public Value, public ilist<BasicBlock>::node {
       instr_list_.remove(instr); 
       instr->set_parent_null();
     }
+    void insert_before(const ilist<Instruction>::iterator &pos, Instruction *instr) 
+    { 
+      // Insert the new instruction before the position node
+      instr_list_.insert_before(pos, instr);
+    }
     // void remove_instr_2(Instruction *instr) { instr_list_.}
     void remove_last_instruction();
     ilist<Instruction> &get_instructions() { return instr_list_; }
