@@ -788,6 +788,9 @@ void CodeGenRegister::gen_binary() {
     case Instruction::shl:
         output.emplace_back("sllw "+dest_reg+", "+sreg0+", "+sreg1);
         break;
+    case Instruction::sext:
+        output.emplace_back("sext.w "+dest_reg+", "+sreg0);
+        break;
     default:
         assert(false);
     }
