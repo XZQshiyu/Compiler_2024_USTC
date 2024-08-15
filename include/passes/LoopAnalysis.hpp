@@ -54,6 +54,10 @@ public:
     std::set<BasicBlock *> get_loop_body(BasicBlock *header, BasicBlock *latch);
     void print_loop_info() const;
     std::vector<BasicBlock *> get_topo_order(Function *f) const;
+    loop_list get_loop_list(Function *f)
+    {
+        return loop_info.at(f);
+    }
     void run() override;
 private:
     std::unordered_map<Function *, loop_list> loop_info;

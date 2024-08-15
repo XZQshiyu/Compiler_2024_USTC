@@ -153,7 +153,7 @@ def eval():
 
             COMMAND = [TEST_PATH]
             try:
-                result = subprocess.run([EXE_PATH, "-o", TEST_PATH + ".ll", "-emit-llvm", "-mem2reg", "-const-prop", "-loop-inv-hoist", "-loop-analysis", TEST_PATH + ".sy"], stderr=subprocess.PIPE, timeout=8)
+                result = subprocess.run([EXE_PATH, "-o", TEST_PATH + ".ll", "-emit-llvm", "-mem2reg", "-const-prop", "-loop-inv-hoist", "-loop-analysis", "-loop-simplify", TEST_PATH + ".sy"], stderr=subprocess.PIPE, timeout=8)
             except Exception as _:
                 f.write('\tFail\n')
                 continue

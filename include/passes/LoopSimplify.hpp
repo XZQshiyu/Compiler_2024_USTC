@@ -18,10 +18,12 @@ class LoopSimplify : public Pass
     public:
         explicit LoopSimplify(Module *m) : Pass(m) {}
         ~LoopSimplify() override = default;
+        BasicBlock *create_preheader(BasicBlock *header, const Loop &loop);
+        BasicBlock *create_exit(BasicBlock *entrance, const Loop &loop);
         void run() override;
     private:
         std::unique_ptr<LoopAnalysis> loop_analysis_;
-        
+
 };
 
 
