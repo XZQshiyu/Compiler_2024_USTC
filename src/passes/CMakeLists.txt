@@ -10,4 +10,6 @@ add_library(
     LoopSearch.cpp
     gvn.cpp
     LoopAnalysis.cpp
+    LoopSimplify.cpp
+    LoopInvCM.cpp
 )

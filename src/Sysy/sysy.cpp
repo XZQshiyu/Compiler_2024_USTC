@@ -9,6 +9,8 @@
 #include "sysy_builder.hpp"
 #include "gvn.hpp"
 #include "LoopAnalysis.hpp"
+#include "LoopSimplify.hpp"
+#include "LoopInvCM.hpp"
 // #include "loop_info.hpp"
 
 #include <filesystem>
@@ -34,6 +36,8 @@ struct Config
     bool loop_inv_hoist{false};
     bool loop_info{false};
     bool loop_analysis{false};
+    bool loop_simplify{false};
+    bool licm{false};
 
     Config(int argc, char **argv) : argc(argc), argv(argv)
     {
@@ -123,6 +127,14 @@ int main(int argc, char **argv)
     if(config.loop_analysis)
     {
         PM.add_pass<LoopAnalysis>();
+    }
+    if(config.loop_simplify)
+    {
+        PM.add_pass<LoopSimplify>();
+    }
+    if(config.licm)
+    {
+        PM.add_pass<LoopInvCM>();
     }
     // transform pass
     // 指令降级
@@ -216,6 +228,14 @@ void Config::parse_cmd_line()
         else if(argv[i] == "-loop-analysis"s)
         {
             loop_analysis = true;
+        }
+        else if(argv[i] == "-loop-simplify"s)
+        {
+            loop_simplify = true;
+        }
+        else if(argv[i] == "-licm"s)
+        {
+            licm = true;
         }
         else
         {

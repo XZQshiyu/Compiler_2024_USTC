@@ -44,13 +44,33 @@ class BasicBlock : public Value, public ilist<BasicBlock>::node {
       instr_list_.push_front(instr);
       instr->set_parent(this); 
     }
+
+    void insert_before(Instruction *pos, Instruction *instr)
+    {
+      instr_list_.insert_before(pos, instr);
+      instr->set_parent(this);
+    }
+
+    void insert_after(Instruction *pos, Instruction *instr)
+    {
+      instr_list_.insert_after(pos, instr);
+      instr->set_parent(this);
+    }
+
+    Instruction *get_prev_instr(Instruction *instr)
+    {
+      return instr_list_.get_prev(instr);
+    }
+    Instruction *get_next_instr(Instruction *instr)
+    {
+      return instr_list_.get_next(instr);
+    }
     void erase_instr(Instruction *instr) { instr_list_.erase(instr); }
     void remove_instr(Instruction *instr) 
     { 
       instr_list_.remove(instr); 
       instr->set_parent_null();
     }
-    // void remove_instr_2(Instruction *instr) { instr_list_.}
     void remove_last_instruction();
     ilist<Instruction> &get_instructions() { return instr_list_; }
     bool empty() const { return instr_list_.empty(); }

@@ -22,7 +22,10 @@ struct Loop final
     BasicBlock *preheader;
     std::vector<BasicBlock *> latch;
     std::set<BasicBlock *> body;
-    BasicBlock *exit;
+    std::unordered_map<BasicBlock *, BasicBlock *> exits;
+
+    // 子循环，用于topo排序
+    std::set<BasicBlock *> sub_loops;
 
     Value *indvar;
     Value *initial;
@@ -32,7 +35,7 @@ struct Loop final
 
     // 默认构造函数
     Loop() 
-        : header(nullptr), preheader(nullptr), exit(nullptr),
+        : header(nullptr), preheader(nullptr),
           indvar(nullptr), initial(nullptr), bound(nullptr), step(nullptr), it_type(Instruction::OpID::add) {}
 };
 
@@ -51,6 +54,19 @@ public:
     std::set<BasicBlock *> get_loop_body(BasicBlock *header, BasicBlock *latch);
     void print_loop_info() const;
     std::vector<BasicBlock *> get_topo_order(Function *f) const;
+    loop_list get_loop_list(Function *f)
+    {
+        return loop_info.at(f);
+    }
+    struct Loop get_loop_by_header(Function *f, BasicBlock *header)
+    {
+        for(auto &loop : loop_info.at(f))
+        {
+            if(loop.header == header)
+                return loop;
+        }
+        return Loop();
+    }
     void run() override;
 private:
     std::unordered_map<Function *, loop_list> loop_info;

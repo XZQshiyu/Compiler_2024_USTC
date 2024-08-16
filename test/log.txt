@@ -1,0 +1,9 @@
+==========./functional//00_main.sy==========
+3							      |	127
+==========./functional//01_var_defn2.sy==========
+10							      |	127
+==========./functional//02_var_defn3.sy==========
+5							      |	127
+==========./functional//03_arr_defn2.sy==========
+0							      |	127
+==========./functional//04_arr_defn3.sy==========
