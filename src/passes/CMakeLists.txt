@@ -11,4 +11,5 @@ add_library(
     gvn.cpp
     LoopAnalysis.cpp
     LoopSimplify.cpp
+    LoopInvCM.cpp
 )

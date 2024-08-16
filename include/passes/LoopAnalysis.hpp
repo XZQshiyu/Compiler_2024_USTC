@@ -58,6 +58,15 @@ public:
     {
         return loop_info.at(f);
     }
+    struct Loop get_loop_by_header(Function *f, BasicBlock *header)
+    {
+        for(auto &loop : loop_info.at(f))
+        {
+            if(loop.header == header)
+                return loop;
+        }
+        return Loop();
+    }
     void run() override;
 private:
     std::unordered_map<Function *, loop_list> loop_info;

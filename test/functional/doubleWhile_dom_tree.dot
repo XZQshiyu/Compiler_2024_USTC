@@ -1,8 +1,0 @@
-digraph G {
-	label_entry->label2;
-	label2->label5;
-	label2->label8;
-	label5->label10;
-	label10->label13;
-	label10->label16;
-}

@@ -263,7 +263,7 @@ public:
             p->next_ = p_it->next_;
             p_it->next_->prev_ = p;
             p_it->next_ = p;
-           //  size_++;
+           size_++;
             mark_node(p);
         }
         void insert_before(const iterator &it, T *p)
@@ -283,7 +283,7 @@ public:
             p->next_ = p_it;
             p_it->prev_->next_ = p;
             p_it->prev_ = p;
-            // size_++;
+            size_++;
             mark_node(p);
         }
 
