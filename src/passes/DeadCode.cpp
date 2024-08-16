@@ -13,6 +13,7 @@ void DeadCode::run() {
             changed |= sweep(func);
         }
     } while (changed);
+    sweep_globally();
     LOG_INFO << "dead code pass erased " << ins_count << " instructions";
 }
 
@@ -110,4 +111,23 @@ bool DeadCode::is_critical(Instruction *ins) {
     if (ins->is_store())
         return true;
     return false;
+}
+
+
+void DeadCode::sweep_globally() {
+    vector<Function *> unused_funcs;
+    vector<GlobalVariable *> unused_globals;
+    for (auto &f_r : m_->get_functions()) {
+        if (f_r.get_use_list().size() == 0 and f_r.get_name() != "main")
+            unused_funcs.push_back(&f_r);
+    }
+    for (auto &glob_var_r : m_->get_global_variable()) {
+        if (glob_var_r.get_use_list().size() == 0)
+            unused_globals.push_back(&glob_var_r);
+    }
+    // changed |= unused_funcs.size() or unused_globals.size();
+    for (auto func : unused_funcs)
+        m_->get_functions().erase(func);
+    for (auto glob : unused_globals)
+        m_->get_global_variable().erase(glob);
 }

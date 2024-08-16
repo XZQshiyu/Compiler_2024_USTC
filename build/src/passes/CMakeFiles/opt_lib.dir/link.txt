@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../libopt_lib.a CMakeFiles/opt_lib.dir/Dominators.cpp.o CMakeFiles/opt_lib.dir/Mem2Reg.cpp.o CMakeFiles/opt_lib.dir/FuncInfo.cpp.o CMakeFiles/opt_lib.dir/DeadCode.cpp.o CMakeFiles/opt_lib.dir/ConstPropagation.cpp.o CMakeFiles/opt_lib.dir/LoopInvHoist.cpp.o CMakeFiles/opt_lib.dir/LoopSearch.cpp.o CMakeFiles/opt_lib.dir/gvn.cpp.o CMakeFiles/opt_lib.dir/LoopAnalysis.cpp.o
+/usr/bin/ranlib ../../libopt_lib.a

@@ -1,0 +1,1 @@
+/usr/bin/c++  -O0 -Wall -g2 -ggdb  -Wl,-z,stack-size=0x100000000 CMakeFiles/test_logging.dir/test_logging.cpp.o -o ../../test_logging  ../../libcommon.a 

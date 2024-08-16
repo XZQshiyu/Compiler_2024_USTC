@@ -1,0 +1,1 @@
+/usr/bin/c++  -O0 -Wall -g2 -ggdb  -Wl,-z,stack-size=0x100000000 CMakeFiles/lexer.dir/lexer.c.o -o ../../lexer  ../../libsyntax.a ../../libcommon.a 

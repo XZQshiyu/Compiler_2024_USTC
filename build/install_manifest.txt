@@ -1,0 +1,6 @@
+/usr/local/bin/parser
+/usr/local/bin/lexer
+/usr/local/bin/test_logging
+/usr/local/bin/test_ast
+/usr/local/lib/libsysy_io.a
+/usr/local/bin/sysy

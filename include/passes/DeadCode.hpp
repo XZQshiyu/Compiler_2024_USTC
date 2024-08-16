@@ -9,6 +9,7 @@
  * 死代码消除：参见
  *https://www.clear.rice.edu/comp512/Lectures/10Dead-Clean-SCCP.pdf
  **/
+using namespace std;
 class DeadCode : public Pass {
   public:
     DeadCode(Module *m) : Pass(m), func_info(std::make_shared<FuncInfo>(m)) {}
@@ -25,4 +26,5 @@ class DeadCode : public Pass {
     void mark(Instruction *ins);
     bool sweep(Function *func);
     bool is_critical(Instruction *ins);
+    void sweep_globally();
 };
