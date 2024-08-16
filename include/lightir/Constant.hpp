@@ -17,10 +17,10 @@ class ConstantInt : public Constant {
     // 整型常量数值
     int value_;
     ConstantInt(Type *ty, int val) : Constant(ty, ""), value_(val) {}
-
   public:
     int get_value() { return value_; }
     static ConstantInt *get(int val, Module *m);
+    static ConstantInt *get_long(long val, Module *m);
     static ConstantInt *get(bool val, Module *m);
     virtual std::string print() override;
 };

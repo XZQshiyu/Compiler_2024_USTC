@@ -3,59 +3,95 @@
 [WARNING] (sysy_builder.cpp:284L  visit)i32
 [WARNING] (sysy_builder.cpp:284L  visit)i32
 [WARNING] (sysy_builder.cpp:284L  visit)i32
-[WARNING] (sysy_builder.cpp:1314L  visit)0---------------
+[WARNING] (sysy_builder.cpp:284L  visit)i32
+[WARNING] (sysy_builder.cpp:284L  visit)i32
 [WARNING] (sysy_builder.cpp:1314L  visit)1---------------
+[WARNING] (sysy_builder.cpp:284L  visit)i32
 [WARNING] (sysy_builder.cpp:1314L  visit)2---------------
+[WARNING] (sysy_builder.cpp:1314L  visit)0---------------
 [WARNING] (sysy_builder.cpp:1314L  visit)2---------------
-[WARNING] (sysy_builder.cpp:1314L  visit)2---------------
-[WARNING] (MathSimplify.cpp:237L  run)math simplify
-[WARNING] (MathSimplify.cpp:243L  run)45
-[WARNING] (MathSimplify.cpp:246L  run)alloca   0x624e44359f50  
-[WARNING] (MathSimplify.cpp:246L  run)alloca   0x624e44363780  
-[WARNING] (MathSimplify.cpp:246L  run)alloca   0x624e44363870  
-[WARNING] (MathSimplify.cpp:246L  run)alloca   0x624e44363960  
-[WARNING] (MathSimplify.cpp:246L  run)alloca   0x624e44363a50  
-[WARNING] (MathSimplify.cpp:246L  run)store   0x624e44363b40  
-[WARNING] (MathSimplify.cpp:246L  run)store   0x624e44363c40  
-[WARNING] (MathSimplify.cpp:246L  run)store   0x624e44363de0  
-[WARNING] (MathSimplify.cpp:246L  run)sub   0x624e44364020  
-[WARNING] (MathSimplify.cpp:246L  run)store   0x624e44364120  
-[WARNING] (MathSimplify.cpp:246L  run)load   0x624e44364220  
-[WARNING] (MathSimplify.cpp:246L  run)mul   0x624e44364320  
-[WARNING] (MathSimplify.cpp:246L  run)sdiv   0x624e44364420  
-[WARNING] (MathSimplify.cpp:268L  run)div
-[WARNING] (MathSimplify.cpp:272L  run)div1
-[WARNING] (MathSimplify.cpp:273L  run)2
-[WARNING] (MathSimplify.cpp:276L  run)47
-[WARNING] (MathSimplify.cpp:246L  run)load   0x624e44364510  
-[WARNING] (MathSimplify.cpp:246L  run)load   0x624e44364600  
-[WARNING] (MathSimplify.cpp:246L  run)sub   0x624e443646f0  
-[WARNING] (MathSimplify.cpp:246L  run)add   0x624e44364810  
-[WARNING] (MathSimplify.cpp:246L  run)load   0x624e44364930  
-[WARNING] (MathSimplify.cpp:246L  run)add   0x624e44364ac0  
-[WARNING] (MathSimplify.cpp:246L  run)sub   0x624e44364c10  
-[WARNING] (MathSimplify.cpp:246L  run)srem   0x624e44364d30  
-[WARNING] (MathSimplify.cpp:246L  run)sub   0x624e44364e20  
-[WARNING] (MathSimplify.cpp:246L  run)store   0x624e44364f40  
-[WARNING] (MathSimplify.cpp:246L  run)load   0x624e44365060  
-[WARNING] (MathSimplify.cpp:246L  run)call   0x624e443651a0  
-[WARNING] (MathSimplify.cpp:246L  run)load   0x624e443652b0  
-[WARNING] (MathSimplify.cpp:246L  run)srem   0x624e443653b0  
-[WARNING] (MathSimplify.cpp:246L  run)add   0x624e44365520  
-[WARNING] (MathSimplify.cpp:246L  run)load   0x624e44365640  
-[WARNING] (MathSimplify.cpp:246L  run)load   0x624e44365730  
-[WARNING] (MathSimplify.cpp:246L  run)sub   0x624e44365820  
-[WARNING] (MathSimplify.cpp:246L  run)sub   0x624e44365970  
-[WARNING] (MathSimplify.cpp:246L  run)add   0x624e44365a40  
-[WARNING] (MathSimplify.cpp:246L  run)load   0x624e44365b80  
-[WARNING] (MathSimplify.cpp:246L  run)add   0x624e44365c70  
-[WARNING] (MathSimplify.cpp:246L  run)srem   0x624e44365dc0  
-[WARNING] (MathSimplify.cpp:246L  run)sub   0x624e44365ee0  
-[WARNING] (MathSimplify.cpp:246L  run)sub   0x624e44365fb0  
-[WARNING] (MathSimplify.cpp:246L  run)store   0x624e443660f0  
-[WARNING] (MathSimplify.cpp:246L  run)load   0x624e44366210  
-[WARNING] (MathSimplify.cpp:246L  run)add   0x624e44366300  
-[WARNING] (MathSimplify.cpp:246L  run)store   0x624e44366420  
-[WARNING] (MathSimplify.cpp:246L  run)load   0x624e44366540  
-[WARNING] (MathSimplify.cpp:246L  run)call   0x624e44366680  
-[WARNING] (MathSimplify.cpp:246L  run)ret   0x624e44366790  
+[WARNING] (MathSimplify.cpp:252L  run)math simplify
+[WARNING] (MathSimplify.cpp:258L  run)5
+[WARNING] (MathSimplify.cpp:261L  run)alloca   0x60599e08f020  
+[WARNING] (MathSimplify.cpp:261L  run)store   0x60599e08f0c0  
+[WARNING] (MathSimplify.cpp:261L  run)alloca   0x60599e08f480  
+[WARNING] (MathSimplify.cpp:261L  run)store   0x60599e08f570  
+[WARNING] (MathSimplify.cpp:261L  run)br   0x60599e08f8a0  
+[WARNING] (MathSimplify.cpp:258L  run)6
+[WARNING] (MathSimplify.cpp:261L  run)load   0x60599e08fdf0  
+[WARNING] (MathSimplify.cpp:261L  run)load   0x60599e08fee0  
+[WARNING] (MathSimplify.cpp:261L  run)getelementptr   0x60599e08fff0  
+[WARNING] (MathSimplify.cpp:261L  run)load   0x60599e0901b0  
+[WARNING] (MathSimplify.cpp:261L  run)ne   0x60599e090280  
+[WARNING] (MathSimplify.cpp:261L  run)br   0x60599e090350  
+[WARNING] (MathSimplify.cpp:258L  run)9
+[WARNING] (MathSimplify.cpp:261L  run)load   0x60599e090530  
+[WARNING] (MathSimplify.cpp:261L  run)load   0x60599e090620  
+[WARNING] (MathSimplify.cpp:261L  run)getelementptr   0x60599e090730  
+[WARNING] (MathSimplify.cpp:261L  run)load   0x60599e0908a0  
+[WARNING] (MathSimplify.cpp:261L  run)call   0x60599e090970  
+[WARNING] (MathSimplify.cpp:261L  run)load   0x60599e090a80  
+[WARNING] (MathSimplify.cpp:261L  run)add   0x60599e090b80  
+[WARNING] (MathSimplify.cpp:261L  run)store   0x60599e090c80  
+[WARNING] (MathSimplify.cpp:261L  run)br   0x60599e090da0  
+[WARNING] (MathSimplify.cpp:258L  run)2
+[WARNING] (MathSimplify.cpp:261L  run)load   0x60599e090ed0  
+[WARNING] (MathSimplify.cpp:261L  run)ret   0x60599e090fc0  
+[WARNING] (MathSimplify.cpp:258L  run)5
+[WARNING] (MathSimplify.cpp:261L  run)getelementptr   0x60599e091520  
+[WARNING] (MathSimplify.cpp:261L  run)call   0x60599e0916b0  
+[WARNING] (MathSimplify.cpp:261L  run)alloca   0x60599e0917a0  
+[WARNING] (MathSimplify.cpp:261L  run)store   0x60599e091840  
+[WARNING] (MathSimplify.cpp:261L  run)br   0x60599e091b50  
+[WARNING] (MathSimplify.cpp:258L  run)2
+[WARNING] (MathSimplify.cpp:261L  run)ne   0x60599e0920a0  
+[WARNING] (MathSimplify.cpp:261L  run)br   0x60599e0921a0  
+[WARNING] (MathSimplify.cpp:258L  run)12
+[WARNING] (MathSimplify.cpp:261L  run)alloca   0x60599e0923a0  
+[WARNING] (MathSimplify.cpp:261L  run)load   0x60599e092440  
+[WARNING] (MathSimplify.cpp:261L  run)sdiv   0x60599e092560  
+[WARNING] (MathSimplify.cpp:283L  run)div
+[WARNING] (MathSimplify.cpp:287L  run)div1
+[WARNING] (MathSimplify.cpp:288L  run)6
+[WARNING] (MathSimplify.cpp:163L  sdiv)new_instr_1i64
+[WARNING] (MathSimplify.cpp:167L  sdiv)new_instr_2i64
+[WARNING] (MathSimplify.cpp:168L  sdiv)new_instr_2i64
+[WARNING] (MathSimplify.cpp:291L  run)19
+[WARNING] (MathSimplify.cpp:261L  run)store   0x60599e092650  
+[WARNING] (MathSimplify.cpp:261L  run)alloca   0x60599e092770  
+[WARNING] (MathSimplify.cpp:261L  run)load   0x60599e092860  
+[WARNING] (MathSimplify.cpp:261L  run)srem   0x60599e092980  
+[WARNING] (MathSimplify.cpp:261L  run)store   0x60599e092a70  
+[WARNING] (MathSimplify.cpp:261L  run)load   0x60599e092fb0  
+[WARNING] (MathSimplify.cpp:261L  run)load   0x60599e0930a0  
+[WARNING] (MathSimplify.cpp:261L  run)ne   0x60599e093190  
+[WARNING] (MathSimplify.cpp:261L  run)br   0x60599e0932e0  
+[WARNING] (MathSimplify.cpp:258L  run)1
+[WARNING] (MathSimplify.cpp:261L  run)ret   0x60599e095700  
+[WARNING] (MathSimplify.cpp:258L  run)13
+[WARNING] (MathSimplify.cpp:261L  run)load   0x60599e093830  
+[WARNING] (MathSimplify.cpp:261L  run)getelementptr   0x60599e0938f0  
+[WARNING] (MathSimplify.cpp:261L  run)getelementptr   0x60599e093ae0  
+[WARNING] (MathSimplify.cpp:261L  run)call   0x60599e093c60  
+[WARNING] (MathSimplify.cpp:261L  run)getelementptr   0x60599e093d30  
+[WARNING] (MathSimplify.cpp:261L  run)call   0x60599e093ec0  
+[WARNING] (MathSimplify.cpp:261L  run)load   0x60599e094010  
+[WARNING] (MathSimplify.cpp:261L  run)getelementptr   0x60599e0940b0  
+[WARNING] (MathSimplify.cpp:261L  run)getelementptr   0x60599e094280  
+[WARNING] (MathSimplify.cpp:261L  run)call   0x60599e0943b0  
+[WARNING] (MathSimplify.cpp:261L  run)getelementptr   0x60599e094480  
+[WARNING] (MathSimplify.cpp:261L  run)call   0x60599e094610  
+[WARNING] (MathSimplify.cpp:261L  run)br   0x60599e094700  
+[WARNING] (MathSimplify.cpp:258L  run)8
+[WARNING] (MathSimplify.cpp:261L  run)load   0x60599e0947f0  
+[WARNING] (MathSimplify.cpp:261L  run)mul   0x60599e094940  
+[WARNING] (MathSimplify.cpp:261L  run)add   0x60599e094ad0  
+[WARNING] (MathSimplify.cpp:261L  run)srem   0x60599e094c20  
+[WARNING] (MathSimplify.cpp:261L  run)store   0x60599e094d10  
+[WARNING] (MathSimplify.cpp:261L  run)load   0x60599e0950b0  
+[WARNING] (MathSimplify.cpp:261L  run)eq   0x60599e0951a0  
+[WARNING] (MathSimplify.cpp:261L  run)br   0x60599e0952f0  
+[WARNING] (MathSimplify.cpp:258L  run)1
+[WARNING] (MathSimplify.cpp:261L  run)br   0x60599e0954a0  
+[WARNING] (MathSimplify.cpp:258L  run)1
+[WARNING] (MathSimplify.cpp:261L  run)br   0x60599e0955d0  

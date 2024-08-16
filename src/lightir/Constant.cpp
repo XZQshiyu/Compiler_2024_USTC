@@ -22,6 +22,9 @@ struct pair_hash
 static std::unordered_map<std::pair<int, Module *>,
                           std::unique_ptr<ConstantInt>, pair_hash>
     cached_int;
+static std::unordered_map<std::pair<long, Module *>,
+                    std::unique_ptr<ConstantInt>, pair_hash>
+    cached_long;
 static std::unordered_map<std::pair<bool, Module *>,
                           std::unique_ptr<ConstantInt>, pair_hash>
     cached_bool;
@@ -38,6 +41,16 @@ ConstantInt *ConstantInt::get(int val, Module *m)
                 new ConstantInt(m->get_int32_type(), val)))
         .get();
 }
+ConstantInt *ConstantInt::get_long(long val, Module *m)
+{
+    if (cached_long.find(std::make_pair(val, m)) != cached_long.end())
+        return cached_long[std::make_pair(val, m)].get();
+    
+    return (cached_long[std::make_pair(val, m)] = std::unique_ptr<ConstantInt>(
+                new ConstantInt(m->get_int64_type(), val)))
+        .get();
+}
+
 ConstantInt *ConstantInt::get(bool val, Module *m)
 {
     if (cached_bool.find(std::make_pair(val, m)) != cached_bool.end())
@@ -46,6 +59,7 @@ ConstantInt *ConstantInt::get(bool val, Module *m)
                 new ConstantInt(m->get_int1_type(), val ? 1 : 0)))
         .get();
 }
+
 std::string ConstantInt::print()
 {
     std::string const_ir;

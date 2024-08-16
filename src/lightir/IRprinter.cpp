@@ -109,7 +109,36 @@ std::string print_instr_op_name(Instruction::OpID id) {
         return "ptrtoint";
     case Instruction::sext:
         return "sext";
+
+    case Instruction::trunc:
+        return "trunc";
+    
+
+    // long binary instruction
+    case Instruction::l_add:
+        return "add";
+    case Instruction::l_sub:
+        return "sub";
+    case Instruction::l_mul:
+        return "mul";
+    case Instruction::l_sdiv:
+        return "sdiv";
+    case Instruction::l_srem:
+        return "srem";
+    case Instruction::l_and:
+        return "and";
+    case Instruction::l_or:
+        return "or";
+    case Instruction::l_xor:
+        return "xor";
+    case Instruction::l_shl:
+        return "shl";
+    case Instruction::l_ashr:
+        return "ashr";
+    case Instruction::l_lshr:
+        return "lshr";
     }
+
     assert(false && "Must be bug");
 }
 
@@ -133,6 +162,8 @@ template <class BinInst> std::string print_binary_inst(const BinInst &inst) {
 }
 std::string IBinaryInst::print() { return print_binary_inst(*this); }
 std::string FBinaryInst::print() { return print_binary_inst(*this); }
+std::string LBinaryInst::print() { return print_binary_inst(*this); }
+
 
 template <class CMP> std::string print_cmp_inst(const CMP &inst) {
     std::string cmp_type;
@@ -293,6 +324,23 @@ std::string SextInst::print()
     instr_ir += this->get_dest_type()->print();
     return instr_ir;
 }
+
+std::string TruncInst::print()
+{
+    std::string instr_ir;
+    instr_ir += "%";
+    instr_ir += this->get_name();
+    instr_ir += " = ";
+    instr_ir += get_instr_op_name();
+    instr_ir += " ";
+    instr_ir += this->get_operand(0)->get_type()->print();
+    instr_ir += " ";
+    instr_ir += print_as_op(this->get_operand(0), false);
+    instr_ir += " to "; 
+    instr_ir += this->get_dest_type()->print();
+    return instr_ir;
+}
+
 
 std::string ZextInst::print() {
     std::string instr_ir;
