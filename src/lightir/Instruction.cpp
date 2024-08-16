@@ -81,6 +81,61 @@ IBinaryInst *IBinaryInst::create_ashr(Value *v1, Value *v2, BasicBlock *bb)
     return create(ashr, v1, v2, bb);
 }
 
+
+LBinaryInst::LBinaryInst(OpID id, Value *v1, Value *v2, BasicBlock *bb)
+    : BaseInst<LBinaryInst>(bb->get_module()->get_int64_type(), id, bb)
+{
+    // assert(v1->get_type()->is_int64_type() && v2->get_type()->is_int64_type() &&
+    //        "IBinaryInst operands are not both i64");
+    add_operand(v1);
+    add_operand(v2);
+}
+
+LBinaryInst *LBinaryInst::create_l_add(Value *v1, Value *v2, BasicBlock *bb)
+{
+    return create(l_add, v1, v2, bb);
+}
+LBinaryInst *LBinaryInst::create_l_sub(Value *v1, Value *v2, BasicBlock *bb)
+{
+    return create(l_sub, v1, v2, bb);
+}
+LBinaryInst *LBinaryInst::create_l_mul(Value *v1, Value *v2, BasicBlock *bb)
+{
+    return create(l_mul, v1, v2, bb);
+}
+LBinaryInst *LBinaryInst::create_l_sdiv(Value *v1, Value *v2, BasicBlock *bb)
+{
+    return create(l_sdiv, v1, v2, bb);
+}
+LBinaryInst *LBinaryInst::create_l_srem(Value *v1, Value *v2, BasicBlock *bb)
+{
+    return create(l_srem, v1, v2, bb);
+}
+LBinaryInst *LBinaryInst::create_l_and(Value *v1, Value *v2, BasicBlock *bb)
+{
+    return create(l_and, v1, v2, bb);
+}
+LBinaryInst *LBinaryInst::create_l_or(Value *v1, Value *v2, BasicBlock *bb)
+{
+    return create(l_or, v1, v2, bb);
+}
+LBinaryInst *LBinaryInst::create_l_xor(Value *v1, Value *v2, BasicBlock *bb)
+{
+    return create(l_xor, v1, v2, bb);
+}
+LBinaryInst *LBinaryInst::create_l_shl(Value *v1, Value *v2, BasicBlock *bb)
+{
+    return create(l_shl, v1, v2, bb);
+}
+LBinaryInst *LBinaryInst::create_l_lshr(Value *v1, Value *v2, BasicBlock *bb)
+{
+    return create(l_lshr, v1, v2, bb);
+}
+LBinaryInst *LBinaryInst::create_l_ashr(Value *v1, Value *v2, BasicBlock *bb)
+{
+    return create(l_ashr, v1, v2, bb);
+}
+
 FBinaryInst::FBinaryInst(OpID id, Value *v1, Value *v2, BasicBlock *bb)
     : BaseInst<FBinaryInst>(bb->get_module()->get_float_type(), id, bb)
 {
@@ -417,6 +472,30 @@ SextInst *SextInst::create_sext_to_i64(Value *val, BasicBlock *bb)
 {
     return create(val, bb->get_module()->get_int64_type(), bb);
 }
+
+TruncInst::TruncInst(Value *val, Type *ty, BasicBlock *bb)
+    : BaseInst<TruncInst>(ty, trunc, bb)
+{
+    assert(val->get_type()->is_integer_type() &&
+           "TruncInst operand is not integer");
+    assert(ty->is_integer_type() && "TruncInst destination type is not integer");
+    assert((static_cast<IntegerType *>(val->get_type())->get_num_bits() >
+            static_cast<IntegerType *>(ty)->get_num_bits()) &&
+           "TruncInst operand bit size is not larger than destination type bit "
+           "size");
+    add_operand(val);
+}
+
+TruncInst *TruncInst::create_trunc(Value *val, Type *ty, BasicBlock *bb)
+{
+    return create(val, ty, bb);
+}
+
+TruncInst *TruncInst::create_trunc_to_i32(Value *val, BasicBlock *bb)
+{
+    return create(val, bb->get_module()->get_int32_type(), bb);
+}
+
 
 ZextInst::ZextInst(Value *val, Type *ty, BasicBlock *bb)
     : BaseInst<ZextInst>(ty, zext, bb)

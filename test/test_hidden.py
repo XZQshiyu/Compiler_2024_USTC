@@ -80,7 +80,11 @@ def eval():
             COMMAND = [TEST_PATH]
 
             try:
+<<<<<<< HEAD
                 result = subprocess.run([EXE_PATH, "-o", TEST_PATH + ".ll", "-emit-llvm", "-mem2reg", "-const-prop", "-loop-inv-hoist", "-loop-analysis", "-loop-simplify", "-licm", TEST_PATH + ".sy"], stderr=subprocess.PIPE, timeout=45)
+=======
+                result = subprocess.run([EXE_PATH, "-o", TEST_PATH + ".ll", "-emit-llvm", "-mem2reg", "-const-prop", "-loop-inv-hoist","-math-simplify", TEST_PATH + ".sy"], stderr=subprocess.PIPE, timeout=45)
+>>>>>>> llh-wrong
             except Exception as _:
                 f.write('\tFail\n')
                 continue

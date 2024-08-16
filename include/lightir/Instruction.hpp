@@ -64,9 +64,23 @@ public:
     // float binary operators Logical operators
     shl,
     ashr,
-    lshr,
+    lshr, 
     lxor,
 
+    trunc,    // truncate
+
+    //long binary operators
+    l_add,
+    l_sub,
+    l_mul,
+    l_sdiv,
+    l_srem,
+    l_and,
+    l_or,
+    l_xor,
+    l_shl,
+    l_ashr,
+    l_lshr,
   };
   /* @parent: if parent!=nullptr, auto insert to bb
    * @ty: result type */
@@ -183,6 +197,33 @@ public:
 
   virtual std::string print() override;
 };
+
+// long binary operators class
+class LBinaryInst : public BaseInst<LBinaryInst>
+{
+  friend BaseInst<LBinaryInst>;
+
+private:
+  LBinaryInst(OpID id, Value *v1, Value *v2, BasicBlock *bb);
+
+public:
+  static LBinaryInst *create_l_add(Value *v1, Value *v2, BasicBlock *bb);
+  static LBinaryInst *create_l_sub(Value *v1, Value *v2, BasicBlock *bb);
+  static LBinaryInst *create_l_mul(Value *v1, Value *v2, BasicBlock *bb);
+  static LBinaryInst *create_l_sdiv(Value *v1, Value *v2, BasicBlock *bb);
+  // add new llvm instruciton
+  static LBinaryInst *create_l_srem(Value *v1, Value *v2, BasicBlock *bb);
+  static LBinaryInst *create_l_and(Value *v1, Value *v2, BasicBlock *bb);
+  static LBinaryInst *create_l_or(Value *v1, Value *v2, BasicBlock *bb);
+  static LBinaryInst *create_l_xor(Value *v1, Value *v2, BasicBlock *bb);
+  static LBinaryInst *create_l_shl(Value *v1, Value *v2, BasicBlock *bb);
+  static LBinaryInst *create_l_ashr(Value *v1, Value *v2, BasicBlock *bb);
+  static LBinaryInst *create_l_lshr(Value *v1, Value *v2, BasicBlock *bb);
+
+  virtual std::string print() override;
+};
+
+
 
 // float binary operators class
 class FBinaryInst : public BaseInst<FBinaryInst>
@@ -399,6 +440,24 @@ public:
 
   virtual std::string print() override;
 };
+
+class TruncInst : public BaseInst<TruncInst>
+{
+  friend BaseInst<TruncInst>;
+
+private:
+  TruncInst(Value *val, Type *ty, BasicBlock *bb);
+
+public:
+  static TruncInst *create_trunc(Value *val, Type *ty, BasicBlock *bb);
+  static TruncInst *create_trunc_to_i32(Value *val, BasicBlock *bb);
+
+  Type *get_dest_type() const { return get_type(); };
+
+  virtual std::string print() override;
+};
+
+
 
 // cast operators class
 class FpToSiInst : public BaseInst<FpToSiInst>

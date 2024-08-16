@@ -1,0 +1,26 @@
+[33m72aa73b[m[33m ([m[1;36mHEAD -> [m[1;32mllh-wrong[m[33m)[m math
+[33m8c67ec3[m[33m ([m[1;31morigin/llh-wrong[m[33m, [m[1;32mmain[m[33m)[m math
+[33m21892b7[m build
+[33m0b00008[m add new function in  bb.hpp
+[33m097b84f[m delete code_stu
+[33m85c73ec[m add test.sh to test riscv correctness
+[33m10facf6[m recreate functional hidden_functional
+[33m1139648[m uninstall git lfs
+[33m61fb489[m create 61.in
+[33mb80aa42[m Merge branch 'main' of github.com:XZQshiyu/Compiler_2024_USTC
+[33mdca487e[m ir modify
+[33mc457424[m Modify codegen.sh to fit riscv64 backend
+[33mdf1f48e[m construct ir
+[33mb096a91[m add sext, ptrtoint and inttoptr
+[33mc3105ca[m add tqdm from python test file
+[33mfdd6d0f[m modify test_hidden.py
+[33m5121a2b[m delete a useless file
+[33m7d98835[m rewrite the ilist and pass ir
+[33m9101149[m modify ir
+[33m2c26e4f[m add two files
+[33m755ab65[m add .gitattributes
+[33m4a7bea2[m add test file
+[33m7db2184[m add large file
+[33m93d1c40[m  Add large test file
+[33m21cc690[m create the pub
+[33mba262e7[m Initial commit

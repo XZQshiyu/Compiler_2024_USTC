@@ -12,6 +12,7 @@
 #include "LoopSimplify.hpp"
 #include "LoopInvCM.hpp"
 // #include "loop_info.hpp"
+#include "MathSimplify.hpp"
 
 #include <filesystem>
 #include <fstream>
@@ -34,6 +35,7 @@ struct Config
     bool const_prop{false};
     bool gvn{false};
     bool loop_inv_hoist{false};
+    bool math_simplify{false};
     bool loop_info{false};
     bool loop_analysis{false};
     bool loop_simplify{false};
@@ -112,6 +114,15 @@ int main(int argc, char **argv)
 
     PassManager PM(m.get());
     
+    // 算术优化
+    if(config.math_simplify)
+    {
+        // PM.add_pass<DeadCode>();
+
+        PM.add_pass<MathSimplify>();
+        PM.add_pass<DeadCode>();
+    }
+
 
     /*
         transform the llvm ir to SSA form
@@ -216,6 +227,10 @@ void Config::parse_cmd_line()
         else if (argv[i] == "-gvn"s)
         {
             gvn = true;
+        }
+        else if (argv[i] == "-math-simplify"s)
+        {
+            math_simplify = true;
         }
         else if (argv[i] == "-loop-inv-hoist"s)
         {

@@ -10,11 +10,16 @@
 #include <set>
 #include <string>
 
+
+
 class Function;
 class Instruction;
 class Module;
 
 class BasicBlock : public Value, public ilist<BasicBlock>::node {
+
+  using InstIter = ilist<Instruction>::iterator;
+
   public:
     ~BasicBlock() = default;
     static BasicBlock *create(Module *m, const std::string &name,
@@ -42,29 +47,28 @@ class BasicBlock : public Value, public ilist<BasicBlock>::node {
     void add_instr_begin(Instruction *instr) 
     { 
       instr_list_.push_front(instr);
-      instr->set_parent(this); 
-    }
+      instr->set_parent(this);}
 
-    void insert_before(Instruction *pos, Instruction *instr)
-    {
+    void insert_before(const InstIter &pos, Instruction *instr) 
+    { 
+      // Insert the new instruction before the position node
       instr_list_.insert_before(pos, instr);
-      instr->set_parent(this);
     }
 
-    void insert_after(Instruction *pos, Instruction *instr)
-    {
-      instr_list_.insert_after(pos, instr);
-      instr->set_parent(this);
+    // void insert_after(Instruction *pos, Instruction *instr) 
+    // { 
+    // }
+
+    Instruction *get_prev_instr(Instruction *instr) 
+    { 
+      return instr_list_.get_prev(instr); 
     }
 
-    Instruction *get_prev_instr(Instruction *instr)
-    {
-      return instr_list_.get_prev(instr);
+    Instruction *get_next_instr(Instruction *instr) 
+    { 
+      return instr_list_.get_next(instr); 
     }
-    Instruction *get_next_instr(Instruction *instr)
-    {
-      return instr_list_.get_next(instr);
-    }
+
     void erase_instr(Instruction *instr) { instr_list_.erase(instr); }
     void remove_instr(Instruction *instr) 
     { 
