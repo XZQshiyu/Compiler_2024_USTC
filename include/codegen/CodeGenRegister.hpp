@@ -15,6 +15,7 @@
 #include <cassert>
 #include <cstring>
 #include <string>
+#include <unordered_map>
 
 // #define STACK_ALIGN(x) (((x / 16) + (x % 16 ? 1 : 0)) * 16)
 #define STACK_ALIGN(x) ALIGN(x, 16)
@@ -320,4 +321,3 @@ std::set<string> outside_func={"getint","getch","getfloat","getarray","getfarray
     std::map<Function *,map<Value *,int>> RA_float_result,RA_int_result;
     //TODO:添加你需要的变量
 };
-//TODO:本次实验为开放性实验，你可以自行设计实验框架并自行对提供的实验框架进行修改。本框架只作为

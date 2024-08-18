@@ -88,10 +88,10 @@ for case in $testcases; do
 	echo -n "$case_base_name..."
 	# if debug mode on, generate .ll also
 	if [ $debug_mode = true ]; then
-		bash -c "sysy -mem2reg -const-prop -loop-inv-hoist -emit-llvm $case -o $ll_file" >>$LOG 2>&1
+		bash -c "sysy -mem2reg -const-prop -loop-inv-hoist -loop-simplify -licm -emit-llvm $case -o $ll_file" >>$LOG 2>&1
 	fi
 	# sysy compile to .s
-	bash -c "sysy -S -mem2reg -const-prop -loop-inv-hoist $case -o $asm_file" >>$LOG 2>&1
+	bash -c "sysy -S -mem2reg -const-prop -loop-inv-hoist -loop-simplify -licm $case -o $asm_file" >>$LOG 2>&1
 	check_return_value $? 0 "CE" "sysy compiler error" || continue
 
 	# gcc compile asm to executable

@@ -67,5 +67,3 @@ class RegAllocator {
 };
 } // namespace RA
 #endif
-//TODO: 这只是一个样例，你可以自行对框架进行修改以符合你自己的心意
-//TODO: 对框架不满可尽情修改

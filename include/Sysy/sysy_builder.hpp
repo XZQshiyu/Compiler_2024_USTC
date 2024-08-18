@@ -1,12 +1,12 @@
 #pragma once
 
-#include "BasicBlock.hpp"
-#include "Constant.hpp"
-#include "Function.hpp"
-#include "IRBuilder.hpp"
-#include "Module.hpp"
-#include "Type.hpp"
-#include "ast.hpp"
+#include "../lightir/BasicBlock.hpp"
+#include "../lightir/Constant.hpp"
+#include "../lightir/Function.hpp"
+#include "../lightir/IRBuilder.hpp"
+#include "../lightir/Module.hpp"
+#include "../lightir/Type.hpp"
+#include "../common/ast.hpp"
 
 #include <map>
 #include <memory>
@@ -174,21 +174,24 @@ public:
         auto _sysy_stoptime_type = FunctionType::get(TyVoid, _sysy_stoptime_params);
         auto _sysy_stoptime_fun = Function::create(_sysy_stoptime_type, "_sysy_stoptime", module.get());
 
+
         // void memset_int(int *s, int n)
         std::vector<Type *> memset_int_params;
         memset_int_params.push_back(TyInt32_ptr);
         memset_int_params.push_back(TyInt32);
+        memset_int_params.push_back(TyInt32);
         auto memset_int_type = FunctionType::get(TyVoid, memset_int_params);
         auto memset_int_fun = Function::create(memset_int_type, "memset_int", module.get());
-        memset_int_fun->set_name("memset_int");
+        // memset_int_fun->set_name("memset_int");
 
         // void memset_float(float *s, int n)
         std::vector<Type *> memset_float_params;
         memset_float_params.push_back(TyFloat_ptr);
         memset_float_params.push_back(TyInt32);
+        memset_float_params.push_back(TyInt32);
         auto memset_float_type = FunctionType::get(TyVoid, memset_float_params);
         auto memset_float_fun = Function::create(memset_float_type, "memset_float", module.get());
-        memset_float_fun->set_name("memset_float");
+        // memset_float_fun->set_name("memset_int");
 
         scope.enter();
         scope.push("getint", getint_fun);

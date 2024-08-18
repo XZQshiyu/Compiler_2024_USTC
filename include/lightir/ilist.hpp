@@ -249,7 +249,6 @@ public:
         void insert_after(const iterator &it, T *p)
         {
             p->prev_->next_ = p->next_;
-            p->next_->prev_ = p->prev_;
             auto p_it = it.ptr_;
             if(p_it == tail_)
             {

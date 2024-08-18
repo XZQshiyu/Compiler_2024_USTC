@@ -2,10 +2,12 @@
 
 extern "C"
 {
-#include "syntax_tree.h"
+#include "../common/syntax_tree.h"
     extern syntax_tree *parse(const char *input);
 }
-#include "User.hpp"
+#include "../common/syntax_tree.h"
+    extern syntax_tree *parse(const char *input);
+#include "../lightir/User.hpp"
 #include <memory>
 #include <string>
 #include <vector>

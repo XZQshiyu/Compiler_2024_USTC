@@ -1,7 +1,6 @@
-#include "sysy_builder.hpp"
-#include "logging.hpp"
+#include "../../include/Sysy/sysy_builder.hpp"
+#include "../../include/common/logging.hpp"
 #include <stack>
-#include <cmath>
 
 #define CONST_FP(num) ConstantFP::get((float)num, module.get())
 #define CONST_INT(num) ConstantInt::get(num, module.get())
@@ -302,7 +301,7 @@ Value *CminusfBuilder::visit(ASTDef &node)
                 if (node.is_const)
                     scope.push({node.id, std::vector<unsigned int>(0)}, {0});
             }
-            else // 初始化不是0
+            else//初始化不是0
             {
                 // 需要通过访问ASTInitval更新 context中的val.i_val或者val.f_val
                 node.initval_list->accept(*this);
@@ -371,7 +370,7 @@ Value *CminusfBuilder::visit(ASTDef &node)
         unsigned int size = 1;
         for (auto exp : node.exp_lists)
         {
-            context.exp_lists.push_back(*exp); // 倒顺序，比较后出现的数据在比较里边的层
+            context.exp_lists.push_back(*exp);//倒顺序，比较后出现的数据在比较里边的层
         }
         ArrayType *array_type = nullptr;
         for (auto it = std::rbegin(context.exp_lists); it != std::rend(context.exp_lists); it++)
@@ -382,9 +381,9 @@ Value *CminusfBuilder::visit(ASTDef &node)
             if (array_type == nullptr)
                 array_type = ArrayType::get(var_type, num);
             else
-                array_type = ArrayType::get(array_type, num); // 扩展一层
+                array_type = ArrayType::get(array_type, num);//扩展一层
         }
-        if (node.initval_list == nullptr) // 没有初始值
+        if (node.initval_list == nullptr)//没有初始值
         {
             if (scope.in_global())
             {
@@ -394,7 +393,7 @@ Value *CminusfBuilder::visit(ASTDef &node)
                 else
                     zero = ConstantZero::get(array_type, module.get());
                 auto var = GlobalVariable::create(node.id, module.get(), array_type, node.is_const, zero);
-                // 全都是零的数组，这个需要codegen的时候自己想办法初始化
+                //全都是零的数组，这个需要codegen的时候自己想办法初始化
                 scope.push(node.id, var);
             }
             else
@@ -449,79 +448,15 @@ Value *CminusfBuilder::visit(ASTDef &node)
                 {
                     auto mem_set = scope.find("memset_int");
                     // LOG(ERROR) << mem_set->get_name();
-                    // if (len <= 100)
-                    // {
-                    //     for (auto i = 0; i < len; i++)
-                    //     {
-                    //         builder->create_store(CONST_INT(0), temp);
-                    //         temp_dim.back() = CONST_INT(i);
-                    //         temp = builder->create_gep(var, temp_dim);
-                    //     }
-                    // }
-                    // else
-                    // {
-                    //     auto *cond_bb = BasicBlock::create(module.get(), "", context.func);
-                    //     if(not builder->get_insert_block()->is_terminated())
-                    //     {
-                    //         builder->create_br(cond_bb);
-                    //     }
-                    //     builder->set_insert_point(cond_bb);
-                    //     auto *i = builder->create_alloca(INT32_T);
-                    //     builder->create_store(CONST_INT(0), i);
-                    //     auto *cond = builder->create_icmp_lt(builder->create_load(i), CONST_INT(len));
-                    //     auto *loop_bb = BasicBlock::create(module.get(), "", context.func);
-                    //     auto *after_bb = BasicBlock::create(module.get(), "", context.func);
-                    //     builder->create_cond_br(cond, loop_bb, after_bb);
-                    //     builder->set_insert_point(loop_bb);
-                    //     temp_dim.back() = builder->create_load(i);
-                    //     temp = builder->create_gep(var, temp_dim);
-                    //     builder->create_store(CONST_INT(0), temp);
-                    //     auto *next_i = builder->create_iadd(builder->create_load(i), CONST_INT(1));
-                    //     builder->create_store(next_i, i);
-                    //     builder->create_br(cond_bb);
-                    //     builder->set_insert_point(after_bb);    
-                    // }
-                    auto call = builder->create_call(mem_set, {temp, CONST_INT(len)});
+                    auto call = builder->create_call(mem_set, {temp, CONST_INT(0), CONST_INT(len * 4)});
                     call->set_name("memset_int_call");
                 }
                 else
                 {
                     auto mem_set = scope.find("memset_float");
                     // LOG(DEBUG) << mem_set->get_type()->print() << "+++";
-                    auto call = builder->create_call(mem_set, {temp, CONST_INT(len)});
+                    auto call = builder->create_call(mem_set, {temp, CONST_INT(0), CONST_INT(len * 4)});
                     call->set_name("memset_float_call");
-                    // if(len <= 100)
-                    // {
-                    //     for(int i = 0; i < len; i++)
-                    //     {
-                    //         builder->create_store(CONST_FP(0.), temp);
-                    //         temp_dim.back() = CONST_INT(i);
-                    //         temp = builder->create_gep(var, temp_dim);
-                    //     }
-                    // }
-                    // else
-                    // {
-                    //     auto *cond_bb = BasicBlock::create(module.get(), "", context.func);
-                    //     if(not builder->get_insert_block()->is_terminated())
-                    //     {
-                    //         builder->create_br(cond_bb);
-                    //     }
-                    //     builder->set_insert_point(cond_bb);
-                    //     auto *i = builder->create_alloca(INT32_T);
-                    //     builder->create_store(CONST_INT(0), i);
-                    //     auto *cond = builder->create_icmp_lt(builder->create_load(i), CONST_INT(len));
-                    //     auto *loop_bb = BasicBlock::create(module.get(), "", context.func);
-                    //     auto *after_bb = BasicBlock::create(module.get(), "", context.func);
-                    //     builder->create_cond_br(cond, loop_bb, after_bb);
-                    //     builder->set_insert_point(loop_bb);
-                    //     temp_dim.back() = builder->create_load(i);
-                    //     temp = builder->create_gep(var, temp_dim);
-                    //     builder->create_store(CONST_FP(0.), temp);
-                    //     auto *next_i = builder->create_iadd(builder->create_load(i), CONST_INT(1));
-                    //     builder->create_store(next_i, i);
-                    //     builder->create_br(cond_bb);
-                    //     builder->set_insert_point(after_bb);    
-                    // }
                 }
                 // LOG(DEBUG) << initval.size();
                 for (auto val = 0u; val < initval.size(); val++)
@@ -897,8 +832,9 @@ Value *CminusfBuilder::visit(ASTIterationStmt &node)
     {
         if (builder->get_insert_block()->get_pre_basic_blocks().empty())
             builder->get_insert_block()->erase_from_parent();
-        else if (not builder->get_insert_block()->is_terminated())
-            builder->create_br(condBB);
+        else
+            if (not builder->get_insert_block()->is_terminated())
+                builder->create_br(condBB);
     }
     else
     {

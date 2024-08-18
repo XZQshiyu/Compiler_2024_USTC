@@ -762,6 +762,27 @@ void CodeGenRegister::gen_binary() {
     case Instruction::srem:
         output.emplace_back("remw "+dest_reg+", "+sreg0+", "+sreg1);
         break;
+    case Instruction::land:
+        output.emplace_back("and "+dest_reg+", "+sreg0+", "+sreg1);
+        break;
+    case Instruction::lor:
+        output.emplace_back("or "+dest_reg+", "+sreg0+", "+sreg1);
+        break;
+    case Instruction::lxor:
+        output.emplace_back("xor "+dest_reg+", "+sreg0+", "+sreg1);
+        break;
+    case Instruction::ashr:
+        output.emplace_back("sraw "+dest_reg+", "+sreg0+", "+sreg1);
+        break;
+    case Instruction::lshr:
+        output.emplace_back("srlw "+dest_reg+", "+sreg0+", "+sreg1);
+        break;
+    case Instruction::shl:
+        output.emplace_back("sllw "+dest_reg+", "+sreg0+", "+sreg1);
+        break;
+    case Instruction::sext:
+        output.emplace_back("sext.w "+dest_reg+", "+sreg0);
+        break;
     default:
         assert(false);
     }
@@ -1766,6 +1787,13 @@ void CodeGenRegister::run() {
                         case Instruction::mul:
                         case Instruction::sdiv:
                         case Instruction::srem:
+                        case Instruction::land:
+                        case Instruction::lor:
+                        case Instruction::shl:
+                        case Instruction::ashr:
+                        case Instruction::lshr:
+                        case Instruction::lxor:
+                        case Instruction::sext:
                         gen_binary();
                         break;
                         case Instruction::fadd:
