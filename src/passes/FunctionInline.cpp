@@ -97,7 +97,7 @@ void FunctionInline::inline_function(Instruction *call, Function *origin) {
         }
         else{
             //多个返回值
-            auto bb_phi = BasicBlock::create(call_func->get_parent(), "", call_func);
+            auto bb_phi = BasicBlock::create(call_func->get_parent(), "phi", call_func);
             std::vector<BasicBlock*> ret_bb_list;
             for(auto ret : ret_list){
                 auto ret_bb = ret->get_parent();
@@ -110,6 +110,7 @@ void FunctionInline::inline_function(Instruction *call, Function *origin) {
             for(int i = 0; i < ret_list.size(); i++){
                 phi->add_phi_pair_operand(ret_list[i]->get_operand(0), ret_bb_list[i]);
             }
+            bb_phi->add_instruction(phi);
             ret_val = phi;
             bb_list.push_back(bb_phi);
             BranchInst::create_br(bb_new, bb_phi);
