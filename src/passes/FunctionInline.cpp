@@ -18,6 +18,21 @@ void FunctionInline::run() {
 }
 
 void FunctionInline::inline_all_functions() {
+    std::set<Function*> recursive_func;
+    for(auto &func : m_->get_functions()){
+        for(auto &bb : func.get_basic_blocks()){
+            for(auto &inst : bb.get_instructions()){
+                if(inst.is_call()){
+                    auto call = &inst;
+                    auto func1 = static_cast<Function*>(call->get_operand(0));
+                    if(func1 == &func){
+                        recursive_func.insert(func1);
+                        break;
+                    }
+                }
+            }
+        }
+    }
     for (auto &func : m_->get_functions()) {
         // std::cout << func.print();
         // auto name = func.get_name();
@@ -33,9 +48,10 @@ void FunctionInline::inline_all_functions() {
                 if (inst.is_call()) {
                     auto call = &inst;
                     auto func1 = static_cast<Function*>(call->get_operand(0));
-                    if (func1->get_name() == func.get_name()) {
+                    if (func1 == &func) {
                         continue;
                     }
+                    if(recursive_func.find(func1) != recursive_func.end()) continue;
                     if(outside_func.find(func1->get_name()) != outside_func.end()) continue;
                     // name = func1->get_name();
                     LOG(DEBUG)<< func.print() << "\n\n======||||||\n\n"<< func1->print() << "\n\n======||||||\n\n";
