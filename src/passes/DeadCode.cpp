@@ -147,6 +147,10 @@ void DeadCode::sweep_globally()
         if (glob_var_r.get_use_list().size() == 0)
             unused_globals.push_back(&glob_var_r);
     }
+    for (auto func : unused_funcs)
+        m_->get_functions().erase(func);
+    for (auto glob : unused_globals)
+        m_->get_global_variable().erase(glob);
     vector<BasicBlock *> unused_bbs;
     set<Instruction *> unused_phi_instrs;
     for (auto &func : m_->get_functions())
@@ -161,10 +165,6 @@ void DeadCode::sweep_globally()
         }
     }
     // changed |= unused_funcs.size() or unused_globals.size();
-    for (auto func : unused_funcs)
-        m_->get_functions().erase(func);
-    for (auto glob : unused_globals)
-        m_->get_global_variable().erase(glob);
     LOG(INFO) << m_->print();
     for (auto bb : unused_bbs)
     {

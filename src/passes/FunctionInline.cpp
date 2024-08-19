@@ -141,7 +141,7 @@ void FunctionInline::inline_function(Instruction *call, Function *origin) {
     }
     call_bb->remove_instr(call);
     origin->remove_use(call, 0);
-    LOG(ERROR) << origin->get_use_list().size();
+    // LOG(ERROR) << origin->get_use_list().size();
     for(auto inst : del_list){
             call_bb->remove_instr(inst);
             bb_new->add_instruction(inst);
