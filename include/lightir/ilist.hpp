@@ -214,7 +214,6 @@ public:
             delete p;
             return ret;
         }
-
         T *get_prev(const iterator &it)
         {
             auto p = it.ptr_;
@@ -250,7 +249,6 @@ public:
         void insert_after(const iterator &it, T *p)
         {
             p->prev_->next_ = p->next_;
-
             auto p_it = it.ptr_;
             if(p_it == tail_)
             {
@@ -264,7 +262,7 @@ public:
             p->next_ = p_it->next_;
             p_it->next_->prev_ = p;
             p_it->next_ = p;
-            size_++;
+           size_++;
             mark_node(p);
         }
         void insert_before(const iterator &it, T *p)
@@ -284,6 +282,10 @@ public:
             p->next_ = p_it;
             p_it->prev_->next_ = p;
             p_it->prev_ = p;
+            if(!is_node(p))
+            {
+                size_++;
+            }
             // size_++;
             mark_node(p);
         }

@@ -551,7 +551,7 @@ Instruction *LoadInst::clone(BasicBlock *prt) const  {
 }
 
 Instruction *AllocaInst::clone(BasicBlock *prt) const  {
-  return new AllocaInst(get_type(), prt);
+  return new AllocaInst(get_alloca_type(), prt);
 }
 
 Instruction *ZextInst::clone(BasicBlock *prt) const  {

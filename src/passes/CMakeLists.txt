@@ -10,4 +10,5 @@ add_library(
     LoopSearch.cpp
     MathSimplify.cpp
     gvn.cpp
+    FunctionInline.cpp
 )

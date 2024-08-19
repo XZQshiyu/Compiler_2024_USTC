@@ -8,6 +8,7 @@
 #include "PassManager.hpp"
 #include "MathSimplify.hpp"
 #include "sysy_builder.hpp"
+#include "FunctionInline.hpp"
 #include "gvn.hpp"
 
 #include <filesystem>
@@ -167,6 +168,8 @@ int main(int argc, char **argv)
         PM.add_pass<LoopInvHoist>();
         PM.add_pass<DeadCode>();
     }
+        PM.add_pass<FunctionInline>();
+        PM.add_pass<DeadCode>();
 
     PM.run();
 
