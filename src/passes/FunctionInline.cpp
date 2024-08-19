@@ -121,7 +121,7 @@ void FunctionInline::inline_function(Instruction *call, Function *origin) {
         }
         else{
             //多个返回值
-            auto bb_phi = BasicBlock::create(call_func->get_parent(), "phi", call_func);
+            auto bb_phi = BasicBlock::create(call_func->get_parent(), "", call_func);
             std::vector<BasicBlock*> ret_bb_list;
             for(auto ret : ret_list){
                 auto ret_bb = ret->get_parent();
