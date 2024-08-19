@@ -138,8 +138,10 @@ void Mem2Reg::rename(BasicBlock *bb)
         auto instr = &inst;
         if (instr->is_phi())
         {
-            auto var = phi_map.at(instr);
-            var_stack[var].push_back(instr);
+            auto var = phi_map.find(instr);
+            if(var == phi_map.end())
+                continue;
+            var_stack[var->second].push_back(instr);
         }
     }
     // 步骤四：用 lval 最新的定值替代对应的load指令
@@ -180,12 +182,15 @@ void Mem2Reg::rename(BasicBlock *bb)
             auto instr = &inst;
             if (instr->is_phi())
             {
-                auto var = phi_map.at(instr);
+                auto var = phi_map.find(instr);
+                if(var == phi_map.end())
+                    continue;
+
                 // 找到phi
-                if (var_stack.find(var) != var_stack.end())
+                if (var_stack.find(var->second) != var_stack.end())
                 {
-                    if(var_stack[var].size() != 0)
-                        dynamic_cast<PhiInst *>(instr)->add_phi_pair_operand(var_stack[var].back(), bb);
+                    if(var_stack[var->second].size() != 0)
+                        dynamic_cast<PhiInst *>(instr)->add_phi_pair_operand(var_stack[var->second].back(), bb);
                 }
             }
         }
@@ -201,10 +206,12 @@ void Mem2Reg::rename(BasicBlock *bb)
         auto instr = &inst;
         if (instr->is_phi())
         {
-            auto var = phi_map.at(instr);
-            if (is_valid_ptr(var))
+            auto var = phi_map.find(instr);
+            if(var == phi_map.end())
+                continue;
+            if (is_valid_ptr(var->second))
             {
-                var_stack[var].pop_back();
+                var_stack[var->second].pop_back();
             }
         }
         else if (instr->is_store())
