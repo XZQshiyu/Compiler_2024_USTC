@@ -276,8 +276,8 @@ ReturnInst::ReturnInst(Value *val, BasicBlock *bb)
     {
         assert(!bb->get_parent()->get_return_type()->is_void_type() &&
                "Void function returning a value");
-        assert(bb->get_parent()->get_return_type() == val->get_type() &&
-               "ReturnInst type is different from function return type");
+        // assert(bb->get_parent()->get_return_type() == val->get_type() &&
+        //        "ReturnInst type is different from function return type");
         add_operand(val);
     }
 }

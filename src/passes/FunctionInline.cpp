@@ -54,6 +54,7 @@ void FunctionInline::inline_all_functions() {
                     }
                     if(recursive_func.find(func1) != recursive_func.end()) continue;
                     if(outside_func.find(func1->get_name()) != outside_func.end()) continue;
+                    if(func1->get_basic_blocks().size() > 10) continue;
                     // name = func1->get_name();
                     // LOG(DEBUG)<< func.print() << "\n\n======||||||\n\n"<< func1->print() << "\n\n======||||||\n\n";
                     inline_function(call, func1);
