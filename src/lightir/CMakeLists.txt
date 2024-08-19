@@ -17,5 +17,4 @@ add_library(
 # 将LLVMSupport链接到动态库IR_lib中
 target_link_libraries(
     IR_lib
-    LLVMSupport
 )
