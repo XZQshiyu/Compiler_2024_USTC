@@ -4,6 +4,7 @@
 #include "IRprinter.hpp"
 #include "Module.hpp"
 #include "Type.hpp"
+#include "Constant.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -580,5 +581,9 @@ Instruction *Int2PtrInst::clone(BasicBlock *prt) const  {
 }
 
 Instruction *PhiInst::clone(BasicBlock *prt) const  {
-  return new PhiInst(get_type(), {get_operands().begin(), get_operands().end()}, {}, prt);
+  auto temp = new PhiInst(get_type(), {}, {}, prt);
+    for (unsigned i = 0; i < get_num_operand(); i += 2) {
+        temp->add_phi_pair_operand(get_operand(i), get_operand(i + 1));
+    }
+    return temp;
 }

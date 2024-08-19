@@ -165,7 +165,7 @@ void DeadCode::sweep_globally()
         }
     }
     // changed |= unused_funcs.size() or unused_globals.size();
-    LOG(INFO) << m_->print();
+    // LOG(INFO) << m_->print();
     for (auto bb : unused_bbs)
     {
         LOG(INFO) << "erase bb: " << bb->get_name();
