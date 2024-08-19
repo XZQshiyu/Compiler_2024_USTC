@@ -54,11 +54,11 @@ void FunctionInline::inline_all_functions() {
                     }
                     if(recursive_func.find(func1) != recursive_func.end()) continue;
                     if(outside_func.find(func1->get_name()) != outside_func.end()) continue;
-                    if(func1->get_basic_blocks().size() > 10) continue;
+                    // if(func1->get_basic_blocks().size() > 10) continue;
                     // name = func1->get_name();
-                    // LOG(DEBUG)<< func.print() << "\n\n======||||||\n\n"<< func1->print() << "\n\n======||||||\n\n";
+                    LOG(DEBUG)<< func.print() << "\n\n======\n\n"<< func1->print() << "\n\n\n\n";
                     inline_function(call, func1);
-                    // LOG(DEBUG)<< func.print();
+                    LOG(DEBUG)<< func.print();
                     goto a1;
                 }
             }
@@ -84,13 +84,16 @@ void FunctionInline::inline_function(Instruction *call, Function *origin) {
         v_map.insert(std::make_pair(static_cast<Value*>(&bb), static_cast<Value*>(bb_new)));
         bb_list.push_back(bb_new);
         for(auto &inst : bb.get_instructions()){
-            LOG(DEBUG) << inst.op_id_;
+            // LOG(DEBUG) << inst.op_id_;
             if(inst.is_ret() && origin->get_return_type()->is_void_type()){
                 ret_void_bbs.push_back(bb_new);
                 continue;
             }
+            if(inst.is_phi()){
+                ;
+            }
             Instruction *inst_new = inst.clone(bb_new);
-
+            if(inst.is_phi()) bb_new->add_instr_begin(inst_new);
             v_map.insert(std::make_pair(static_cast<Value*>(&inst), static_cast<Value*>(inst_new)));
             if(inst.is_ret()){
                 ret_list.push_back(inst_new);
@@ -100,6 +103,9 @@ void FunctionInline::inline_function(Instruction *call, Function *origin) {
     for(auto bb : bb_list){
         for(auto &inst : bb->get_instructions()){
             for(int i = 0; i < inst.get_num_operand(); i++){
+                    if(inst.is_phi()){
+                        ;
+                    }
                 auto op = inst.get_operand(i);
                 if(v_map.find(op) != v_map.end()){
                     inst.set_operand(i, v_map[op]);
