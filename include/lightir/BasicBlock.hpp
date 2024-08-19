@@ -83,6 +83,10 @@ class BasicBlock : public Value, public ilist<BasicBlock>::node {
     instr_list_.insert(it, inst);
     return inst;
 }
+  void reset(){
+    pre_bbs_.clear();
+    succ_bbs_.clear();
+  }
 
   private:
     BasicBlock(const BasicBlock &) = delete;

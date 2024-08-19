@@ -5,9 +5,12 @@
 #include "Value.hpp"
 #include <cassert>
 #include <filesystem>
+#include <iostream>
 #include <memory>
 #include <utility>
 #include <vector>
+
+
 
 void FunctionInline::run() {
     inline_all_functions();
@@ -15,6 +18,7 @@ void FunctionInline::run() {
 
 void FunctionInline::inline_all_functions() {
     for (auto &func : m_->get_functions()) {
+        // std::cout << func.print();
         // auto name = func.get_name();
         // if (func.get_name() == "main") {
         //     continue;
@@ -33,7 +37,7 @@ void FunctionInline::inline_all_functions() {
                     }
                     if(outside_func.find(func1->get_name()) != outside_func.end()) continue;
                     // name = func1->get_name();
-                    LOG(DEBUG)<< func.print() << '\n' << func1->print() << '\n';
+                    LOG(DEBUG)<< func.print() << "\n\n======||||||\n\n"<< func1->print() << "\n\n======||||||\n\n";
                     inline_function(call, func1);
                     LOG(DEBUG)<< func.print();
                     goto a1;
@@ -138,5 +142,7 @@ void FunctionInline::inline_function(Instruction *call, Function *origin) {
             call_bb->remove_instr(inst);
             bb_new->add_instruction(inst);
     }
+    origin->reset_bbs();
+    call_func->reset_bbs();
     return;
 }

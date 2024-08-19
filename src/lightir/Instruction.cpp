@@ -190,6 +190,7 @@ CallInst::CallInst(Function *func, std::vector<Value *> args, BasicBlock *bb)
                "CallInst: Wrong arg type");
         add_operand(args[i]);
     }
+    func_ = func;
 }
 
 CallInst *CallInst::create_call(Function *func, std::vector<Value *> args,

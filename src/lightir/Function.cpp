@@ -1,6 +1,9 @@
 #include "Function.hpp"
+#include "BasicBlock.hpp"
 #include "IRprinter.hpp"
 #include "Module.hpp"
+#include <cassert>
+#include <iostream>
 
 Function::Function(FunctionType *ty, const std::string &name, Module *parent)
     : Value(ty, name), parent_(parent), seq_cnt_(0) {
@@ -127,6 +130,37 @@ std::string Function::print() {
     return func_ir;
 }
 
+void Function::reset_bbs(){
+    for(auto &bb: basic_blocks_){
+        bb.reset();
+    }
+    for(auto &bb : basic_blocks_){
+        auto inst = &((bb.get_instructions().back()));
+            if(inst->is_br()){
+                auto br = static_cast<BranchInst*>(inst);
+                if(br->is_cond_br()){
+                    auto true_bb = static_cast<BasicBlock*>(br->get_operand(1));
+                    auto false_bb = static_cast<BasicBlock*>(br->get_operand(2));
+                    assert(true_bb->get_parent() == this);
+                    assert(false_bb->get_parent() == this);
+                    bb.add_succ_basic_block(true_bb);
+                    bb.add_succ_basic_block(false_bb);
+                    true_bb->add_pre_basic_block(&bb);
+                    false_bb->add_pre_basic_block(&bb);
+                }
+                else{
+                    auto succ_bb = static_cast<BasicBlock*>(br->get_operand(0));
+                    assert(succ_bb->get_parent() == this);
+                    bb.add_succ_basic_block(succ_bb);
+                    succ_bb->add_pre_basic_block(&bb);
+                }
+            }
+            // else{
+            //     std::cout << print();
+            // }
+        
+    }
+}
 
 std::string Argument::print() {
     std::string arg_ir;

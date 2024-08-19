@@ -125,6 +125,8 @@ int main(int argc, char **argv)
     }
 
     PassManager PM(m.get());
+    PM.add_pass<FunctionInline>();
+        PM.add_pass<DeadCode>();
 
     LOG(INFO) << "before mem2reg";
     for(auto &func : m->get_functions())
@@ -168,8 +170,7 @@ int main(int argc, char **argv)
         PM.add_pass<LoopInvHoist>();
         PM.add_pass<DeadCode>();
     }
-        PM.add_pass<FunctionInline>();
-        PM.add_pass<DeadCode>();
+        
 
     PM.run();
 

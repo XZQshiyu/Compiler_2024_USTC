@@ -323,4 +323,3 @@ class CodeGenRegister {
     std::map<Function *,map<Value *,int>> RA_float_result,RA_int_result;
     //TODO:添加你需要的变量
 };
-//TODO:本次实验为开放性实验，你可以自行设计实验框架并自行对提供的实验框架进行修改。本框架只作为

@@ -5,7 +5,9 @@
 
 #include <map>
 #include <set>
-#include <queue>
+#include <vector>
+#include <stack>
+
 class Dominators : public Pass {
   public:
     using BBSet = std::set<BasicBlock *>;
@@ -25,15 +27,20 @@ class Dominators : public Pass {
   private:
     void create_idom(Function *f);
     void create_dominance_frontier(Function *f);
+    void dfs(BasicBlock *bb);
+    void get_reverse_post_order();
     void create_dom_tree_succ(Function *f);
+    BasicBlock* intersect(BasicBlock *b1, BasicBlock *b2);
+    void create_dom(Function *f);
 
-    void post_order_traversal(BasicBlock *bb, BBSet &visit); 
-  
     // TODO 补充需要的函数
 
-    std::map<BasicBlock *, int> post_order_num {};  // 后序遍历后各个基本块的顺序编号
-    std::list<BasicBlock *> post_order{}; // 后序遍历的结果
     std::map<BasicBlock *, BasicBlock *> idom_{};  // 直接支配
+    std::map<BasicBlock *, std::vector<BasicBlock *>> dom_{}; // 支配集合
+    std::stack<BasicBlock *> dfs_stack{}; // dfs栈
+    std::set<BasicBlock *> visited{}; // dfs访问过的节点
+    std::vector<BasicBlock *> reverse_post_order{}; // 逆后序
+    std::map<BasicBlock *, int> reverse_post_order_map{}; // 逆后序映射
     std::map<BasicBlock *, BBSet> dom_frontier_{}; // 支配边界集合
     std::map<BasicBlock *, BBSet> dom_tree_succ_blocks_{}; // 支配树中的后继节点
 };

@@ -272,8 +272,9 @@ public:
 
   virtual std::string print() override;
   Instruction *clone(BasicBlock *prt)const override {
-  return new CallInst(get_function(), {get_operands().begin(), get_operands().end()}, prt);
+  return new CallInst(func_, {get_operands().begin()+1, get_operands().end()}, prt);
 }
+  Function* func_;
 };
 
 // branch operators class

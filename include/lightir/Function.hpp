@@ -53,6 +53,8 @@ public:
   void set_instr_name();
   std::string print();
 
+  void reset_bbs();
+
 private:
   ilist<BasicBlock> basic_blocks_;
   std::list<Argument> arguments_;
