@@ -66,7 +66,7 @@ bool DeadCode::sweep(Function *func) {
             }
         }
     }
-    // LOG(INFO) << func->print();
+    LOG(INFO) << func->print();
     for(auto &bb : func->get_basic_blocks())
     {
         LOG(INFO) << "bb: " << bb.get_name() << " " << bb.tag();
