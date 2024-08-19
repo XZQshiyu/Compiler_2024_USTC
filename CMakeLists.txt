@@ -6,7 +6,7 @@ cmake_minimum_required( VERSION 3.4 )
 # C编译器标志 包含C++编译器标志 + C99标准
 # ${variable_name}相当于对变量variable_name解引用(类似指针),变量 variablle_name中的值是一个string
 set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -std=c99")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,stack-size=0x100000000")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl")
 
 # debug模式下的C++编译器标志
 # 采用默认的C++编译器标志，-O0表示不采用优化，-Wall表示输出所有警告信息, -g2:源代码行数和变量名, -ggdb: gdb调试优化
@@ -47,7 +47,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # FLEX库, BISON库,LLVM库,对于LLVM库，使用LLVM自带的CMake配置文件而不是CMAKE默认的配置文件(CONFIG)关键字
 find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
-find_package(LLVM REQUIRED CONFIG)
+
 # 输出 LLVM的版本号和配置文件的路径
 message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
 message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
@@ -57,11 +57,7 @@ include_directories(${LLVM_INCLUDE_DIRS})
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 # 将LLVM库中的 support,core组件映射到库名 llvm_libs，可以使用llvm_libs这个变量名链接这些库
-llvm_map_components_to_libnames(
-    llvm_libs
-    support
-    core
-)
+
 
 # 相当于一个环境变量,包含了所有的头文件可能存在的目录,这样不会出现#include引用相对路径出现的头文件报错
 # 头文件如下: 5个子目录,include目录和LLVM的包含目录
@@ -73,11 +69,11 @@ INCLUDE_DIRECTORIES(
     include/lightir
     include/codegen
     include/passes/
-    ${LLVM_INCLUDE_DIRS}
+
 )
 
 # 添加 LLVM编译器定义
-add_definitions(${LLVM_DEFINITIONS})
+
 
 # 设置CMake输出目录
 # 可执行文件,静态库和动态库的输出目录都为 二进制目录
