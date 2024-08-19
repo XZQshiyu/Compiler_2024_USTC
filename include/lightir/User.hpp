@@ -10,6 +10,7 @@ class User : public Value {
     virtual ~User() { remove_all_operands(); }
 
     const std::vector<Value *> &get_operands() const { return operands_; }
+    std::vector<Value *> &get_modified_operands() { return operands_; }
     unsigned get_num_operand() const { return operands_.size(); }
 
     // start from 0

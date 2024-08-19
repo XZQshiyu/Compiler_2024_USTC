@@ -11,6 +11,7 @@
 #include "LoopAnalysis.hpp"
 #include "LoopSimplify.hpp"
 #include "LoopInvCM.hpp"
+#include "LoopUnRoll.hpp"
 // #include "loop_info.hpp"
 
 #include <filesystem>
@@ -38,6 +39,7 @@ struct Config
     bool loop_analysis{false};
     bool loop_simplify{false};
     bool licm{false};
+    bool loop_unroll{false};
 
     Config(int argc, char **argv) : argc(argc), argv(argv)
     {
@@ -119,11 +121,14 @@ int main(int argc, char **argv)
     */
     PM.add_pass<Mem2Reg>();
     PM.add_pass<DeadCode>();
-    // analysis pass
-    // if(config.loop_info)
-    // {
-    //     PM.add_pass<LoopInfo>();
-    // }
+    // 指令降级
+    if (config.const_prop)
+    {
+        PM.add_pass<ConstPropagation>();
+        PM.add_pass<DeadCode>();
+        PM.add_pass<ConstPropagation>();
+        PM.add_pass<DeadCode>();
+    }
     if(config.loop_analysis)
     {
         PM.add_pass<LoopAnalysis>();
@@ -136,13 +141,11 @@ int main(int argc, char **argv)
     {
         PM.add_pass<LoopInvCM>();
     }
-    // transform pass
-    // 指令降级
-    if (config.const_prop)
+    if(config.loop_unroll)
     {
-        PM.add_pass<ConstPropagation>();
-        PM.add_pass<DeadCode>();
+        PM.add_pass<LoopUnRoll>();
     }
+    // transform pass
 
     if (config.gvn)
     {
@@ -236,6 +239,10 @@ void Config::parse_cmd_line()
         else if(argv[i] == "-licm"s)
         {
             licm = true;
+        }
+        else if(argv[i] == "-loop-unroll"s)
+        {
+            loop_unroll = true;
         }
         else
         {

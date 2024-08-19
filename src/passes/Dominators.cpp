@@ -160,8 +160,8 @@ void Dominators::create_dominance_frontier(Function *f)
                     // LOG(INFO) << idom_[&b]->print();
                     dom_frontier_[runner].insert(&b);
                     runner = idom_[runner];
-                    // if(runner == nullptr)
-                    //     break;
+                    if(runner == nullptr)
+                        break;
                     // LOG(INFO) <<
                 }
             }

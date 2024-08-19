@@ -14,7 +14,7 @@ class LoopUnRoll : public Pass {
     public:
         LoopUnRoll(Module *m) : Pass(m) {}
         void run() override;
-         struct SimpLoop {
+        struct SimpLoop {
             BasicBlock *header;
             BasicBlock *preheader;
             BasicBlock *latch;
@@ -24,10 +24,14 @@ class LoopUnRoll : public Pass {
             ConstantInt *initial;
             ConstantInt *bound;
             ConstantInt *step;
+            Instruction::OpID icmp_op;
+            SimpLoop() : header(nullptr), preheader(nullptr), latch(nullptr), exit(nullptr), indvar(nullptr), initial(nullptr), bound(nullptr), step(nullptr) {}
         };
         SimpLoop get_simplify_loop(BasicBlock *header,const Loop &loop);
         void unroll_loop(const SimpLoop &sloop, int unroll_factor);
+        bool should_unroll(const SimpLoop &sloop);
     private:
+        int UNROLL_THRESHOLD = 10000;
         std::unique_ptr<LoopAnalysis> loop_analysis_;
         std::unique_ptr<Dominators> dominators_;
         std::unique_ptr<LoopSimplify> loop_simplify_;

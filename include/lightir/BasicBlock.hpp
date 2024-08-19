@@ -65,6 +65,21 @@ class BasicBlock : public Value, public ilist<BasicBlock>::node {
     {
       return instr_list_.get_next(instr);
     }
+    Instruction *clone_instr(const ilist<Instruction>::iterator &it, Instruction *other,
+                                    bool diff_func) {
+    auto other_bb = other->get_parent();
+    assert(diff_func || other_bb->get_parent() == get_parent());
+    if(is_terminated() && it == instr_list_.end())
+    // check for RetInst and BrInst
+    if (other->is_ret() or other->is_br())
+        assert(it == get_instructions().end());
+
+    /* About use chain and prev/succ:
+     * clone calls constructor of Instruction, which maintains use chain */
+    auto inst = other->clone(this);
+    instr_list_.insert(it, inst);
+    return inst;
+}
     void erase_instr(Instruction *instr) { instr_list_.erase(instr); }
     void remove_instr(Instruction *instr) 
     { 

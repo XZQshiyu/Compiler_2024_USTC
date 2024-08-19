@@ -282,7 +282,11 @@ public:
             p->next_ = p_it;
             p_it->prev_->next_ = p;
             p_it->prev_ = p;
-            size_++;
+            if(!is_node(p))
+            {
+                size_++;
+            }
+            // size_++;
             mark_node(p);
         }
 

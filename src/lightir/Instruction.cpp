@@ -19,7 +19,7 @@ Instruction::Instruction(Type *ty, OpID id, BasicBlock *parent)
         parent->add_instruction(this);
 }
 
-Function *Instruction::get_function() { return parent_->get_parent(); }
+Function *Instruction::get_function() const { return parent_->get_parent(); }
 Module *Instruction::get_module() { return parent_->get_module(); }
 
 std::string Instruction::get_instr_op_name() const
@@ -522,4 +522,62 @@ PhiInst *PhiInst::create_phi(Type *ty, BasicBlock *bb,
                              std::vector<BasicBlock *> val_bbs)
 {
     return create(ty, vals, val_bbs, bb);
+}
+
+Instruction *FBinaryInst::clone(BasicBlock *prt) const  {
+  return new FBinaryInst(op_id_, get_operand(0), get_operand(1), prt);
+}
+
+Instruction *ICmpInst::clone(BasicBlock *prt) const  {
+  return new ICmpInst(op_id_, get_operand(0), get_operand(1), prt);
+}
+
+Instruction *FCmpInst::clone(BasicBlock *prt) const  {
+  return new FCmpInst(op_id_, get_operand(0), get_operand(1), prt);
+}
+
+
+
+Instruction *ReturnInst::clone(BasicBlock *prt) const  {
+  return new ReturnInst(get_operand(0), prt);
+}
+
+Instruction *StoreInst::clone(BasicBlock *prt) const  {
+  return new StoreInst(get_operand(0), get_operand(1), prt);
+}
+
+Instruction *LoadInst::clone(BasicBlock *prt) const  {
+  return new LoadInst(get_operand(0), prt);
+}
+
+Instruction *AllocaInst::clone(BasicBlock *prt) const  {
+  return new AllocaInst(get_alloca_type(), prt);
+}
+
+Instruction *ZextInst::clone(BasicBlock *prt) const  {
+  return new ZextInst(get_operand(0), get_type(), prt);
+}
+
+Instruction *SextInst::clone(BasicBlock *prt) const  {
+  return new SextInst(get_operand(0), get_type(), prt);
+}
+
+Instruction *FpToSiInst::clone(BasicBlock *prt) const  {
+  return new FpToSiInst(get_operand(0), get_type(), prt);
+}
+
+Instruction *SiToFpInst::clone(BasicBlock *prt) const  {
+  return new SiToFpInst(get_operand(0), get_type(), prt);
+}
+
+Instruction *Ptr2IntInst::clone(BasicBlock *prt) const  {
+  return new Ptr2IntInst(get_operand(0), get_type(), prt);
+}
+
+Instruction *Int2PtrInst::clone(BasicBlock *prt) const  {
+  return new Int2PtrInst(get_operand(0), get_type(), prt);
+}
+
+Instruction *PhiInst::clone(BasicBlock *prt) const  {
+  return new PhiInst(get_type(), {get_operands().begin(), get_operands().end()}, {}, prt);
 }

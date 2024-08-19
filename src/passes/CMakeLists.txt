@@ -12,4 +12,5 @@ add_library(
     LoopAnalysis.cpp
     LoopSimplify.cpp
     LoopInvCM.cpp
+    LoopUnRoll.cpp
 )
